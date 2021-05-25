@@ -1,10 +1,16 @@
 package com.revature.app.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -23,4 +29,14 @@ public class Visualization {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "visualization_id")
 	private int visualization_id;
+	
+	@Column(name = "visualization_name")
+	private String visualization_name;
+	
+	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+	@JoinTable(
+			name = "Visualizations_Curricula",
+			joinColumns = {@JoinColumn(name = "visualization_id")},
+			inverseJoinColumns = {@JoinColumn(name = "curriculum_id")})
+	private List<Curriculum> curriculum_List;
 }

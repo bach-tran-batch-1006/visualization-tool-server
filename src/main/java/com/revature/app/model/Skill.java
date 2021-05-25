@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -23,4 +25,11 @@ public class Skill {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "skill_id")
 	private int skill_id;
+	
+	@Column(name = "skill_name")
+	private String skill_name;
+	
+	@ManyToOne
+	@JoinColumn(name = "category_id")
+	private Category category;
 }
