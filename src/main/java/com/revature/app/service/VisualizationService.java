@@ -7,8 +7,8 @@ import com.revature.app.dao.VisualizationDao;
 
 @Service
 public class VisualizationService {
-	@Autowired
-	 VisualizationDao visualizationdao;
-	
+  
+	 @Autowired
+	 VisualizationDao visualizationDao;
 
 }

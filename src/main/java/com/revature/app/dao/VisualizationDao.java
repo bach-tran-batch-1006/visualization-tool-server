@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.revature.app.model.Visualization;
 
 @Repository
-public interface VisualizationDao extends JpaRepository <Visualization, Integer> {
+public interface VisualizationDao extends JpaRepository<Visualization, Integer> {
 
- 
 }
