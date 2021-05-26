@@ -29,10 +29,10 @@ public class Curriculum {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "curriculum_id")
-	private int curriculum_id;
+	private int curriculumId;
 	
 	@Column(name = "curriculum_name")
-	private String curriculum_name;
+	private String curriculumName;
 	
 	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	@JoinTable(

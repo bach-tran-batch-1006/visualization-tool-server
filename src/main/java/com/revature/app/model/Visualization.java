@@ -28,15 +28,15 @@ public class Visualization {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "visualization_id")
-	private int visualization_id;
+	private int visualizationId;
 	
 	@Column(name = "visualization_name")
-	private String visualization_name;
+	private String visualizationName;
 	
 	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	@JoinTable(
 			name = "Visualizations_Curricula",
 			joinColumns = {@JoinColumn(name = "visualization_id")},
 			inverseJoinColumns = {@JoinColumn(name = "curriculum_id")})
-	private List<Curriculum> curriculum_List;
+	private List<Curriculum> curriculumList;
 }
