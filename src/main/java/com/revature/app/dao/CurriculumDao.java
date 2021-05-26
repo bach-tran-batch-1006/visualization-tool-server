@@ -1,5 +1,6 @@
 package com.revature.app.dao;
 
+
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,4 +13,5 @@ public interface CurriculumDao extends JpaRepository<Curriculum, Integer>{
 	
 	public Optional<Curriculum> findByCurriculumId(int curriculumId);
 	
+
 }

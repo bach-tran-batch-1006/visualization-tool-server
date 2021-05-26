@@ -1,5 +1,6 @@
 package com.revature.app.service;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,7 @@ public class CurriculumService {
 			throw new RuntimeException("Couldn't add curriculum into the database");
 		}
 		return curriculum;
+
 	}
 
 }
