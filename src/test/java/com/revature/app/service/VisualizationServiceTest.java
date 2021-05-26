@@ -42,7 +42,8 @@ public class VisualizationServiceTest {
 	
 	
 	@Test
-	public void test_getVisualization_happy() {
+	public void test_getVisualization_happy() throws Exception {
+		
 		Curriculum curr1 = new Curriculum(1, "", null);
 		
 		List<Curriculum> curriculaList = new ArrayList<Curriculum>();
