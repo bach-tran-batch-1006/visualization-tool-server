@@ -1,5 +1,6 @@
 package com.revature.app.service;
 
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -38,5 +39,6 @@ public class CurriculumServiceUnitTest {
 		
 		assertEquals(expected, actual);
 	}
+
 
 }

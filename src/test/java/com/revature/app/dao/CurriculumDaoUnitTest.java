@@ -1,5 +1,6 @@
 package com.revature.app.dao;
 
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -31,4 +32,5 @@ public class CurriculumDaoUnitTest {
 		Curriculum expected = new Curriculum(1, "BackEnd Developer", null);
 		assertEquals(expected, actual);
 	}
+
 }
