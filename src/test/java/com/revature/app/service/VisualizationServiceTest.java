@@ -33,7 +33,7 @@ public class VisualizationServiceTest {
 	void CreateEndpoint() throws Exception {
 		//perform define the type of request
 		//MockMvcMatchers return the status of testing that endpoint
-		//will be http verb post for now I used get so I can do it from browser instead of postman
+		//will be http verb post for now I used get so I can do it from browser instead of postman will change later
 	     mockmvc.perform(get("/create")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 	
