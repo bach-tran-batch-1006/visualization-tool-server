@@ -24,10 +24,10 @@ public class Skill {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "skill_id")
-	private int skill_id;
+	private int skillId;
 	
 	@Column(name = "skill_name")
-	private String skill_name;
+	private String skillName;
 	
 	@ManyToOne
 	@JoinColumn(name = "category_id")
