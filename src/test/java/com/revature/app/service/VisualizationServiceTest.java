@@ -1,15 +1,18 @@
 package com.revature.app.service;
 
+import static org.hamcrest.CoreMatchers.any;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,17 +23,14 @@ import com.revature.app.model.Visualization;
 @ExtendWith(MockitoExtension.class)
 public class VisualizationServiceTest {
 	
-	@InjectMocks
-	
+	@Mock
 	private static VisualizationDao mockVisualizationDao;
 	
-	@Autowired
+	@InjectMocks	
 	private VisualizationService visualizationService;
 	
 	@BeforeAll
 	public static void setUp() {
-		
-		mockVisualizationDao = mock(VisualizationDao.class);
 		
 	}
 	
@@ -40,13 +40,18 @@ public class VisualizationServiceTest {
 		
 	}
 	
+	
 	@Test
 	public void test_getVisualization_happy() {
-		ArrayList<Curriculum> curriculaList = new ArrayList<Curriculum>();
+		Curriculum curr1 = new Curriculum(1, "", null);
 		
+		List<Curriculum> curriculaList = new ArrayList<Curriculum>();
+		curriculaList.add(curr1);
 		
 		Visualization expected = new Visualization(1, "Java Visualization", curriculaList);
+		
 		Visualization actual = visualizationService.getVisualization();
+		
 		assertEquals(expected, actual);
 		
 	}
