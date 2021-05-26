@@ -38,7 +38,7 @@ public class CategoryController {
 	
 	@DeleteMapping(path="category/{id}")
 	public void deleteCategory(@PathVariable("id") int id) {
-		return null;
+		
 	}
 	
 	@GetMapping(path = "categoryTest")
