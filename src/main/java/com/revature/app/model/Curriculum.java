@@ -20,9 +20,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-
 @Entity
-@Table(name="Curricula")
+@Table(name = "Curricula")
 @AllArgsConstructor @EqualsAndHashCode @Getter @Setter @ToString @NoArgsConstructor
 public class Curriculum {
 
@@ -30,16 +29,12 @@ public class Curriculum {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "curriculum_id")
 	private int curriculumId;
-	
+
 	@Column(name = "curriculum_name")
 	private String curriculumName;
-	
-	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-	@JoinTable(
-			name = "Curricula_Skills",
-			joinColumns = {@JoinColumn(name = "curriculum_id")},
-			inverseJoinColumns = {@JoinColumn(name = "skill_id")})
+
+	@ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+	@JoinTable(name = "Curricula_Skills", joinColumns = { @JoinColumn(name = "curriculum_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "skill_id") })
 	private List<Skill> skillList;
-	
-	
 }
