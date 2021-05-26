@@ -13,6 +13,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.revature.app.dto.CurriculumDto;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -41,5 +43,12 @@ public class Curriculum {
 			inverseJoinColumns = {@JoinColumn(name = "skill_id")})
 	private List<Skill> skillList;
 	
+	public Curriculum(String name) {
+		this.curriculumName = name;
+	}
+	
+	public Curriculum(CurriculumDto curriculumDto) {
+		this.curriculumName = curriculumDto.name;
+	}
 	
 }
