@@ -39,21 +39,6 @@ public class CurriculumDaoUnitTest {
 	@Autowired
 	private CurriculumDao curriculumDao;
 
-	@BeforeAll
-	public static void setUp(){
-
-	}
-
-	@Test
-	void test_addCurriculum_success() {
-		Curriculum actual = curriculumDao.save(new Curriculum(0, "BackEnd Developer", null));
-		Curriculum expected = new Curriculum(1, "BackEnd Developer", null);
-		assertEquals(expected, actual);
-	}
-
-	@Autowired
-	private CurriculumDao curriculumDao;
-
 	@Autowired
 	EntityManagerFactory emf;
 
