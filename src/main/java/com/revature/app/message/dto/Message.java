@@ -10,5 +10,5 @@ import lombok.ToString;
 @NoArgsConstructor @Getter @Setter @AllArgsConstructor @EqualsAndHashCode @ToString
 public class Message {
 
-	String info;
+	String message;
 }
