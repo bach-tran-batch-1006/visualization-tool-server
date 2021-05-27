@@ -2,15 +2,15 @@ package com.revature.app.service;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.revature.app.dao.SkillDAO;
 import com.revature.app.dto.SkillDTO;
 import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.EmptyParameterException;
-import com.revature.app.exception.SkillDAOException;
 import com.revature.app.exception.SkillNotAddedException;
 import com.revature.app.exception.SkillNotDeletedException;
 import com.revature.app.exception.SkillNotFoundException;
@@ -23,10 +23,12 @@ public class SkillService {
 	@Autowired
 	private SkillDAO skillDAO;
 
+	@Transactional
 	public List<Skill> getAllSkills(){
 		return skillDAO.findAll();
 	}
 	
+	@Transactional(rollbackOn = {SkillNotFoundException.class})
 	public Skill getSkillByID(String skillID) throws BadParameterException, EmptyParameterException, SkillNotFoundException {
 		Skill skill = null;
 		try {
@@ -45,12 +47,12 @@ public class SkillService {
 		}
 	}
 	
+	@Transactional(rollbackOn = {SkillNotAddedException.class})
 	public Skill addSkill(SkillDTO skillDTO) throws EmptyParameterException, SkillNotAddedException {
 		Skill skill = null;
 		if(skillDTO.getName().trim().equals("")) {
 			throw new EmptyParameterException("The skill name was left blank");
 		}
-		//skill = skillDAO.addSkill(skillDTO);
 		skill = new Skill(skillDTO);
 		skill = skillDAO.save(skill);
 		if(skill == null || skill.getSkillId() == 0) {
@@ -59,6 +61,7 @@ public class SkillService {
 		return skill;
 	}
 
+	@Transactional(rollbackOn = {SkillNotUpdatedException.class, SkillNotFoundException.class})
 	public Skill updateSkill(String skillID, SkillDTO upSkill) throws EmptyParameterException, SkillNotUpdatedException, BadParameterException, SkillNotFoundException{
 		Skill skill = null;
 		try {
@@ -85,6 +88,7 @@ public class SkillService {
 		}
 	}
 
+	@Transactional(rollbackOn = {SkillNotDeletedException.class, SkillNotFoundException.class})
 	public Skill deleteSkill(String skillID) throws EmptyParameterException, BadParameterException, SkillNotDeletedException, SkillNotFoundException {
 		Skill skill = null;
 		try {
@@ -97,6 +101,9 @@ public class SkillService {
 				throw new SkillNotFoundException("The skill could not be deleted because it couldn't be found");
 			} else {
 				skillDAO.delete(skill);
+				if(skillDAO.findById(id) != null) {
+					throw new SkillNotDeletedException("The skill could not be deleted because of a database issue");
+				}
 			}
 			return skill;
 		} catch (NumberFormatException e) {

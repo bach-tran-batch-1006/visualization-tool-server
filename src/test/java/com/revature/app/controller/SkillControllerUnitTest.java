@@ -70,7 +70,6 @@ class SkillControllerUnitTest {
 		SkillDTO skillDTO3 = new SkillDTO("ProblemSkill", new Category(1, "TestCat", "Description"));
 		SkillDTO skillDTO4 = new SkillDTO("ProblemCat", new Category(1, "   ", "Description"));
 		
-		
 		lenient().when(mockSkillService.getSkillByID(eq("1"))).thenReturn(skill1);
 		lenient().when(mockSkillService.getSkillByID(eq("2"))).thenThrow(new SkillNotFoundException());
 		lenient().when(mockSkillService.getSkillByID(eq(" "))).thenThrow(new EmptyParameterException());
@@ -98,24 +97,21 @@ class SkillControllerUnitTest {
 	
 	
 	@Test
-	void test_getAllSkills_happy() {
+	void test_getAllSkills_happy() throws Exception {
 		Skill skill1 = new Skill(1, "", new Category(1, "", null));
 		Skill skill2 = new Skill(2, "", new Category(1, "", null));
 		List<Skill> expected = new ArrayList<Skill>();
 		expected.add(skill1);
 		expected.add(skill2);
 		when(mockSkillService.getAllSkills()).thenReturn(expected);
-		List<Skill> actual = (List<Skill>) skillController.getAllSkills();
-		assertEquals(expected, actual);
+		mockMvc.perform(get("/allSkills")).andExpect(MockMvcResultMatchers.status().is(200));
 	}
 	
 	@Test
-	void test_getAllSkills_noSkills() {
+	void test_getAllSkills_noSkills() throws Exception {
 		List<Skill> emptySkillList = new ArrayList<Skill>();
 		when(mockSkillService.getAllSkills()).thenReturn(emptySkillList);
-		MessageDTO actual = (MessageDTO) skillController.getAllSkills();
-		MessageDTO expected = new MessageDTO("The list of skills is empty");
-		assertEquals(expected, actual);
+		mockMvc.perform(get("/allSkills")).andExpect(MockMvcResultMatchers.status().is(404));
 	}
 
 //

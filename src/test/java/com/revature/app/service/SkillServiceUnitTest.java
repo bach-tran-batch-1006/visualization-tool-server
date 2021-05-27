@@ -65,6 +65,9 @@ class SkillServiceUnitTest {
 		lenient().when(mockSkillDAO.findById(eq(2))).thenReturn(skill3);
 		lenient().when(mockSkillDAO.findById(eq(3))).thenReturn(skill3);
 		lenient().when(mockSkillDAO.save(skill3)).thenReturn(skill3);
+		
+		lenient().when(mockSkillDAO.findById(4)).thenReturn(skill3).thenReturn(null);
+		lenient().when(mockSkillDAO.findById(5)).thenReturn(skill3);
 	}
 	
 	
@@ -247,8 +250,8 @@ class SkillServiceUnitTest {
 //	
 	@Test
 	void test_deleteSkill_happy() throws EmptyParameterException, BadParameterException, SkillNotDeletedException, SkillNotFoundException {
-		Skill expected = new Skill(1, "", new Category(1, "", null));
-		Skill actual = skillService.deleteSkill("1");
+		Skill expected = new Skill(1, "TestSkill", new Category(1, "TestCat", null));
+		Skill actual = skillService.deleteSkill("4");
 		assertEquals(expected, actual);
 	}
 	
@@ -279,6 +282,16 @@ class SkillServiceUnitTest {
 			fail("EmptyParameterException was not thrown");
 		} catch (EmptyParameterException e) {
 			assertEquals(e.getMessage(), "The skill ID was left blank");
+		}
+	}
+	
+	@Test
+	void test_deleteSkill_skillNotDeleted() throws EmptyParameterException, BadParameterException, SkillNotFoundException {
+		try {
+			skillService.deleteSkill("5");
+			fail("SkillNotDeletedException was not thrown");
+		} catch (SkillNotDeletedException e) {
+			assertEquals(e.getMessage(), "The skill could not be deleted because of a database issue");
 		}
 	}
 	

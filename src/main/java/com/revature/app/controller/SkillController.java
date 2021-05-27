@@ -35,9 +35,10 @@ public class SkillController {
 		List<Skill> skillList;
 		skillList = skillService.getAllSkills();
 		if(skillList.size() <= 0) {
-			return new MessageDTO("The list of skills is empty");
+			return ResponseEntity.status(404).body(new MessageDTO("The list of skills is empty"));
 		} else {
-			return skillList;
+			return ResponseEntity.status(200).body(skillList);
+			
 		}
 	}
 	
