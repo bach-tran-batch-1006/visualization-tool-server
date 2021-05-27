@@ -1,5 +1,6 @@
 package com.revature.app.dao;
 
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
@@ -106,4 +107,5 @@ public class CurriculumDaoUnitTest {
 		Curriculum expected = null;
 		assertEquals(expected, actual);
 	}
+
 }
