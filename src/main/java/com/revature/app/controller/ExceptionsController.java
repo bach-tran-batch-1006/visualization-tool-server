@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.revature.app.expections.VisualizationNotFound;
 import com.revature.app.message.dto.Message;
 
 @ControllerAdvice

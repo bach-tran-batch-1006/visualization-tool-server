@@ -1,4 +1,4 @@
-package com.revature.app.dto.Visualization;
+package com.revature.app.dto;
 
 
 
