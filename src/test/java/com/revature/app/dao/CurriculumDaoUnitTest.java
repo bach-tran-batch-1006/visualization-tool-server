@@ -36,6 +36,7 @@ import com.revature.app.model.Curriculum;
 @DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
 public class CurriculumDaoUnitTest {
 	
+	//testing with sonarCloud
 	@Autowired
 	private CurriculumDao curriculumDao;
 
