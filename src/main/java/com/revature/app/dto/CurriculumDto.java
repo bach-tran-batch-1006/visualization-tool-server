@@ -1,5 +1,7 @@
 package com.revature.app.dto;
 
+import java.util.ArrayList;
+
 import java.util.List;
 
 import com.revature.app.model.Skill;
@@ -18,6 +20,7 @@ public class CurriculumDto {
 	
 	public CurriculumDto(String name) {
 		this.name = name;
-		this.skillList = null;
+		this.skillList = new ArrayList<>();
+
 	}
 }
