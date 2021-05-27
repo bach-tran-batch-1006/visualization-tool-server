@@ -21,7 +21,6 @@ import com.revature.app.dao.SkillDAO;
 import com.revature.app.dto.SkillDTO;
 import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.EmptyParameterException;
-import com.revature.app.exception.SkillDAOException;
 import com.revature.app.exception.SkillNotAddedException;
 import com.revature.app.exception.SkillNotDeletedException;
 import com.revature.app.exception.SkillNotFoundException;
@@ -40,12 +39,12 @@ class SkillServiceUnitTest {
 	private SkillService skillService;
 	
 	@BeforeAll
-	public static void setUp() throws SkillDAOException {
+	public static void setUp() {
 		
 	}
 	
 	@BeforeEach
-	public void beforeTest() throws SkillDAOException {
+	public void beforeTest() {
 		Skill skill1 = new Skill(1, "", new Category(1, "", null));
 		Skill skill2 = new Skill(2, "", new Category(1, "", null));
 		Skill skill3 = new Skill(1, "TestSkill", new Category(1, "TestCat", null));
