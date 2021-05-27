@@ -19,6 +19,11 @@ public class CategoryController {
 	@Autowired
 	private CategoryService categoryService;
 	
+	@GetMapping("test")
+	public /* @ResponseBody is implicitly added here whenever we do @RestController */String test() {
+		return "Hi";
+	}
+	
 	@PostMapping(path = "category")
 	public Category addCategory() {
 		
