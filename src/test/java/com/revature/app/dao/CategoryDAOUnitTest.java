@@ -93,15 +93,6 @@ class CategoryDAOUnitTest {
 		assertEquals(expected, actual);
 	}
 	
-//	@Test
-//	void testUpdateCategoryById_postive() {
-//
-//	}
-//	
-//	@Test
-//	void testUpdateCategoryById_negative() {
-//		fail("Not yet implemented");
-//	}
 
 	@Test
 	@Order(4)
@@ -112,8 +103,6 @@ class CategoryDAOUnitTest {
 			categoryDAO.getById(1);
 		});
 			
-
-		
 	}
 
 
