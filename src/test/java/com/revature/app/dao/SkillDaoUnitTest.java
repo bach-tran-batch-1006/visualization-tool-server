@@ -151,4 +151,5 @@ class SkillDaoUnitTest {
 		Skill actual = skillDAO.findById(0);
 		assertEquals(null, actual);
 	}
+	
 }
