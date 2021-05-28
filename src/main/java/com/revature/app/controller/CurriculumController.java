@@ -23,34 +23,34 @@ public class CurriculumController {
 
 	@Autowired
 	private CurriculumService service;
-	
-	@GetMapping(path="curriculum")
+
+	@GetMapping(path = "curriculum")
 	public Object getAllCurriculum() {
 		List<Curriculum> curricula;
 		try {
 			curricula = service.getAllCurriculum();
-			if(curricula.size() <= 0) {
+			if (curricula.isEmpty()) {
 				return ResponseEntity.status(400).body(curricula);
 			}
 		} catch (EmptyCurriculumException e) {
-			e.printStackTrace(); 
+			e.printStackTrace();
 			return "We need a MessageDTO";
 		}
 
 		return ResponseEntity.status(200).body(curricula);
 	}
-	
-	@GetMapping(path="curriculum/{id}")
+
+	@GetMapping(path = "curriculum/{id}")
 	public Object getCurriculumById(@PathVariable("id") String curriculumId) {
 		try {
 			return service.getCurriculumByID(Integer.parseInt(curriculumId));
 		} catch (NumberFormatException | CurriculumNotFoundException e) {
 			e.printStackTrace();
 			return "We need a MessageDTO";
-		}		
+		}
 	}
-	
-	@PostMapping(path="curriculum")
+
+	@PostMapping(path = "curriculum")
 	public Object addCurriculum(@RequestBody CurriculumDto dto) {
 		try {
 			return service.addCurriculum(dto);
@@ -59,23 +59,20 @@ public class CurriculumController {
 			return ResponseEntity.status(400).body(e.getMessage());
 		}
 	}
-	
-	@PutMapping(path="curriculum/{id}")
+
+	@PutMapping(path = "curriculum/{id}")
 	public Object updateCurriculumById(@PathVariable("id") String curriculumId, @RequestBody CurriculumDto dto) {
-		Curriculum curriculum = service.updateCurriculumByID(Integer.parseInt(curriculumId), dto);
-		return curriculum;
+		return service.updateCurriculumByID(Integer.parseInt(curriculumId), dto);
 	}
-	
-    @DeleteMapping(path="curriculum/{id}")
-    public Object deleteCurriculumByID(@PathVariable("id") String curriculumId) {
-        try {
-            Curriculum curriculum = service.deleteCurriculumByID(Integer.parseInt(curriculumId));
-            return ResponseEntity.status(200).body(curriculum);
-        } catch (NumberFormatException e) {
-            return null;
-        } catch (CurriculumNotFoundException e) {
-            return null;
-        }
-    }
-	
+
+	@DeleteMapping(path = "curriculum/{id}")
+	public Object deleteCurriculumByID(@PathVariable("id") String curriculumId) throws CurriculumNotFoundException {
+		try {
+			Curriculum curriculum = service.deleteCurriculumByID(Integer.parseInt(curriculumId));
+			return ResponseEntity.status(200).body(curriculum);
+		} catch (NumberFormatException e) {
+			return null;
+		}
+	}
+
 }

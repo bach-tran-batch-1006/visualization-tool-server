@@ -10,7 +10,6 @@ import javax.persistence.EntityManagerFactory;
 
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -50,7 +49,7 @@ import com.revature.app.service.CurriculumService;
 @ExtendWith(SpringExtension.class)
 @WebAppConfiguration
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class CurriculumControllerIntegrationTest {
+class CurriculumControllerIntegrationTest {
 	
 	@Autowired
 	WebApplicationContext webApplicationContext;
@@ -128,14 +127,11 @@ public class CurriculumControllerIntegrationTest {
 	}
 	
 	public void performTest(MockHttpServletRequestBuilder actual, int status, CurriculumDto expected) throws Exception {
-		System.out.println("expected: "+ expected);
 		String expectedDto = om.writeValueAsString(expected);
 		
 		Curriculum expectedOb = new Curriculum(expected);
 		expectedOb.setCurriculumId(1);
 		String expectedAsJson = om.writeValueAsString(expectedOb);
-		System.out.println("expectedAsJson: "+ expectedAsJson);
-		System.out.println("actual: "+ actual);
 
 		this.mockMvc.perform(actual.contentType(MediaType.APPLICATION_JSON).content(expectedDto))
 			.andExpect(MockMvcResultMatchers.status().is(status))
@@ -208,6 +204,21 @@ public class CurriculumControllerIntegrationTest {
 		performTest(request, 200, expected);
 	}
 	
+	/*
+	 * @Test
+	 * 
+	 * @Order(100)
+	 * 
+	 * @Transactional void test_getCurriculumById_NotFoundException() throws
+	 * Exception { Session session = em.unwrap(Session.class);
+	 * if(session.get(Curriculum.class, 1) == null) { fail("nothing is committed");
+	 * }
+	 * 
+	 * CurriculumDto expected = generateTestDto(); MockHttpServletRequestBuilder
+	 * request = MockMvcRequestBuilders .get("/curriculum/1000000");
+	 * //getHttpRequest("/curriculum/1", expected); performTest(request, 200,
+	 * expected); }
+	 */
 	
 	@Test
 	@Order(2)
@@ -257,8 +268,7 @@ public class CurriculumControllerIntegrationTest {
 			fail("Nothing to delete in database");
 		}
 		
-		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
-				.delete("/curriculum/1");
+		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.delete("/curriculum/1");
 		
 		String curriculumJson = om.writeValueAsString(expected);
 		
