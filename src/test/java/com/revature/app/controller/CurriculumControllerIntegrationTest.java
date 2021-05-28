@@ -117,7 +117,7 @@ public class CurriculumControllerIntegrationTest {
 		return request;
 	}
 	
-	public MockHttpServletRequestBuilder deleteHttpRequest(String path, CurriculumDto params) throws JsonProcessingException {
+	public MockHttpServletRequestBuilder deleteHttpRequest(String path, Curriculum params) throws JsonProcessingException {
 		String contentString = om.writeValueAsString(params);
 		
 		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete(path)
@@ -142,6 +142,7 @@ public class CurriculumControllerIntegrationTest {
 			.andExpect(MockMvcResultMatchers.content()
 					.json(expectedAsJson)).andReturn();
 	}
+
 	
 	public ResultActions performTest(MockHttpServletRequestBuilder actual, int status, CurriculumDto expected, int flag) throws Exception {
 		System.out.println("expected: "+ expected);
@@ -207,22 +208,26 @@ public class CurriculumControllerIntegrationTest {
 		performTest(request, 200, expected);
 	}
 	
-	@Disabled
+	
 	@Test
 	@Order(2)
 	@Transactional
 	void test_getAllCurriculum_success() throws Exception {
 		CurriculumDto secondDto = generateTestDto();
 		secondDto.setName("AnotherOne");
-		CurriculumDto firstDto = generateTestDto();
-		ArrayList<Curriculum> expected = new ArrayList<Curriculum>();
-		expected.add(new Curriculum(firstDto));
-		expected.add(new Curriculum(secondDto));
-		
 		//temporarily save a second Curriculum to the db
 		em.getTransaction().begin();
 		em.persist(new Curriculum(secondDto));
 		em.getTransaction().commit();
+		
+		ArrayList<Curriculum> expected = new ArrayList<Curriculum>();
+		Session session = em.unwrap(Session.class);
+		expected.add(session.get(Curriculum.class, 1));
+		expected.add(session.get(Curriculum.class, 2));
+		
+		if(expected.size() < 2) {
+			fail("Not properly persisted");
+		}
 		
 		MockHttpServletRequestBuilder request = MockMvcRequestBuilders
 				.get("/curriculum");
@@ -241,12 +246,25 @@ public class CurriculumControllerIntegrationTest {
 		performTest(request, 200, expected);
 	}
 	
+	
 	@Test
 	@Order(4)
 	@Transactional
 	void test_deleteCurriculumById_success() throws Exception {
-		CurriculumDto expected = generateTestDto();
-		MockHttpServletRequestBuilder request = deleteHttpRequest("/curriculum/1", expected);
-		performTest(request, 200, expected);
+		Session session = em.unwrap(Session.class);
+		Curriculum expected = session.get(Curriculum.class, 1);
+		if(expected == null) {
+			fail("Nothing to delete in database");
+		}
+		
+		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
+				.delete("/curriculum/1");
+		
+		String curriculumJson = om.writeValueAsString(expected);
+		
+		this.mockMvc
+			.perform(builder)
+			.andExpect(MockMvcResultMatchers.status().is(200))
+			.andExpect(MockMvcResultMatchers.content().json(curriculumJson));
 	}
 }

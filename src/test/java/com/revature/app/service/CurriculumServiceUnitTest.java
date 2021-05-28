@@ -134,7 +134,7 @@ public class CurriculumServiceUnitTest {
 	}
 
 	@Test
-	void test_delete_success() {
+	void test_delete_success() throws CurriculumNotFoundException {
 		curriculumService.deleteCurriculumByID(1);
 		verify(curriculumDao, times(1)).deleteById(eq(1));
 	}
