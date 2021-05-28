@@ -87,7 +87,7 @@ class CategoryServiceUnitTest {
 		Category expected = new Category(1, "DevOps", "set of practices that combines software development and IT operations.");
 		CategoryDTO categoryDTO = new CategoryDTO("DevOps", "set of practices that combines software development and IT operations.");
 		
-		lenient().when(categoryDAO.getById(eq(1))).thenReturn(oldCategory);
+		lenient().when(categoryDAO.findById(eq(1))).thenReturn(oldCategory);
 		lenient().when(categoryDAO.save(oldCategory)).thenReturn(expected);
 		
 		Category actual = categoryService.updateCategory(1, categoryDTO);
@@ -103,7 +103,7 @@ class CategoryServiceUnitTest {
 		
 		
 		assertThrows(CategoryBlankInputException.class, () -> {
-			lenient().when(categoryDAO.getById(eq(1))).thenReturn(new Category(1, "Language", "Programming Language"));
+			lenient().when(categoryDAO.findById(eq(1))).thenReturn(new Category(1, "Language", "Programming Language"));
 			categoryService.updateCategory(1, inputCategoryDTO);
 		});
 		

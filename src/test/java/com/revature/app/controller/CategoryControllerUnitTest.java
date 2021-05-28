@@ -1,10 +1,18 @@
 package com.revature.app.controller;
 
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,11 +22,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.app.dto.CategoryDTO;
+import com.revature.app.exception.CategoryBlankInputException;
+import com.revature.app.exception.CategoryInvalidIdException;
 import com.revature.app.model.Category;
 import com.revature.app.service.CategoryService;
 
@@ -50,10 +59,96 @@ class CategoryControllerUnitTest {
 		this.mockMvc.perform(post("/category").contentType(MediaType.APPLICATION_JSON).content(inputJson))
 		.andExpect(status().isCreated()).andExpect(content().json(expectedJson));
 	}
+	
+	@Test
+	void testAddCategory_negative_BlankExceptionWithStatusCode() throws Exception {
+		
+		
+		CategoryDTO inputCategory = new CategoryDTO("", "Programming Language");
+		String inputJson = om.writeValueAsString(inputCategory);
+		
+		when(categoryService.addCategory(inputCategory)).thenThrow(CategoryBlankInputException.class);
+		
+		this.mockMvc.perform(post("/category").contentType(MediaType.APPLICATION_JSON).content(inputJson))
+		.andExpect(status().isBadRequest());
+	}
+	
+	@Test
+	void testGetAllCategories_positive() throws Exception {
+		List<Category> expected = new ArrayList<>();
+		Category category1 = new Category(1, "Language", "Programming Language");
+		Category category2 = new Category(1, "DevOps", "DevOps Description");
+		
+		expected.add(category1);
+		expected.add(category2);
+		
+		String expectedJson = om.writeValueAsString(expected);
+		
+		when(categoryService.getAllCategories()).thenReturn(expected);
+		
+		this.mockMvc.perform(get("/category")).andExpect(status().isOk()).andExpect(content().json(expectedJson));
+		
+	}
+	
+	@Test
+	void testUpdateCategory_positive() throws Exception {
+		Category expected = new Category(1, "Language", "Programming Language");
+		String expectedJson = om.writeValueAsString(expected);
+		CategoryDTO inputCategory = new CategoryDTO("Language", "Programming Language");
+		String inputJson = om.writeValueAsString(inputCategory);
+		
+		when(categoryService.updateCategory(eq(1),eq(inputCategory))).thenReturn(expected);
+		
+		this.mockMvc.perform(put("/category/1").contentType(MediaType.APPLICATION_JSON).content(inputJson))
+		.andExpect(status().isOk()).andExpect(content().json(expectedJson));
+	}
+	
+	@Test
+	void testUpdateCategory_negative_CategoryBlankInputException_() throws Exception {
+		
+		
+		CategoryDTO inputCategory = new CategoryDTO("", "Programming Language");
+		String inputJson = om.writeValueAsString(inputCategory);
+		
+		when(categoryService.updateCategory(eq(1),eq(inputCategory))).thenThrow(CategoryBlankInputException.class);
+		
+		this.mockMvc.perform(put("/category/1").contentType(MediaType.APPLICATION_JSON).content(inputJson))
+		.andExpect(status().isBadRequest());
+	}
+	
+	@Test
+	void testUpdateCategory_negative_CategoryInvalidIdException_() throws Exception {
+		
+		
+		CategoryDTO inputCategory = new CategoryDTO("Language", "Programming Language");
+		String inputJson = om.writeValueAsString(inputCategory);
+		
+		when(categoryService.updateCategory(eq(3),eq(inputCategory))).thenThrow(CategoryInvalidIdException.class);
+		
+		this.mockMvc.perform(put("/category/3").contentType(MediaType.APPLICATION_JSON).content(inputJson))
+		.andExpect(status().isBadRequest());
+	}
+	
+	@Test
+	void test_deleteCategory_positive() throws Exception{
+		
+
+		when(categoryService.deleteCategory(eq(3))).thenReturn("Success");
+		
+		this.mockMvc.perform(delete("/category/3")).andExpect(status().isNoContent());
+		
+	}
 
 	@Test
-	void test_testEndpoint() throws Exception {
-		mockMvc.perform(get("/categoryTest")).andExpect(MockMvcResultMatchers.status().isOk());
+	void test_deleteCategory_negative_CategoryInvalidIdException() throws Exception {
+		when(categoryService.deleteCategory(eq(3))).thenThrow(CategoryInvalidIdException.class);
+		this.mockMvc.perform(delete("/category/3")).andExpect(status().isBadRequest());
 	}
+	
+
+//	@Test
+//	void test_testEndpoint() throws Exception {
+//		mockMvc.perform(get("/categoryTest")).andExpect(MockMvcResultMatchers.status().isOk());
+//	}
 
 }
