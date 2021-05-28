@@ -35,7 +35,7 @@ public class Curriculum {
 	@Column(name = "curriculum_name")
 	private String curriculumName;
 
-	@ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+	@ManyToMany(cascade = { CascadeType.MERGE})
 	@JoinTable(name = "Curricula_Skills", joinColumns = { @JoinColumn(name = "curriculum_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "skill_id") })
 	private List<Skill> skillList;

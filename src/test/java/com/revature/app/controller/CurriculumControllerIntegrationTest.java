@@ -1,5 +1,7 @@
 package com.revature.app.controller;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,13 +12,12 @@ import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.annotation.DirtiesContext;
@@ -26,6 +27,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -45,7 +47,6 @@ import com.revature.app.service.CurriculumService;
 @SpringBootTest
 @ActiveProfiles("test")
 @DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
-@AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
 @WebAppConfiguration
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -60,7 +61,7 @@ public class CurriculumControllerIntegrationTest {
 	@Autowired
 	CurriculumDao dao;
 	
-	@Autowired
+	
 	private MockMvc mockMvc;
 	private ObjectMapper om;
 	
@@ -75,9 +76,11 @@ public class CurriculumControllerIntegrationTest {
 		em = emf.createEntityManager();
 	}
 	
+	
+//_________________SUPPORT_FUNCTIONS__________________//	
 	public CurriculumDto generateTestDto() {
-		Category testCat = new Category(1, "TestCat", "Description");
-		Skill testSkill = new Skill(1, "Test", testCat);
+		Session session = em.unwrap(Session.class);
+		Skill testSkill = session.get(Skill.class, 1);
 		ArrayList<Skill> skills = new ArrayList<Skill>();
 		skills.add(testSkill);
 		CurriculumDto testDto = new CurriculumDto("TestCurriculum", skills);
@@ -124,14 +127,31 @@ public class CurriculumControllerIntegrationTest {
 		return request;
 	}
 	
-	public MvcResult performTest(MockHttpServletRequestBuilder actual, int status, CurriculumDto expected) throws Exception {
+	public void performTest(MockHttpServletRequestBuilder actual, int status, CurriculumDto expected) throws Exception {
+		System.out.println("expected: "+ expected);
+		String expectedDto = om.writeValueAsString(expected);
+		
+		Curriculum expectedOb = new Curriculum(expected);
+		expectedOb.setCurriculumId(1);
+		String expectedAsJson = om.writeValueAsString(expectedOb);
+		System.out.println("expectedAsJson: "+ expectedAsJson);
+		System.out.println("actual: "+ actual);
+
+		this.mockMvc.perform(actual.contentType(MediaType.APPLICATION_JSON).content(expectedDto))
+			.andExpect(MockMvcResultMatchers.status().is(status))
+			.andExpect(MockMvcResultMatchers.content()
+					.json(expectedAsJson)).andReturn();
+	}
+	
+	public ResultActions performTest(MockHttpServletRequestBuilder actual, int status, CurriculumDto expected, int flag) throws Exception {
 		System.out.println("expected: "+ expected);
 		Curriculum expectedOb = new Curriculum(expected);
 		expectedOb.setCurriculumId(1);
 		String expectedAsJson = om.writeValueAsString(expectedOb);
+		System.out.println("expectedAsJson: "+ expectedAsJson);
 		
 		return this.mockMvc.perform(actual).andExpect(MockMvcResultMatchers.status().is(status))
-				.andExpect(MockMvcResultMatchers.content().json(expectedAsJson)).andReturn();
+				.andExpect(MockMvcResultMatchers.content().json(expectedAsJson));
 	}
 	
 	public MvcResult performTest(MockHttpServletRequestBuilder actual, int status, List<Curriculum> expected) throws Exception {
@@ -140,6 +160,8 @@ public class CurriculumControllerIntegrationTest {
 		return this.mockMvc.perform(actual).andExpect(MockMvcResultMatchers.status().is(status))
 				.andExpect(MockMvcResultMatchers.content().json(expectedAsJson)).andReturn();
 	}
+	
+	//_________________END_SUPPORT_FUNCTIONS__________________//
 	
 	@Test
 	@Order(0)
@@ -162,17 +184,26 @@ public class CurriculumControllerIntegrationTest {
         
         
 		CurriculumDto expected = generateTestDto();
-		MockHttpServletRequestBuilder request = postHttpRequest("/curriculum", expected);
+		MockHttpServletRequestBuilder request =  MockMvcRequestBuilders
+                .post("/curriculum");
+				//postHttpRequest("/curriculum", expected);
 		performTest(request, 200, expected);
 	}
 
-	@Disabled
 	@Test
 	@Order(1)
 	@Transactional
 	void test_getCurriculumById_success() throws Exception {
+		
+		Session session = em.unwrap(Session.class);
+		if(session.get(Curriculum.class, 1) == null) {
+            fail("nothing is committed");
+        }
+		
 		CurriculumDto expected = generateTestDto();
-		MockHttpServletRequestBuilder request = getHttpRequest("/curriculum/1", expected);
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get("/curriculum/1");			
+		//getHttpRequest("/curriculum/1", expected);
 		performTest(request, 200, expected);
 	}
 	
@@ -199,7 +230,7 @@ public class CurriculumControllerIntegrationTest {
 		performTest(request, 200, expected);
 	}
 	
-	@Disabled
+	
 	@Test
 	@Order(3)
 	@Transactional
@@ -210,7 +241,6 @@ public class CurriculumControllerIntegrationTest {
 		performTest(request, 200, expected);
 	}
 	
-	@Disabled
 	@Test
 	@Order(4)
 	@Transactional
