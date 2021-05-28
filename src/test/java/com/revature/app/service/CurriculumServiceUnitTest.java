@@ -2,9 +2,6 @@ package com.revature.app.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -83,7 +80,7 @@ public class CurriculumServiceUnitTest {
 	@Test
 	void test_getCurriculum_Idnotexist() throws BadParameterException, CurriculumNotFoundException {
 		try {
-			CurriculumDto curriculumDto = new CurriculumDto("Language", null);
+			new CurriculumDto("Language", null);
 			curriculumService.getCurriculumByID(0);
 			
 		} catch (CurriculumNotFoundException e) {
@@ -129,18 +126,25 @@ public class CurriculumServiceUnitTest {
 	}
 
 	@Test
-	void test_updatebyID_failed() {
-		
-	}
-
-	@Test
 	void test_delete_success() throws CurriculumNotFoundException {
-		curriculumService.deleteCurriculumByID(1);
-		verify(curriculumDao, times(1)).deleteById(eq(1));
+		
+		when(curriculumDao.findByCurriculumId(1)).thenReturn(new Curriculum(1, "Delete Developer", new ArrayList<>()));
+
+		Curriculum expected = new Curriculum(1, "Delete Developer", new ArrayList<>());
+		Curriculum actual = curriculumService.deleteCurriculumByID(1);
+		
+		assertEquals(expected, actual);
 	}
+	
 
 	@Test
 	void test_delete_failed() {
+		try {
+			curriculumService.deleteCurriculumByID(1);
+			
+		}catch(CurriculumNotFoundException e) {
+			assertEquals(e.getMessage(), "The curriculum could not be deleted because it couldn't be found");
+		}
 
 	}
 
