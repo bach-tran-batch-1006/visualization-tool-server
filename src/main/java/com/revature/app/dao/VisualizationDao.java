@@ -1,6 +1,7 @@
 package com.revature.app.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -11,6 +12,8 @@ import com.revature.app.model.Visualization;
 public interface VisualizationDao extends JpaRepository<Visualization, Integer> {
    
 	List<Visualization> findByVisualizationName(String name);
+
+	Object save(Optional<Visualization> newVisual);
 	
 }
 

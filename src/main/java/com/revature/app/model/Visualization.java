@@ -13,6 +13,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.revature.app.dto.VisualizationDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -24,6 +26,10 @@ import lombok.ToString;
 @Table(name="Visualizations")
 @AllArgsConstructor @EqualsAndHashCode @Getter @Setter @ToString @NoArgsConstructor
 public class Visualization {
+
+	public Visualization(VisualizationDTO visDto) {
+		
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
