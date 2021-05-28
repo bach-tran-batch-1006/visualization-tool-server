@@ -4,6 +4,7 @@ package com.revature.app.service;
 import java.util.List;
 
 import javax.persistence.NoResultException;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public class CurriculumService {
 	@Autowired
 	private CurriculumDao curriculumDao;
 
+	@Transactional(rollbackOn = {CurriculumNotAddedException.class})
 	public Curriculum addCurriculum(CurriculumDto curriculumDto) throws BadParameterException, CurriculumNotAddedException {
 		Curriculum curriculum = new Curriculum(0, curriculumDto.getName(), curriculumDto.getSkillList());
 		
@@ -37,6 +39,7 @@ public class CurriculumService {
 		return curriculum;
 	}
 
+	@Transactional(rollbackOn = {CurriculumNotFoundException.class})
 	public Curriculum getCurriculumByID(int i) throws CurriculumNotFoundException {
 		try {
 			return curriculumDao.findByCurriculumId(i);
@@ -45,6 +48,7 @@ public class CurriculumService {
 		}
 	}
 
+	@Transactional(rollbackOn = {EmptyCurriculumException.class})
 	public List<Curriculum> getAllCurriculum() throws EmptyCurriculumException {
 
 		List<Curriculum> curricula;
@@ -57,6 +61,7 @@ public class CurriculumService {
 		return curricula;
 	}
 
+	@Transactional
 	public Curriculum updateCurriculumByID(int i, CurriculumDto curriculumDto) {
 	  
 	  Curriculum curriculumToUpdate = curriculumDao.findByCurriculumId(i);
@@ -67,6 +72,7 @@ public class CurriculumService {
 	  return curriculumDao.save(curriculumToUpdate);
 	 }
 
+	@Transactional
 	public void deleteCurriculumByID(int i) {
 		
 		curriculumDao.deleteById(1);

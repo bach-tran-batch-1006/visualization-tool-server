@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
@@ -49,6 +50,7 @@ import com.revature.app.service.CurriculumService;
 @WebAppConfiguration
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CurriculumControllerIntegrationTest {
+	
 	@Autowired
 	WebApplicationContext webApplicationContext;
 	
@@ -74,7 +76,8 @@ public class CurriculumControllerIntegrationTest {
 	}
 	
 	public CurriculumDto generateTestDto() {
-		Skill testSkill = new Skill(0, "Test", new Category(0, "TestCat", "Description"));
+		Category testCat = new Category(1, "TestCat", "Description");
+		Skill testSkill = new Skill(1, "Test", testCat);
 		ArrayList<Skill> skills = new ArrayList<Skill>();
 		skills.add(testSkill);
 		CurriculumDto testDto = new CurriculumDto("TestCurriculum", skills);
@@ -122,6 +125,7 @@ public class CurriculumControllerIntegrationTest {
 	}
 	
 	public MvcResult performTest(MockHttpServletRequestBuilder actual, int status, CurriculumDto expected) throws Exception {
+		System.out.println("expected: "+ expected);
 		Curriculum expectedOb = new Curriculum(expected);
 		expectedOb.setCurriculumId(1);
 		String expectedAsJson = om.writeValueAsString(expectedOb);
@@ -142,6 +146,21 @@ public class CurriculumControllerIntegrationTest {
 	@Transactional
 	@Commit
 	void test_addCurriculum_success() throws Exception {
+		Category testCat = new Category(0, "TestCat", "Description");
+		
+		em.getTransaction().begin();
+        em.persist(testCat);
+        em.getTransaction().commit();
+        
+        Session session = em.unwrap(Session.class);
+        Skill testSkill = new Skill(0, "Test", session.get(Category.class, 1));
+        
+		em.getTransaction().begin();
+        em.persist(testSkill);
+        em.getTransaction().commit();
+        
+        
+        
 		CurriculumDto expected = generateTestDto();
 		MockHttpServletRequestBuilder request = postHttpRequest("/curriculum", expected);
 		performTest(request, 200, expected);
