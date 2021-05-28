@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@AllArgsConstructor @EqualsAndHashCode @Getter @Setter @ToString @NoArgsConstructor
+@AllArgsConstructor @EqualsAndHashCode @Getter @Setter @NoArgsConstructor
 public class SkillDTO {
 
 	String name;

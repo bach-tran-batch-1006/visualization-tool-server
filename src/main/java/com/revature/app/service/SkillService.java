@@ -28,12 +28,15 @@ public class SkillService {
 		return skillDAO.findAll();
 	}
 	
+	String badParam = "The skill ID provided must be of type int";
+	String emptyParam = "The skill ID was left blank";
+	
 	@Transactional(rollbackOn = {SkillNotFoundException.class})
 	public Skill getSkillByID(String skillID) throws BadParameterException, EmptyParameterException, SkillNotFoundException {
 		Skill skill = null;
 		try {
 			if(skillID.trim().equals("")){
-				throw new EmptyParameterException("The skill ID was left blank");
+				throw new EmptyParameterException(emptyParam);
 			}
 			int id = Integer.parseInt(skillID);
 			skill = skillDAO.findById(id);
@@ -43,7 +46,7 @@ public class SkillService {
 				return skill;
 			}
 		} catch (NumberFormatException e) {
-			throw new BadParameterException("The skill ID provided must be of type int");
+			throw new BadParameterException(badParam);
 		}
 	}
 	
@@ -66,7 +69,7 @@ public class SkillService {
 		Skill skill = null;
 		try {
 			if(skillID.trim().equals("")){
-				throw new EmptyParameterException("The skill ID was left blank");
+				throw new EmptyParameterException(emptyParam);
 			}
 			if(upSkill.getName().trim().equals("")){
 				throw new EmptyParameterException("The skill name was left blank");
@@ -84,7 +87,7 @@ public class SkillService {
 			}
 			return skill;
 		} catch (NumberFormatException e) {
-			throw new BadParameterException("The skill ID provided must be of type int");
+			throw new BadParameterException(badParam);
 		}
 	}
 
@@ -93,7 +96,7 @@ public class SkillService {
 		Skill skill = null;
 		try {
 			if(skillID.trim().equals("")){
-				throw new EmptyParameterException("The skill ID was left blank");
+				throw new EmptyParameterException(emptyParam);
 			}
 			int id = Integer.parseInt(skillID);
 			skill = skillDAO.findById(id);
@@ -107,7 +110,7 @@ public class SkillService {
 			}
 			return skill;
 		} catch (NumberFormatException e) {
-			throw new BadParameterException("The skill ID provided must be of type int");
+			throw new BadParameterException(badParam);
 		}
 	}
 	
