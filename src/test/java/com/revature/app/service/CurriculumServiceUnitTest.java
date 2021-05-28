@@ -82,12 +82,12 @@ class CurriculumServiceUnitTest {
 
 	@Test
 	void test_getCurriculum_Idnotexist() throws CurriculumNotFoundException {
-		when(curriculumDao.findByCurriculumId(Integer.MAX_VALUE)).thenReturn(null);
 		try {
-			curriculumService.getCurriculumByID(Integer.MAX_VALUE);
-			fail("Exception not thrown");
+			new CurriculumDto("Language", null);
+			curriculumService.getCurriculumByID(0);
+			
 		} catch (CurriculumNotFoundException e) {
-			assertEquals("Curriculum not found", e.getMessage());
+			assertEquals(e.getMessage(), "Curriculum not found");
 		}
 	}
 
