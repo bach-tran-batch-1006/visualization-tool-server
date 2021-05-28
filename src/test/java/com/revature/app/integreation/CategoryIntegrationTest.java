@@ -1,4 +1,4 @@
-package com.revature.app.categoryIntegrationTest;
+package com.revature.app.integreation;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

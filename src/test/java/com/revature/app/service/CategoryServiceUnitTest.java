@@ -35,7 +35,6 @@ import com.revature.app.model.Category;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@Transactional
 class CategoryServiceUnitTest {
 	
 	@Mock
@@ -57,7 +56,6 @@ class CategoryServiceUnitTest {
 	}
 	
 	@Test
-	@Commit
 	@Order(0)
 	void testAddCategory_positive() throws CategoryBlankInputException {
 		Category expected = new Category(1, "Language", "Programming Language");
@@ -72,7 +70,6 @@ class CategoryServiceUnitTest {
     
 	@ParameterizedTest
 	@NullAndEmptySource
-	@Commit
 	void testAddCategory_negative_BlankInputException(String categoryName) {
 			assertThrows(CategoryBlankInputException.class, () -> {
 				categoryService.addCategory(new CategoryDTO(categoryName, "Programming Language"));
@@ -80,7 +77,6 @@ class CategoryServiceUnitTest {
 	}
 	
 	@Test
-	@Commit
 	void testUpdateCategory_positive() throws CategoryBlankInputException, CategoryInvalidIdException {
 		Category oldCategory = new Category(1, "Language", "Programming Language");
 		Category expected = new Category(1, "DevOps", "set of practices that combines software development and IT operations.");
@@ -96,7 +92,6 @@ class CategoryServiceUnitTest {
 	
 	@ParameterizedTest
 	@NullAndEmptySource
-	@Commit
 	void testUpdateCategory_negative_blankInputException(String categoryName) {
 		CategoryDTO inputCategoryDTO = new CategoryDTO(categoryName, "Programming Language");
 		
@@ -109,7 +104,6 @@ class CategoryServiceUnitTest {
 	
 	@ParameterizedTest
 	@MethodSource("invalidIds")
-	@Commit
 	void testUpdateCategory_negative_invalidIdException(int id) {
 		
 		CategoryDTO inputCategoryDTO = new CategoryDTO("Language", "Programming Language");
@@ -129,7 +123,6 @@ class CategoryServiceUnitTest {
 	
 	@ParameterizedTest
 	@MethodSource("invalidIds")
-	@Commit
 	void testDeleteCategory_negative_invalidIdException(int id) {
 	
 		assertThrows(CategoryInvalidIdException.class, () -> {
