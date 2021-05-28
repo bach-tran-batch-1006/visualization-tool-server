@@ -19,6 +19,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.test.annotation.Commit;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -28,6 +30,7 @@ import com.revature.app.model.Category;
 @DataJpaTest
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
 class CategoryDAOUnitTest {
 	
 	@Autowired
@@ -61,7 +64,7 @@ class CategoryDAOUnitTest {
 	@Order(1)
 	void testGetCategoryById_postive() {
 		Category expected = new Category(1, "Language", "Programming language");
-		Category actual = categoryDAO.getById(1);
+		Category actual = categoryDAO.findById(1);
 		
 		assertEquals(expected, actual);
 	}
@@ -70,7 +73,7 @@ class CategoryDAOUnitTest {
 	@Order(2)
 	void testGetCategoryById_negative() {
 		try {
-		categoryDAO.getById(99);
+		categoryDAO.findById(99);
 		} catch (javax.persistence.EntityNotFoundException e) {
 			assertEquals(e.getMessage(), "Unable to find com.revature.app.model.Category with id 99");
 		}
@@ -98,11 +101,8 @@ class CategoryDAOUnitTest {
 	@Order(4)
 	void testDeleteCategory_postive() {
 		
-		Assertions.assertThrows(JpaObjectRetrievalFailureException.class, () -> {
 			categoryDAO.deleteById(1);
-			categoryDAO.getById(1);
-		});
-			
+			assertEquals(categoryDAO.findById(1), null);		
 	}
 
 
