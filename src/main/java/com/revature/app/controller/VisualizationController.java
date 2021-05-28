@@ -3,15 +3,18 @@ package com.revature.app.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.app.dto.VisualizationDTO;
+import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.VisualizationNotFoundException;
 import com.revature.app.model.Visualization;
 import com.revature.app.service.VisualizationService;
@@ -23,7 +26,8 @@ public class VisualizationController {
 	private VisualizationService visualizationService;
 
 	@PostMapping(path = "visualization")
-	public Visualization createVisualization(@RequestBody VisualizationDTO visualizationdto) {
+	@ResponseStatus(HttpStatus.CREATED)
+	public Visualization createVisualization(@RequestBody VisualizationDTO visualizationdto) throws BadParameterException {
 		
 		return this.visualizationService.createVisualization(visualizationdto);
 	}
@@ -42,14 +46,9 @@ public class VisualizationController {
 
 	}
 
-	@GetMapping("visualization/name/{name}")
-	public List<Visualization> findByName(@PathVariable("name") String visName) throws VisualizationNotFoundException {
-		
-		return this.visualizationService.findByName(visName);
-	}
-
+	
 	@PutMapping("visualization/{id}")
-	public Visualization updateVisualization(@PathVariable("id") int id, @RequestBody VisualizationDTO visualizationdto) throws VisualizationNotFoundException {
+	public Visualization updateVisualization(@PathVariable("id") int id, @RequestBody VisualizationDTO visualizationdto) throws VisualizationNotFoundException, BadParameterException {
 
 		return this.visualizationService.updateVisualizationByID(id, visualizationdto);
 

@@ -1,175 +1,181 @@
 package com.revature.app.controller;
 
+import static org.mockito.Mockito.lenient;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-import org.springframework.http.MediaType;
+import java.util.ArrayList;
+import java.util.List;
+
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockHttpSession;
-import org.springframework.test.annotation.Commit;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.app.CurriculaVisualizationToolApplication;
 import com.revature.app.dto.VisualizationDTO;
+import com.revature.app.exception.BadParameterException;
+import com.revature.app.exception.VisualizationNotFoundException;
+import com.revature.app.model.Visualization;
+import com.revature.app.service.VisualizationService;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = CurriculaVisualizationToolApplication.class)
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
+@ExtendWith(MockitoExtension.class)
 class VisualizationControllerTest {
 
-	@Autowired
 	private MockMvc mockmvc;
 
-	@Autowired
-	WebApplicationContext webApplicationContext;
-
 	private ObjectMapper objectmapper;
+	@Mock
+	private VisualizationService mockservice;
+
+	@InjectMocks
+	private VisualizationController vscontroller;
 
 	@BeforeEach
-	void setup() {
-		this.mockmvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+	void setup() throws VisualizationNotFoundException, BadParameterException {
+		this.mockmvc = MockMvcBuilders.standaloneSetup(vscontroller).build();
 		this.objectmapper = new ObjectMapper();
-	}
+
+		VisualizationDTO visualizationdto = new VisualizationDTO("first", null);
+		VisualizationDTO visualizationdtoblank= new VisualizationDTO("", null);
+		Visualization visualization = new Visualization(1, "first", null);
+		Visualization updatevisualization = new Visualization(1, "newname", null);
+		VisualizationDTO nameupdate= new VisualizationDTO("newname", null);
+		List <Visualization> all = new ArrayList<>();
+		all.add(visualization);
+		lenient().when(mockservice.createVisualization(visualizationdto)).thenReturn(visualization);
+		lenient().when(mockservice.findVisualizationByID(1)).thenReturn(visualization);
+		lenient().when(mockservice.findVisualizationByID(35)).thenThrow(new VisualizationNotFoundException());
+		lenient().when(mockservice.updateVisualizationByID(1, nameupdate)).thenReturn(updatevisualization);
+		lenient().when(mockservice.updateVisualizationByID(98, nameupdate)).thenThrow(new VisualizationNotFoundException());
+		lenient().when(mockservice.deleteVisualizationByID(1)).thenReturn(1);
+		lenient().when(mockservice.deleteVisualizationByID(98)).thenThrow(new VisualizationNotFoundException());
+		lenient().when(mockservice.findAllVisualization()).thenReturn(all);
+		lenient().when(mockservice.createVisualization(visualizationdtoblank)).thenThrow(new BadParameterException());
+		lenient().when(mockservice.updateVisualizationByID(1,visualizationdtoblank)).thenThrow(new BadParameterException());
+		}
 
 	@Test
-	@Order(1)
-	@Transactional
-	@Commit
 	void CreateEndpoint() throws Exception {
-		VisualizationDTO newuser = new VisualizationDTO();
-		newuser.setTitle("firstuser");
 
-		objectmapper = new ObjectMapper();
-		String Jsondto = objectmapper.writeValueAsString(newuser);
-		MockHttpSession session = new MockHttpSession();
+		VisualizationDTO body = new VisualizationDTO("first", null);
+		String bodystring = this.objectmapper.writeValueAsString(body);
 
-		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.post("/visualization")
-				.contentType(MediaType.APPLICATION_JSON).content(Jsondto).session(session);
+		Visualization visualization = new Visualization(1, "first", null);
+		String expected = this.objectmapper.writeValueAsString(visualization);
 
-		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isOk());
+		this.mockmvc.perform(post("/visualization").contentType(MediaType.APPLICATION_JSON).content(bodystring))
+				.andExpect(MockMvcResultMatchers.status().isCreated()).andDo(print())
+				.andExpect(MockMvcResultMatchers.content().json(expected));
+
+	}
+	
+	@Test
+	void CreatEndpointvalidBlankVisualization() throws Exception {
+		VisualizationDTO bodyupdate = new VisualizationDTO("", null);
+		String bodystring = this.objectmapper.writeValueAsString(bodyupdate);
+
+
+		this.mockmvc.perform(post("/visualization").contentType(MediaType.APPLICATION_JSON).content(bodystring))
+				.andExpect(MockMvcResultMatchers.status().isBadRequest());
 
 	}
 
 	@Test
-	@Order(2)
-	@Transactional
-	@Commit
 	void FindEndpoint() throws Exception {
 
-		VisualizationDTO newuser = new VisualizationDTO();
-		newuser.setTitle("firstuser2");
+	
 
-		objectmapper = new ObjectMapper();
-		String Jsondto = objectmapper.writeValueAsString(newuser);
-		MockHttpSession session = new MockHttpSession();
-
-		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.put("/visualization/1")
-				.contentType(MediaType.APPLICATION_JSON).content(Jsondto).session(session);
-
-		mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isOk());
+		Visualization visualization = new Visualization(1, "first", null);
+		String expected = this.objectmapper.writeValueAsString(visualization);
+		mockmvc.perform(get("/visualization/1")).andExpect(MockMvcResultMatchers.content().json(expected)).andDo(print())
+		.andExpect(MockMvcResultMatchers.status().isOk());
 
 	}
 
 	@Test
-	@Order(3)
-	@Transactional
-	@Commit
 	void FindEndpointInvalidVisualizationDoNotExist() throws Exception {
 		mockmvc.perform(get("/visualization/35")).andExpect(MockMvcResultMatchers.status().isNotFound());
 
 	}
 
 	@Test
-	@Order(4)
-	@Transactional
-	@Commit
 	void UpdateEndpointvalidVisualization() throws Exception {
+		VisualizationDTO bodyupdate = new VisualizationDTO("newname", null);
+		String bodystring = this.objectmapper.writeValueAsString(bodyupdate);
 
-		VisualizationDTO newuser = new VisualizationDTO();
-		newuser.setTitle("firstuser");
+		Visualization visualization = new Visualization(1, "newname", null);
+		String expected = this.objectmapper.writeValueAsString(visualization);
 
-		objectmapper = new ObjectMapper();
-		String Jsondto = objectmapper.writeValueAsString(newuser);
-		MockHttpSession session = new MockHttpSession();
+		this.mockmvc.perform(put("/visualization/1").contentType(MediaType.APPLICATION_JSON).content(bodystring))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().json(expected));
 
-		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.put("/visualization/1")
-				.contentType(MediaType.APPLICATION_JSON).content(Jsondto).session(session);
+	}
 
-		mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isOk());
+
+	@Test
+	void UpdateEndpointDoNotExistVisualization() throws Exception {
+		VisualizationDTO bodyupdate = new VisualizationDTO("newname", null);
+		String bodystring = this.objectmapper.writeValueAsString(bodyupdate);
+
+		Visualization visualization = new Visualization(1, "newname", null);
+		String expected = this.objectmapper.writeValueAsString(visualization);
+
+		this.mockmvc.perform(put("/visualization/98").contentType(MediaType.APPLICATION_JSON).content(bodystring))
+				.andExpect(MockMvcResultMatchers.status().isNotFound());
+			
+	
+
+	}
+	
+	@Test
+	void updateEndpointinvalidBlankVisualization() throws Exception {
+		VisualizationDTO bodyupdate = new VisualizationDTO("", null);
+		String bodystring = this.objectmapper.writeValueAsString(bodyupdate);
+
+
+		this.mockmvc.perform(put("/visualization/1").contentType(MediaType.APPLICATION_JSON).content(bodystring))
+				.andExpect(MockMvcResultMatchers.status().isBadRequest());
 
 	}
 
 	@Test
-	@Order(5)
-	@Transactional
-	@Commit
-	void UpdateEndpointInvalidVisualization() throws Exception {
-
-		VisualizationDTO newuser = new VisualizationDTO();
-		newuser.setTitle("firstuser");
-
-		objectmapper = new ObjectMapper();
-		String Jsondto = objectmapper.writeValueAsString(newuser);
-		MockHttpSession session = new MockHttpSession();
-
-		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.put("/visualization/98")
-				.contentType(MediaType.APPLICATION_JSON).content(Jsondto).session(session);
-		mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isNotFound());
-
-	}
-
-	@Test
-	@Order(6)
-	@Transactional
-	@Commit
 
 	void deleteEndpointvalidVisualization() throws Exception {
 
-		mockmvc.perform(delete("/visualization/1")).andExpect(MockMvcResultMatchers.status().isOk());
+		mockmvc.perform(delete("/visualization/1").contentType(MediaType.APPLICATION_JSON))
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.content().json("1"));
 
 	}
 
 	@Test
-	@Order(7)
-	@Transactional
-	@Commit
-	void deleteEndpointInvalidVisualization() throws Exception {
+	void deleteEndpointDoNotExistVisualization() throws Exception {
 
-		mockmvc.perform(delete("/visualization/35")).andExpect(MockMvcResultMatchers.status().isNotFound());
+		mockmvc.perform(delete("/visualization/98")).andExpect(MockMvcResultMatchers.status().isNotFound());
 
 	}
 
 	@Test
-	@Order(8)
-	@Transactional
-	@Commit
 	void GetallEndpointvalidVisualizations() throws Exception {
-
-		mockmvc.perform(get("/visualization")).andExpect(MockMvcResultMatchers.status().isOk());
+		Visualization visualization = new Visualization(1, "first", null);
+		List <Visualization> all = new ArrayList<>();
+		all.add(visualization);
+		String allexpect= this.objectmapper.writeValueAsString(all);
+		mockmvc.perform(get("/visualization").contentType(MediaType.APPLICATION_JSON))
+		.andExpect(MockMvcResultMatchers.content().json(allexpect))
+		.andExpect(MockMvcResultMatchers.status().isOk());
 
 	}
 
