@@ -66,10 +66,16 @@ public class CurriculumController {
 		return curriculum;
 	}
 	
-	@DeleteMapping(path="curriculum/{id}")
-	public Object deleteCurriculumByID(@PathVariable("id") String curriculumId) {
-		service.deleteCurriculumByID(Integer.parseInt(curriculumId));
-		return ResponseEntity.status(200);
-	}
+    @DeleteMapping(path="curriculum/{id}")
+    public Object deleteCurriculumByID(@PathVariable("id") String curriculumId) {
+        try {
+            Curriculum curriculum = service.deleteCurriculumByID(Integer.parseInt(curriculumId));
+            return ResponseEntity.status(200).body(curriculum);
+        } catch (NumberFormatException e) {
+            return null;
+        } catch (CurriculumNotFoundException e) {
+            return null;
+        }
+    }
 	
 }

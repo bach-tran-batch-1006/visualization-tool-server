@@ -72,9 +72,13 @@ public class CurriculumService {
 	  return curriculumDao.save(curriculumToUpdate);
 	 }
 
-	@Transactional
-	public void deleteCurriculumByID(int i) {
-		
+	@Transactional(rollbackOn = {CurriculumNotFoundException.class})
+	public Curriculum deleteCurriculumByID(int i) throws CurriculumNotFoundException {
+		Curriculum curriculum = curriculumDao.findByCurriculumId(1);
+		if(curriculum == null) {
+			throw new CurriculumNotFoundException("The curriculum could not be deleted because it couldn't be found");
+		}
 		curriculumDao.deleteById(1);
+		return curriculum;
 	}
 }
