@@ -77,7 +77,6 @@ class CategoryServiceUnitTest {
 			assertThrows(CategoryBlankInputException.class, () -> {
 				categoryService.addCategory(new CategoryDTO(categoryName, "Programming Language"));
 			});
-	
 	}
 	
 	@Test
@@ -105,8 +104,7 @@ class CategoryServiceUnitTest {
 		assertThrows(CategoryBlankInputException.class, () -> {
 			lenient().when(categoryDAO.findById(eq(1))).thenReturn(new Category(1, "Language", "Programming Language"));
 			categoryService.updateCategory(1, inputCategoryDTO);
-		});
-		
+		});	
 	}
 	
 	@ParameterizedTest

@@ -2,7 +2,6 @@ package com.revature.app.controller;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -145,10 +144,4 @@ class CategoryControllerUnitTest {
 		this.mockMvc.perform(delete("/category/3")).andExpect(status().isBadRequest());
 	}
 	
-
-//	@Test
-//	void test_testEndpoint() throws Exception {
-//		mockMvc.perform(get("/categoryTest")).andExpect(MockMvcResultMatchers.status().isOk());
-//	}
-
 }

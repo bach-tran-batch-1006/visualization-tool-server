@@ -6,9 +6,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -29,7 +26,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.app.dao.CategoryDAO;
 import com.revature.app.dto.CategoryDTO;
@@ -65,7 +61,6 @@ public class CategoryIntegrationTest {
     
 	@BeforeEach
     void setup() {
-        //this.skillService = new SkillService();
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         this.om = new ObjectMapper();
        
