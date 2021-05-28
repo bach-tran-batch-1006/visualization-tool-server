@@ -26,7 +26,7 @@ import com.revature.app.model.Skill;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class CurriculumServiceUnitTest {
+class CurriculumServiceUnitTest {
 
 	@Mock
 	private CurriculumDao curriculumDao;
@@ -51,7 +51,7 @@ public class CurriculumServiceUnitTest {
 			CurriculumDto curriculumDto = new CurriculumDto(" ", new ArrayList<Skill>());
 			curriculumService.addCurriculum(curriculumDto);
 		} catch (BadParameterException e) {
-			assertEquals(e.getMessage(), "Curriculum can not be blank.");
+			assertEquals("Curriculum can not be blank.", e.getMessage());
 		}
 	}
 
@@ -62,7 +62,7 @@ public class CurriculumServiceUnitTest {
 			CurriculumDto curriculumDto = new CurriculumDto("Language", null);
 			curriculumService.addCurriculum(curriculumDto);
 		} catch (CurriculumNotAddedException e) {
-			assertEquals(e.getMessage(), "Couldn't add curriculum into the database.");
+			assertEquals("Couldn't add curriculum into the database.", e.getMessage());
 		}
 	}
 
@@ -78,13 +78,13 @@ public class CurriculumServiceUnitTest {
 	}
 
 	@Test
-	void test_getCurriculum_Idnotexist() throws BadParameterException, CurriculumNotFoundException {
+	void test_getCurriculum_Idnotexist() throws CurriculumNotFoundException {
+		when(curriculumDao.findByCurriculumId(Integer.MAX_VALUE)).thenReturn(null);
 		try {
-			new CurriculumDto("Language", null);
-			curriculumService.getCurriculumByID(0);
-			
+			curriculumService.getCurriculumByID(Integer.MAX_VALUE);
+			fail("Exception not thrown");
 		} catch (CurriculumNotFoundException e) {
-			assertEquals(e.getMessage(), "Curriculum not found");
+			assertEquals("Curriculum not found", e.getMessage());
 		}
 	}
 
@@ -109,7 +109,7 @@ public class CurriculumServiceUnitTest {
 				fail("No Curriculum found");
 			}
 		}catch(EmptyCurriculumException e) {
-			assertEquals(e.getMessage(), "No Curriculum found");
+			assertEquals("No Curriculum found", e.getMessage());
 		}
 	}
 
@@ -143,7 +143,7 @@ public class CurriculumServiceUnitTest {
 			curriculumService.deleteCurriculumByID(1);
 			
 		}catch(CurriculumNotFoundException e) {
-			assertEquals(e.getMessage(), "The curriculum could not be deleted because it couldn't be found");
+			assertEquals("The curriculum could not be deleted because it couldn't be found", e.getMessage());
 		}
 
 	}
