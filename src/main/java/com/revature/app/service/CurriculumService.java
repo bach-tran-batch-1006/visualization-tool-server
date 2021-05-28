@@ -1,38 +1,38 @@
 package com.revature.app.service;
 
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.NoResultException;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.revature.app.dao.CurriculumDao;
 import com.revature.app.dto.CurriculumDto;
+import com.revature.app.exception.BadParameterException;
+import com.revature.app.exception.CurriculumNotAddedException;
 import com.revature.app.exception.CurriculumNotFoundException;
 import com.revature.app.exception.EmptyCurriculumException;
 import com.revature.app.model.Curriculum;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Service
 public class CurriculumService {
 
 	@Autowired
-	@Setter
-	@Getter
 	private CurriculumDao curriculumDao;
 
-	public Curriculum addCurriculum(CurriculumDto curriculumDto) {
+	public Curriculum addCurriculum(CurriculumDto curriculumDto) throws BadParameterException, CurriculumNotAddedException {
 		Curriculum curriculum = new Curriculum(0, curriculumDto.getName(), curriculumDto.getSkillList());
-
+		
+		if(curriculumDto.getName().trim().equals("")) {
+			throw new BadParameterException("Curriculum can not be blank.");
+		}
+		
 		curriculum = curriculumDao.save(curriculum);
 
-		if (curriculum.getCurriculumId() == 0) {
-			throw new RuntimeException("Couldn't add curriculum into the database");
+		if (curriculum == null || curriculum.getCurriculumId() == 0) {
+			throw new CurriculumNotAddedException("Couldn't add curriculum into the database.");
 		}
 		return curriculum;
 	}
@@ -45,11 +45,11 @@ public class CurriculumService {
 		}
 	}
 
-	public ArrayList<Curriculum> getAllCurriculum() throws EmptyCurriculumException {
+	public List<Curriculum> getAllCurriculum() throws EmptyCurriculumException {
 
-		ArrayList<Curriculum> curricula = new ArrayList<Curriculum>();
+		List<Curriculum> curricula;
 
-		curricula = (ArrayList<Curriculum>) curriculumDao.findAll();
+		curricula = curriculumDao.findAll();
 
 		if (curricula.isEmpty()) {
 			throw new EmptyCurriculumException("No Curriculum found");
@@ -70,7 +70,5 @@ public class CurriculumService {
 	public void deleteCurriculumByID(int i) {
 		
 		curriculumDao.deleteById(1);
-		
-		
 	}
 }

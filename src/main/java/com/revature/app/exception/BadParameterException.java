@@ -20,7 +20,6 @@ public class BadParameterException extends Exception {
 
 	public BadParameterException(String message, Throwable cause) {
 		super(message, cause);
-
 	}
 
 	public BadParameterException(String message, Throwable cause, boolean enableSuppression,
