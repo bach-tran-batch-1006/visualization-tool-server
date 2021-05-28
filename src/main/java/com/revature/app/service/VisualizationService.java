@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.revature.app.dao.VisualizationDao;
 import com.revature.app.dto.VisualizationDTO;
+import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.VisualizationNotFoundException;
 import com.revature.app.model.Visualization;
 
@@ -21,16 +22,15 @@ public class VisualizationService {
 	private VisualizationDao visualizationDao;
 
 	@Transactional
-	public Visualization createVisualization(VisualizationDTO visualizationdto) {
+	public Visualization createVisualization(VisualizationDTO visualizationdto) throws BadParameterException {
 
 		Visualization visualization = new Visualization();
-		if (visualizationdto.getTitle().length() > 0) {
-			visualization.setVisualizationName(visualizationdto.getTitle());
-		} else if (visualizationdto.getCurricula() != null) {
-			visualization.setCurriculumList(visualizationdto.getCurricula());
-		} else {
-			visualization.setCurriculumList(new ArrayList<>());
+		if (visualizationdto.getTitle().trim().equals("") || visualizationdto.getCurricula() == null) {
+			throw new BadParameterException("Parameter can't be blank");
 		}
+		visualization.setCurriculumList(visualizationdto.getCurricula());
+
+		visualization.setVisualizationName(visualizationdto.getTitle());
 		visualization = this.visualizationDao.save(visualization);
 
 		return visualization;
@@ -49,11 +49,14 @@ public class VisualizationService {
 
 	@Transactional
 	public Visualization updateVisualizationByID(Integer id, VisualizationDTO visualizationdto)
-			throws VisualizationNotFoundException {
+			throws VisualizationNotFoundException, BadParameterException {
 
+		if (visualizationdto.getTitle().trim().equals("") || visualizationdto.getCurricula() == null) {
+			throw new BadParameterException("Parameter can't be blank");
+		}
 		Optional<Visualization> diagram = this.visualizationDao.findById(id);
 		if (!diagram.isPresent()) {
-			throw new VisualizationNotFoundException();
+			throw new VisualizationNotFoundException("Visualization not Found");
 		}
 
 		Visualization visualization = diagram.get();
@@ -76,19 +79,7 @@ public class VisualizationService {
 		return 1;
 	}
 
-	@Transactional
-	public List<Visualization> findByName(String name) throws VisualizationNotFoundException {
-
-		List<Visualization> visList = visualizationDao.findByVisualizationName(name);
-
-		if (visList == null) {
-			throw new VisualizationNotFoundException("Visualization not found");
-		}
-
-		return visList;
-
-	}
-
+	
 	public List<Visualization> findAllVisualization() {
 
 		return visualizationDao.findAll();

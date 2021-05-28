@@ -33,7 +33,7 @@ public class Visualization {
 	@Column(name = "visualization_name")
 	private String visualizationName;
 	
-	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+	@ManyToMany(cascade = {CascadeType.MERGE})
 	@JoinTable(
 			name = "Visualizations_Curricula",
 			joinColumns = {@JoinColumn(name = "visualization_id")},
