@@ -41,7 +41,6 @@ public class CurriculumController {
 		try {
 			return service.getCurriculumByID(Integer.parseInt(curriculumId));
 		} catch (NumberFormatException | CurriculumNotFoundException e) {
-			e.printStackTrace();
 			return ResponseEntity.status(404).body(e.getMessage());
 		}
 	}
@@ -51,7 +50,6 @@ public class CurriculumController {
 		try {
 			return service.addCurriculum(dto);
 		} catch (Exception e) {
-			e.printStackTrace();
 			return ResponseEntity.status(400).body(e.getMessage());
 		}
 	}
