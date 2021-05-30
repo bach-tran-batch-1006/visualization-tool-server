@@ -50,32 +50,30 @@ import com.revature.app.service.CurriculumService;
 @WebAppConfiguration
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CurriculumControllerIntegrationTest {
-	
+
 	@Autowired
 	WebApplicationContext webApplicationContext;
-	
+
 	@Autowired
 	CurriculumService service;
-	
+
 	@Autowired
 	CurriculumDao dao;
-	
-	
+
 	private MockMvc mockMvc;
 	private ObjectMapper om;
-	
+
 	@Autowired
 	EntityManagerFactory emf;
 	private EntityManager em;
-	
+
 	@BeforeEach
 	void setup() {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 		this.om = new ObjectMapper();
 		em = emf.createEntityManager();
 	}
-	
-	
+
 //_________________SUPPORT_FUNCTIONS__________________//	
 	public CurriculumDto generateTestDto() {
 		Session session = em.unwrap(Session.class);
@@ -85,105 +83,102 @@ class CurriculumControllerIntegrationTest {
 		CurriculumDto testDto = new CurriculumDto("TestCurriculum", skills);
 		return testDto;
 	}
-	
-	public MockHttpServletRequestBuilder getHttpRequest(String path, CurriculumDto params) throws JsonProcessingException {
+
+	public MockHttpServletRequestBuilder getHttpRequest(String path, CurriculumDto params)
+			throws JsonProcessingException {
 		String contentString = om.writeValueAsString(params);
-		
-		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(path)
-				.contentType(MediaType.APPLICATION_JSON)
+
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(path).contentType(MediaType.APPLICATION_JSON)
 				.content(contentString);
-		
+
 		return request;
 	}
-	
-	public MockHttpServletRequestBuilder postHttpRequest(String path, CurriculumDto params) throws JsonProcessingException {
+
+	public MockHttpServletRequestBuilder postHttpRequest(String path, CurriculumDto params)
+			throws JsonProcessingException {
 		String contentString = om.writeValueAsString(params);
-		
+
 		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post(path)
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(contentString);
-		
+				.contentType(MediaType.APPLICATION_JSON).content(contentString);
+
 		return request;
 	}
-	
-	public MockHttpServletRequestBuilder putHttpRequest(String path, CurriculumDto params) throws JsonProcessingException {
+
+	public MockHttpServletRequestBuilder putHttpRequest(String path, CurriculumDto params)
+			throws JsonProcessingException {
 		String contentString = om.writeValueAsString(params);
-		
-		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.put(path)
-				.contentType(MediaType.APPLICATION_JSON)
+
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.put(path).contentType(MediaType.APPLICATION_JSON)
 				.content(contentString);
-		
+
 		return request;
 	}
-	
-	public MockHttpServletRequestBuilder deleteHttpRequest(String path, Curriculum params) throws JsonProcessingException {
+
+	public MockHttpServletRequestBuilder deleteHttpRequest(String path, Curriculum params)
+			throws JsonProcessingException {
 		String contentString = om.writeValueAsString(params);
-		
+
 		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete(path)
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(contentString);
-		
+				.contentType(MediaType.APPLICATION_JSON).content(contentString);
+
 		return request;
 	}
-	
+
 	public void performTest(MockHttpServletRequestBuilder actual, int status, CurriculumDto expected) throws Exception {
 		String expectedDto = om.writeValueAsString(expected);
-		
+
 		Curriculum expectedOb = new Curriculum(expected);
 		expectedOb.setCurriculumId(1);
 		String expectedAsJson = om.writeValueAsString(expectedOb);
 
 		this.mockMvc.perform(actual.contentType(MediaType.APPLICATION_JSON).content(expectedDto))
-			.andExpect(MockMvcResultMatchers.status().is(status))
-			.andExpect(MockMvcResultMatchers.content()
-					.json(expectedAsJson)).andReturn();
+				.andExpect(MockMvcResultMatchers.status().is(status))
+				.andExpect(MockMvcResultMatchers.content().json(expectedAsJson)).andReturn();
 	}
 
-	
-	public ResultActions performTest(MockHttpServletRequestBuilder actual, int status, CurriculumDto expected, int flag) throws Exception {
-		System.out.println("expected: "+ expected);
+	public ResultActions performTest(MockHttpServletRequestBuilder actual, int status, CurriculumDto expected, int flag)
+			throws Exception {
+		System.out.println("expected: " + expected);
 		Curriculum expectedOb = new Curriculum(expected);
 		expectedOb.setCurriculumId(1);
 		String expectedAsJson = om.writeValueAsString(expectedOb);
-		System.out.println("expectedAsJson: "+ expectedAsJson);
-		
+		System.out.println("expectedAsJson: " + expectedAsJson);
+
 		return this.mockMvc.perform(actual).andExpect(MockMvcResultMatchers.status().is(status))
 				.andExpect(MockMvcResultMatchers.content().json(expectedAsJson));
 	}
-	
-	public MvcResult performTest(MockHttpServletRequestBuilder actual, int status, List<Curriculum> expected) throws Exception {
+
+	public MvcResult performTest(MockHttpServletRequestBuilder actual, int status, List<Curriculum> expected)
+			throws Exception {
 		String expectedAsJson = om.writeValueAsString(expected);
-		
+
 		return this.mockMvc.perform(actual).andExpect(MockMvcResultMatchers.status().is(status))
 				.andExpect(MockMvcResultMatchers.content().json(expectedAsJson)).andReturn();
 	}
-	
-	//_________________END_SUPPORT_FUNCTIONS__________________//
-	
+
+	// _________________END_SUPPORT_FUNCTIONS__________________//
+
 	@Test
 	@Order(0)
 	@Transactional
 	@Commit
 	void test_addCurriculum_success() throws Exception {
 		Category testCat = new Category(0, "TestCat", "Description");
-		
+
 		em.getTransaction().begin();
-        em.persist(testCat);
-        em.getTransaction().commit();
-        
-        Session session = em.unwrap(Session.class);
-        Skill testSkill = new Skill(0, "Test", session.get(Category.class, 1));
-        
+		em.persist(testCat);
+		em.getTransaction().commit();
+
+		Session session = em.unwrap(Session.class);
+		Skill testSkill = new Skill(0, "Test", session.get(Category.class, 1));
+
 		em.getTransaction().begin();
-        em.persist(testSkill);
-        em.getTransaction().commit();
-        
-        
-        
+		em.persist(testSkill);
+		em.getTransaction().commit();
+
 		CurriculumDto expected = generateTestDto();
-		MockHttpServletRequestBuilder request =  MockMvcRequestBuilders
-                .post("/curriculum");
-				//postHttpRequest("/curriculum", expected);
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/curriculum");
+		// postHttpRequest("/curriculum", expected);
 		performTest(request, 200, expected);
 	}
 
@@ -191,62 +186,57 @@ class CurriculumControllerIntegrationTest {
 	@Order(1)
 	@Transactional
 	void test_getCurriculumById_success() throws Exception {
-		
+
 		Session session = em.unwrap(Session.class);
-		if(session.get(Curriculum.class, 1) == null) {
-            fail("nothing is committed");
-        }
-		
+		if (session.get(Curriculum.class, 1) == null) {
+			fail("nothing is committed");
+		}
+
 		CurriculumDto expected = generateTestDto();
-		MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .get("/curriculum/1");			
-		//getHttpRequest("/curriculum/1", expected);
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("/curriculum/1");
+		// getHttpRequest("/curriculum/1", expected);
 		performTest(request, 200, expected);
 	}
-	
 	/*
 	 * @Test
 	 * 
 	 * @Order(100)
 	 * 
 	 * @Transactional void test_getCurriculumById_NotFoundException() throws
-	 * Exception { Session session = em.unwrap(Session.class);
-	 * if(session.get(Curriculum.class, 1) == null) { fail("nothing is committed");
-	 * }
+	 * Exception { Session session = em.unwrap(Session.class); if
+	 * (session.get(Curriculum.class, 1) == null) { fail("nothing is committed"); }
 	 * 
 	 * CurriculumDto expected = generateTestDto(); MockHttpServletRequestBuilder
-	 * request = MockMvcRequestBuilders .get("/curriculum/1000000");
-	 * //getHttpRequest("/curriculum/1", expected); performTest(request, 200,
+	 * request = MockMvcRequestBuilders.get("/curriculum/1000000"); //
+	 * getHttpRequest("/curriculum/1", expected); performTest(request, 200,
 	 * expected); }
 	 */
-	
+
 	@Test
 	@Order(2)
 	@Transactional
 	void test_getAllCurriculum_success() throws Exception {
 		CurriculumDto secondDto = generateTestDto();
 		secondDto.setName("AnotherOne");
-		//temporarily save a second Curriculum to the db
+		// temporarily save a second Curriculum to the db
 		em.getTransaction().begin();
 		em.persist(new Curriculum(secondDto));
 		em.getTransaction().commit();
-		
+
 		ArrayList<Curriculum> expected = new ArrayList<Curriculum>();
 		Session session = em.unwrap(Session.class);
 		expected.add(session.get(Curriculum.class, 1));
 		expected.add(session.get(Curriculum.class, 2));
-		
-		if(expected.size() < 2) {
+
+		if (expected.size() < 2) {
 			fail("Not properly persisted");
 		}
-		
-		MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-				.get("/curriculum");
-		
+
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("/curriculum");
+
 		performTest(request, 200, expected);
 	}
-	
-	
+
 	@Test
 	@Order(3)
 	@Transactional
@@ -256,25 +246,22 @@ class CurriculumControllerIntegrationTest {
 		MockHttpServletRequestBuilder request = putHttpRequest("/curriculum/1", expected);
 		performTest(request, 200, expected);
 	}
-	
-	
+
 	@Test
 	@Order(4)
 	@Transactional
 	void test_deleteCurriculumById_success() throws Exception {
 		Session session = em.unwrap(Session.class);
 		Curriculum expected = session.get(Curriculum.class, 1);
-		if(expected == null) {
+		if (expected == null) {
 			fail("Nothing to delete in database");
 		}
-		
+
 		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.delete("/curriculum/1");
-		
+
 		String curriculumJson = om.writeValueAsString(expected);
-		
-		this.mockMvc
-			.perform(builder)
-			.andExpect(MockMvcResultMatchers.status().is(200))
-			.andExpect(MockMvcResultMatchers.content().json(curriculumJson));
+
+		this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().is(200))
+				.andExpect(MockMvcResultMatchers.content().json(curriculumJson));
 	}
 }
