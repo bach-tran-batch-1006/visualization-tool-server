@@ -87,7 +87,7 @@ class CurriculumServiceUnitTest {
 			curriculumService.getCurriculumByID(10);
 			
 		} catch (CurriculumNotFoundException e) {
-			assertEquals(e.getMessage(), "Curriculum not found");
+			assertEquals("Curriculum not found", e.getMessage());
 		}
 	}
 
