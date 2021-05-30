@@ -25,16 +25,12 @@ public class CurriculumController {
 	private CurriculumService service;
 
 	@GetMapping(path = "curriculum")
-	public Object getAllCurriculum() {
+	public Object getAllCurriculum() throws EmptyCurriculumException {
 		List<Curriculum> curricula;
-		try {
-			curricula = service.getAllCurriculum();
-			if (curricula.isEmpty()) {
-				return ResponseEntity.status(400).body(curricula);
-			}
-		} catch (EmptyCurriculumException e) {
-			e.printStackTrace();
-			return "We need a MessageDTO";
+
+		curricula = service.getAllCurriculum();
+		if (curricula.isEmpty()) {
+			return ResponseEntity.status(400).body(curricula);
 		}
 
 		return ResponseEntity.status(200).body(curricula);
@@ -46,7 +42,7 @@ public class CurriculumController {
 			return service.getCurriculumByID(Integer.parseInt(curriculumId));
 		} catch (NumberFormatException | CurriculumNotFoundException e) {
 			e.printStackTrace();
-			return "We need a MessageDTO";
+			return ResponseEntity.status(404).body(e.getMessage());
 		}
 	}
 
@@ -67,12 +63,10 @@ public class CurriculumController {
 
 	@DeleteMapping(path = "curriculum/{id}")
 	public Object deleteCurriculumByID(@PathVariable("id") String curriculumId) throws CurriculumNotFoundException {
-		try {
-			Curriculum curriculum = service.deleteCurriculumByID(Integer.parseInt(curriculumId));
-			return ResponseEntity.status(200).body(curriculum);
-		} catch (NumberFormatException e) {
-			return null;
-		}
+
+		Curriculum curriculum = service.deleteCurriculumByID(Integer.parseInt(curriculumId));
+		return ResponseEntity.status(200).body(curriculum);
+
 	}
 
 }

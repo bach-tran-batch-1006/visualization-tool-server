@@ -84,7 +84,7 @@ class CurriculumServiceUnitTest {
 	void test_getCurriculum_Idnotexist() throws CurriculumNotFoundException {
 		try {
 			new CurriculumDto("Language", null);
-			curriculumService.getCurriculumByID(0);
+			curriculumService.getCurriculumByID(10);
 			
 		} catch (CurriculumNotFoundException e) {
 			assertEquals(e.getMessage(), "Curriculum not found");
