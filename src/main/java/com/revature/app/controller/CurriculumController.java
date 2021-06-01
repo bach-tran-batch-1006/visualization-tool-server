@@ -1,5 +1,6 @@
 package com.revature.app.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +26,13 @@ public class CurriculumController {
 	private CurriculumService service;
 
 	@GetMapping(path = "curriculum")
-	public Object getAllCurriculum() throws EmptyCurriculumException {
-		List<Curriculum> curricula;
+	public Object getAllCurriculum() {
+		List<Curriculum> curricula = new ArrayList<Curriculum>();
 
-		curricula = service.getAllCurriculum();
-		if (curricula.isEmpty()) {
-			return ResponseEntity.status(400).body(curricula);
+		try {
+			curricula = service.getAllCurriculum();
+		} catch (EmptyCurriculumException e) {
+			return ResponseEntity.status(200).body(curricula);
 		}
 
 		return ResponseEntity.status(200).body(curricula);
