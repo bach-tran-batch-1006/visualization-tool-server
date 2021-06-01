@@ -1,4 +1,4 @@
-package com.revature.app.integreation;
+package com.revature.app.integration;
 
 import java.util.ArrayList;
 import java.util.List;
