@@ -128,10 +128,6 @@ class CurriculumServiceUnitTest {
 		assertEquals(expected, actual);
 	}
 
-	@Test
-	void test_updatebyID_failed() {
-		
-	}
 
 	@Test
 	void test_delete_success() throws CurriculumNotFoundException {
