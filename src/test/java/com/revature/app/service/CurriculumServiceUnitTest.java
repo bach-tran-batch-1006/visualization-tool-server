@@ -135,8 +135,12 @@ class CurriculumServiceUnitTest {
 
 	@Test
 	void test_delete_success() throws CurriculumNotFoundException {
-		curriculumService.deleteCurriculumByID(1);
-		verify(curriculumDao, times(1)).deleteById(eq(1));
+		when(curriculumDao.findByCurriculumId(1)).thenReturn(new Curriculum(1, "Delete Developer", new ArrayList<>()));
+
+		Curriculum expected = new Curriculum(1, "Delete Developer", new ArrayList<>());
+		Curriculum actual = curriculumService.deleteCurriculumByID(1);
+		
+		assertEquals(expected, actual);
 	}
 
 	@Test
