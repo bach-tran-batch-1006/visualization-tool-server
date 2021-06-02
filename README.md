@@ -25,6 +25,7 @@ The Curricula Visualization Tool is used, at a high-level, to provide a color-co
 | Skill | A skill / technology relevant to one or more curricula |
 | Category | Categorizes many skills into unique groups |
 
+# Backend Endpoints
 <p align="center">
   <a href="#visualizations">Visualizations</a> •
   <a href="#curricula">Curricula</a> •
@@ -32,7 +33,6 @@ The Curricula Visualization Tool is used, at a high-level, to provide a color-co
   <a href="#categories">Categories</a>
 </p>
 
-# Backend Endpoints
 ## Visualizations
 - `POST /visualization` : Creates a new visualization
     - **Required Fields**
