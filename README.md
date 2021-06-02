@@ -25,47 +25,82 @@ The Curricula Visualization Tool is used, at a high-level, to provide a color-co
 | Skill | A skill / technology relevant to one or more curricula |
 | Category | Categorizes many skills into unique groups |
 
+<p align="center">
+  <a href="#visualizations">Visualizations</a> •
+  <a href="#curricula">Curricula</a> •
+  <a href="#skills">Skills</a> •
+  <a href="#categories">Categories</a>
+</p>
+
 # Backend Endpoints
 ## Visualizations
 - `POST /visualization` : Creates a new visualization
+    - **Required Fields**
+        - `title` : Title of the visualization
 - `GET /visualization` : Gets a list of all visualizations
 - `GET /visualization/:id` : Get a specific visualization
 - `PUT /visualization/:id` : Update a specific visualization
+    - **Required Fields**
+        - `title` : Title of the visualization
 - `DELETE /visualization/:id` Delete a specific visualization
 
-#### Related Fields
-- `title` : Title of the visualization
+#### Object Fields
+- `visualizationId` : Unique Identifier
+- `visualizationName` : Title of the visualization
+- `curriculumList` : Curriculum list relating to this visualization
 
 ## Curricula
 - `POST /curriculum` : Creates a new curriculum
+    - **Required Fields**
+        - `name` : Name of the curriculum
 - `GET /curriculum` : Gets a list of all curricula
 - `GET /curriculum/:id` : Get a specific curriculum
 - `PUT /curriculum/:id` : Update a specific curriculum
+    - **Required Fields**
+        - `name` : Name of the curriculum
 - `DELETE /curriculum/:id` Delete a specific curriculum
 
-#### Related Fields
-- `name` : Name of the curriculum
+#### Object Fields
+- `curriculumId` : Unique Identifier
+- `curriculumName` : Name of the curriculum
+- `skillList` : Skill list relating to this curriculum
 
 ## Skills
 - `POST /skill` : Creates a new skill
+    - **Required Fields**
+        - `name` : Name of the skill
+        - `category` : Category Reference Object
+            - `categoryId`
+            - `categoryName`
+            - `categoryDescription`
 - `GET /allSkills` : Gets a list of all skills
 - `GET /skill/:id` : Get a specific skill
 - `PUT /skill/:id` : Update a specific skill
+    - **Required Fields**
+        - `name` : Name of the skill
+        - `category` : Category Reference Object
+            - `categoryId`
+            - `categoryName`
+            - `categoryDescription`
 - `DELETE /skill/:id` Delete a specific skill
 
-#### Related Fields
-- `name` : Name of the skill
-- `category` : Category Reference Object
-    - `categoryId`
-    - `categoryName`
-    - `categoryDescription`
+#### Object Fields
+- `skillId` : Unique Identifier
+- `skillName` : Name of the curriculum
+- `category` : The category of this skill
 
 ## Categories
 - `POST /category` : Creates a new category
+    - **Required Fields**
+        - `categoryName` : Name of the category
+        - `categoryDescription` : Description for the category
 - `GET /category` : Gets a list of all categories
 - `PUT /category/:id` : Update a specific category
+    - **Required Fields**
+        - `categoryName` : Name of the category
+        - `categoryDescription` : Description for the category
 - `DELETE /category/:id` Delete a specific category
 
-#### Related Fields
-- `categoryName` : Name of the category
-- `categoryDescription` : Description for the category
+#### Object Fields
+- `categoryId` : Unique Identifier
+- `categoryName` : Name of this category
