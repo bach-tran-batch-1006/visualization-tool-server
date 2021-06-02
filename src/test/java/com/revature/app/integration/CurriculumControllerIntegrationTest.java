@@ -1,4 +1,4 @@
-package com.revature.app.controller;
+package com.revature.app.integration;
 
 import static org.junit.jupiter.api.Assertions.fail;
 

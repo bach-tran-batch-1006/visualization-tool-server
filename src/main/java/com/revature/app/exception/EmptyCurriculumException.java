@@ -1,5 +1,6 @@
 package com.revature.app.exception;
 
+@SuppressWarnings("serial")
 public class EmptyCurriculumException extends Exception {
 
 	public EmptyCurriculumException() {

@@ -13,7 +13,7 @@ public interface SkillDAO extends JpaRepository<Skill, Integer>{
 
 	public List<Skill> findAll();
 	
-	public Skill findById(int skillID);
+	public Skill findById(int visualizationId);
 	
 	
 	

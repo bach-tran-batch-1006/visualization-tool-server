@@ -10,6 +10,7 @@ class CurriculaVisualizationToolApplicationTests {
 
 	@Test
 	void contextLoads() {
+	
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.revature.app.exception;
 
+@SuppressWarnings("serial")
 public class CategoryInvalidIdException extends Exception {
 
 	public CategoryInvalidIdException() {

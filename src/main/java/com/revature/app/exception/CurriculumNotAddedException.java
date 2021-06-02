@@ -1,5 +1,6 @@
 package com.revature.app.exception;
 
+@SuppressWarnings("serial")
 public class CurriculumNotAddedException extends Exception {
 
 	public CurriculumNotAddedException() {

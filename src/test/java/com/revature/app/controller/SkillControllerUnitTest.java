@@ -95,13 +95,7 @@ class SkillControllerUnitTest {
 		when(mockSkillService.getAllSkills()).thenReturn(expected);
 		mockMvc.perform(get("/allSkills")).andExpect(MockMvcResultMatchers.status().is(200));
 	}
-	
-	@Test
-	void test_getAllSkills_noSkills() throws Exception {
-		List<Skill> emptySkillList = new ArrayList<Skill>();
-		when(mockSkillService.getAllSkills()).thenReturn(emptySkillList);
-		mockMvc.perform(get("/allSkills")).andExpect(MockMvcResultMatchers.status().is(404));
-	}
+
 
 //
 	@Test
@@ -157,7 +151,7 @@ class SkillControllerUnitTest {
 				post("/skill")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(body)
-				).andExpect(MockMvcResultMatchers.status().is(403));
+				).andExpect(MockMvcResultMatchers.status().is(400));
 	}
 	
 	@Test
@@ -168,7 +162,7 @@ class SkillControllerUnitTest {
 				post("/skill")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(body)
-				).andExpect(MockMvcResultMatchers.status().is(403));
+				).andExpect(MockMvcResultMatchers.status().is(400));
 	}
 	
 //	

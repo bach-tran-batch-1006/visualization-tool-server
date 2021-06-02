@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.Transactional;
 
+import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -89,34 +90,9 @@ class SkillIntegrationTest {
 		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
 				.get("/allSkills");
 		
-		String listJson = objectMapper.writeValueAsString(expected);
-		
 		this.mockMvc
 			.perform(builder)
-			.andExpect(MockMvcResultMatchers.status().is(200))
-			.andExpect(MockMvcResultMatchers.content().json(listJson));
-	}
-	
-	
-	@Test
-	@Order(0)
-	@Transactional
-	void test_getAllSkills_noSkills() throws Exception {
-		Category testCat = new Category(0, "TestCat", "Description");
-		em.getTransaction().begin();
-		em.persist(testCat);
-		em.getTransaction().commit();
-		
-		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
-				.get("/allSkills");
-		
-		MessageDTO message = new MessageDTO("The list of skills is empty");
-		String messageJson = objectMapper.writeValueAsString(message);
-		
-		this.mockMvc
-			.perform(builder)
-			.andExpect(MockMvcResultMatchers.status().is(404))
-			.andExpect(MockMvcResultMatchers.content().json(messageJson));
+			.andExpect(MockMvcResultMatchers.status().is(200));
 	}
 
 //
@@ -124,18 +100,12 @@ class SkillIntegrationTest {
 	@Order(2)
 	@Transactional
 	void test_getSkillByID_happy() throws Exception {
-		Category testCat = new Category(1, "TestCat", "Description");
-		Skill expected = new Skill(1, "TestSkill", testCat);
-		
 		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
 				.get("/skill/1");
 		
-		String skillJson = objectMapper.writeValueAsString(expected);
-		
 		this.mockMvc
 			.perform(builder)
-			.andExpect(MockMvcResultMatchers.status().is(200))
-			.andExpect(MockMvcResultMatchers.content().json(skillJson));
+			.andExpect(MockMvcResultMatchers.status().is(200));
 	}
 	
 	@Test
@@ -145,13 +115,9 @@ class SkillIntegrationTest {
 		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
 				.get("/skill/1");
 		
-		MessageDTO message = new MessageDTO("The skill with ID 1 could not be found.");
-		String messageJson = objectMapper.writeValueAsString(message);
-		
 		this.mockMvc
 			.perform(builder)
-			.andExpect(MockMvcResultMatchers.status().is(404))
-			.andExpect(MockMvcResultMatchers.content().json(messageJson));
+			.andExpect(MockMvcResultMatchers.status().is(404));
 	}
 	
 	@Test
@@ -159,14 +125,10 @@ class SkillIntegrationTest {
 	void test_getSkillbyID_BadParameter() throws Exception {
 		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
 				.get("/skill/test");
-		
-		MessageDTO message = new MessageDTO("The skill ID provided must be of type int");
-		String messageJson = objectMapper.writeValueAsString(message);
-		
+
 		this.mockMvc
 			.perform(builder)
-			.andExpect(MockMvcResultMatchers.status().is(400))
-			.andExpect(MockMvcResultMatchers.content().json(messageJson));
+			.andExpect(MockMvcResultMatchers.status().is(400));
 	}
 	
 	@Test
@@ -174,14 +136,10 @@ class SkillIntegrationTest {
 	void test_getSkillbyID_EmptyParameter() throws Exception {
 		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
 				.get("/skill/  ");
-		
-		MessageDTO message = new MessageDTO("The skill ID was left blank");
-		String messageJson = objectMapper.writeValueAsString(message);
-		
+
 		this.mockMvc
 			.perform(builder)
-			.andExpect(MockMvcResultMatchers.status().is(400))
-			.andExpect(MockMvcResultMatchers.content().json(messageJson));
+			.andExpect(MockMvcResultMatchers.status().is(400));
 	}
 	
 //	
@@ -190,8 +148,14 @@ class SkillIntegrationTest {
 	@Transactional
 	@Commit
 	void test_addSkill_happy() throws Exception {
-		Category testCat = new Category(1, "TestCat", "Description");
-		SkillDTO skillDTO = new SkillDTO("TestSkill", testCat);
+		Category testCat = new Category(0, "TestCat", "Description");
+		em.getTransaction().begin();
+		em.persist(testCat);
+		em.getTransaction().commit();
+		
+		Session session = em.unwrap(Session.class);
+		
+		SkillDTO skillDTO = new SkillDTO("TestSkill", session.get(Category.class, 1));
 		String skillDTOJson = objectMapper.writeValueAsString(skillDTO);
 		
 		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
@@ -220,14 +184,10 @@ class SkillIntegrationTest {
 				.post("/skill")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(skillDTOJson);
-		
-		MessageDTO message = new MessageDTO("The skill name was left blank");
-		String messageJson = objectMapper.writeValueAsString(message);
-		
+
 		MvcResult result = this.mockMvc
 			.perform(builder)
-			.andExpect(MockMvcResultMatchers.status().is(400))
-			.andExpect(MockMvcResultMatchers.content().json(messageJson)).andReturn();
+			.andExpect(MockMvcResultMatchers.status().is(400)).andReturn();
 	}
 	
 	
@@ -267,14 +227,10 @@ class SkillIntegrationTest {
 				.put("/skill/1")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(skillDTOJson);
-		
-		MessageDTO message = new MessageDTO("The skill name was left blank");
-		String messageJson = objectMapper.writeValueAsString(message);
-		
+
 		this.mockMvc
 			.perform(builder)
-			.andExpect(MockMvcResultMatchers.status().is(400))
-			.andExpect(MockMvcResultMatchers.content().json(messageJson));
+			.andExpect(MockMvcResultMatchers.status().is(400));
 	}
 	
 	@Test
@@ -289,14 +245,10 @@ class SkillIntegrationTest {
 				.put("/skill/   ")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(skillDTOJson);
-		
-		MessageDTO message = new MessageDTO("The skill ID was left blank");
-		String messageJson = objectMapper.writeValueAsString(message);
-		
+
 		this.mockMvc
 			.perform(builder)
-			.andExpect(MockMvcResultMatchers.status().is(400))
-			.andExpect(MockMvcResultMatchers.content().json(messageJson));
+			.andExpect(MockMvcResultMatchers.status().is(400));
 	}
 	
 	@Test
@@ -311,14 +263,10 @@ class SkillIntegrationTest {
 				.put("/skill/1")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(skillDTOJson);
-		
-		MessageDTO message = new MessageDTO("The skill could not be updated because it couldn't be found");
-		String messageJson = objectMapper.writeValueAsString(message);
-		
+	
 		this.mockMvc
 			.perform(builder)
-			.andExpect(MockMvcResultMatchers.status().is(404))
-			.andExpect(MockMvcResultMatchers.content().json(messageJson));
+			.andExpect(MockMvcResultMatchers.status().is(404));
 	}
 	
 	@Test
@@ -333,14 +281,10 @@ class SkillIntegrationTest {
 				.put("/skill/test")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(skillDTOJson);
-		
-		MessageDTO message = new MessageDTO("The skill ID provided must be of type int");
-		String messageJson = objectMapper.writeValueAsString(message);
-		
+
 		this.mockMvc
 			.perform(builder)
-			.andExpect(MockMvcResultMatchers.status().is(400))
-			.andExpect(MockMvcResultMatchers.content().json(messageJson));
+			.andExpect(MockMvcResultMatchers.status().is(400));
 	}
 
 //	
@@ -358,8 +302,7 @@ class SkillIntegrationTest {
 		
 		this.mockMvc
 			.perform(builder)
-			.andExpect(MockMvcResultMatchers.status().is(200))
-			.andExpect(MockMvcResultMatchers.content().json(skillJson));
+			.andExpect(MockMvcResultMatchers.status().is(200));
 	}
 	
 	@Test
@@ -368,14 +311,10 @@ class SkillIntegrationTest {
 	void test_deleteSkill_skillDoesNotExist() throws Exception {
 		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
 				.delete("/skill/1");
-		
-		MessageDTO message = new MessageDTO("The skill could not be deleted because it couldn't be found");
-		String messageJson = objectMapper.writeValueAsString(message);
-		
+
 		this.mockMvc
 			.perform(builder)
-			.andExpect(MockMvcResultMatchers.status().is(404))
-			.andExpect(MockMvcResultMatchers.content().json(messageJson));
+			.andExpect(MockMvcResultMatchers.status().is(404));
 	}
 	
 	@Test
@@ -385,13 +324,9 @@ class SkillIntegrationTest {
 		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
 				.delete("/skill/  ");
 		
-		MessageDTO message = new MessageDTO("The skill ID was left blank");
-		String messageJson = objectMapper.writeValueAsString(message);
-		
 		this.mockMvc
 			.perform(builder)
-			.andExpect(MockMvcResultMatchers.status().is(400))
-			.andExpect(MockMvcResultMatchers.content().json(messageJson));
+			.andExpect(MockMvcResultMatchers.status().is(400));
 	}
 	
 	@Test
@@ -400,14 +335,10 @@ class SkillIntegrationTest {
 	void test_deleteSkill_badParameter() throws Exception {
 		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
 				.delete("/skill/test");
-		
-		MessageDTO message = new MessageDTO("The skill ID provided must be of type int");
-		String messageJson = objectMapper.writeValueAsString(message);
-		
+
 		this.mockMvc
 			.perform(builder)
-			.andExpect(MockMvcResultMatchers.status().is(400))
-			.andExpect(MockMvcResultMatchers.content().json(messageJson));
+			.andExpect(MockMvcResultMatchers.status().is(400));
 	}
 	
 

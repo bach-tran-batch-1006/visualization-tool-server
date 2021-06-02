@@ -1,8 +1,6 @@
 package com.revature.app.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -12,78 +10,119 @@ import org.springframework.stereotype.Service;
 import com.revature.app.dao.VisualizationDao;
 import com.revature.app.dto.VisualizationDTO;
 import com.revature.app.exception.BadParameterException;
+import com.revature.app.exception.EmptyParameterException;
 import com.revature.app.exception.VisualizationNotFoundException;
+import com.revature.app.model.Skill;
 import com.revature.app.model.Visualization;
 
 @Service
 public class VisualizationService {
+	
+	String badParam = "The visualization ID provided must be of type int";
+	String emptyParam = "The visualization ID was left blank";
+	String emptyName = "The visualization name was left blank";
 
 	@Autowired
 	private VisualizationDao visualizationDao;
 
 	@Transactional
-	public Visualization createVisualization(VisualizationDTO visualizationdto) throws BadParameterException {
-
+	public Visualization createVisualization(VisualizationDTO visualizationDto) throws EmptyParameterException {
 		Visualization visualization = new Visualization();
-		if (visualizationdto.getTitle().trim().equals("") || visualizationdto.getCurricula() == null) {
-			throw new BadParameterException("Parameter can't be blank");
+		if (visualizationDto.getTitle().trim().equals("")) {
+			throw new EmptyParameterException(emptyName);
 		}
-		visualization.setCurriculumList(visualizationdto.getCurricula());
-
-		visualization.setVisualizationName(visualizationdto.getTitle());
-		visualization = this.visualizationDao.save(visualization);
-
+		visualization.setVisualizationId(0);
+		visualization.setCurriculumList(visualizationDto.getCurricula());
+		visualization.setVisualizationName(visualizationDto.getTitle());
+		visualization = visualizationDao.save(visualization);
 		return visualization;
 	}
 
-	@Transactional
-	public Visualization findVisualizationByID(int id) throws VisualizationNotFoundException {
-
-		Optional<Visualization> optVisualization = this.visualizationDao.findById(id);
-		if (!optVisualization.isPresent()) {
-			throw new VisualizationNotFoundException("Visualization not found");
+	@Transactional(rollbackOn = {VisualizationNotFoundException.class})
+	public Visualization findVisualizationByID(String visId) throws VisualizationNotFoundException, EmptyParameterException, BadParameterException {
+		try {
+			if(visId.trim().equals("")){
+				throw new EmptyParameterException(emptyParam);
+			}
+			int id = Integer.parseInt(visId);
+			Visualization vis = visualizationDao.findById(id);
+			if (vis == null) {
+				throw new VisualizationNotFoundException("Visualization not found");
+			}
+			return vis;
+		} catch (NumberFormatException e) {
+			throw new BadParameterException(badParam);
 		}
-
-		return optVisualization.get();
 	}
 
 	@Transactional
-	public Visualization updateVisualizationByID(Integer id, VisualizationDTO visualizationdto)
-			throws VisualizationNotFoundException, BadParameterException {
-
-		if (visualizationdto.getTitle().trim().equals("") || visualizationdto.getCurricula() == null) {
-			throw new BadParameterException("Parameter can't be blank");
+	public Visualization updateVisualizationByID(String visID, VisualizationDTO visualizationDto) throws VisualizationNotFoundException, BadParameterException, EmptyParameterException {
+		try {
+			if(visID.trim().equals("")){
+				throw new EmptyParameterException(emptyParam);
+			}
+			if(visualizationDto.getTitle().trim().equals("")){
+				throw new EmptyParameterException(emptyName);
+			}
+			int id = Integer.parseInt(visID);
+			Visualization vis = visualizationDao.findById(id);
+			if (vis == null) {
+				throw new VisualizationNotFoundException("Visualization not found");
+			} else {
+				vis.setCurriculumList(visualizationDto.getCurricula());
+				vis.setVisualizationName(visualizationDto.getTitle());
+				vis = visualizationDao.save(vis);
+			}
+			return vis;		
+		} catch (NumberFormatException e) {
+			throw new BadParameterException(badParam);
 		}
-		Optional<Visualization> diagram = this.visualizationDao.findById(id);
-		if (!diagram.isPresent()) {
-			throw new VisualizationNotFoundException("Visualization not Found");
-		}
-
-		Visualization visualization = diagram.get();
-		if (visualizationdto.getTitle().length() > 0) {
-			visualization.setVisualizationName(visualizationdto.getTitle());
-		}
-		visualization = this.visualizationDao.save(visualization);
-		return visualization;
-
 	}
 
 	@Transactional
-	public int deleteVisualizationByID(int id) throws VisualizationNotFoundException {
-
-		if (!visualizationDao.existsById(id)) {
-			throw new VisualizationNotFoundException("Visualization not found");
-
+	public int deleteVisualizationByID(String visID) throws VisualizationNotFoundException, BadParameterException, EmptyParameterException {
+		try {
+			if(visID.trim().equals("")){
+				throw new EmptyParameterException(emptyParam);
+			}
+			int id = Integer.parseInt(visID);
+			Visualization vis = visualizationDao.findById(id);
+			if (vis == null) {
+				throw new VisualizationNotFoundException("Visualization not found");
+			}
+			visualizationDao.deleteById(id);
+			return id;
+		} catch (NumberFormatException e) {
+			throw new BadParameterException(badParam);
 		}
-		this.visualizationDao.deleteById(id);
-		return 1;
 	}
 
 	
 	public List<Visualization> findAllVisualization() {
-
 		return visualizationDao.findAll();
+	}
 
+	
+	@Transactional(rollbackOn = {VisualizationNotFoundException.class})
+	public List<Skill> getAllSkillsByVisualization(String visID) throws EmptyParameterException, BadParameterException, VisualizationNotFoundException {
+		try {
+			if(visID.trim().equals("")){
+				throw new EmptyParameterException(emptyParam);
+			}
+			int id = Integer.parseInt(visID);
+			Visualization vis = visualizationDao.findById(id);
+			if (vis == null) {
+				throw new VisualizationNotFoundException("Visualization not found");
+			}
+			//The above code is just a sanity check to make sure that the visualization exists before getting
+			//the skills by the visualization 
+			
+			//Now it runs the query of the database to get all the skills
+			List<Skill> skillList = visualizationDao.skillVisList(id);
+			return skillList;
+		} catch (NumberFormatException e) {
+			throw new BadParameterException(badParam);
+		}
 	}
 
 }

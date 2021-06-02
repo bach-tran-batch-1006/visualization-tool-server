@@ -53,51 +53,38 @@ import com.revature.app.service.VisualizationService;
 @ActiveProfiles("test")
 @SpringBootTest
 class VisualizationTest {
+	
 	@Autowired
 	WebApplicationContext webapplicationcontext;
 
 	private MockMvc mockmvc;
-
 	private ObjectMapper objectmapper;
 
 	@Autowired
-	private VisualizationService mockservice;
+	private VisualizationService visService;
 
 	@Autowired
-	VisualizationDao visualizationdao;
+	VisualizationDao visualizationDao;
 
 	@Autowired
 	EntityManagerFactory emf;
 	private EntityManager em;
-
-	@Test
-	@Order(1)
-	@Transactional
-	@Commit
-	void findVisualizationDoNotExist() throws Exception {
-
-
-		
-		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.get("/visualization/98");
-			
-
-		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isNotFound());
-
-	}
-
+	
+	
 	@BeforeEach
 	void setup() throws BadParameterException, VisualizationNotFoundException {
 		this.mockmvc = MockMvcBuilders.webAppContextSetup(this.webapplicationcontext).build();
 		this.objectmapper = new ObjectMapper();
 		em = emf.createEntityManager();
 	}
+	
+	
 
 	@Test
 	@Order(2)
 	@Transactional
 	@Commit
 	void CreateEndpoint() throws Exception {
-
 		Category testcat = new Category(0, "testcat", "hopethiswork");
 		Skill skill1 = new Skill(0, "testskill", testcat);
 
@@ -245,24 +232,13 @@ class VisualizationTest {
 	@Transactional
 	@Commit
 	void updateVisualizationBlankName() throws Exception {
-
-		
 		Session session = em.unwrap(Session.class);
 		Visualization expected= (session.get(Visualization.class, 1));
 		VisualizationDTO vsdto= new VisualizationDTO("", expected.getCurriculumList());
-
-		
-	
-       String Jsondto = this.objectmapper.writeValueAsString(vsdto);
-	
-
+        String Jsondto = this.objectmapper.writeValueAsString(vsdto);
 		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.put("/visualization/1")
 				.contentType(MediaType.APPLICATION_JSON).content(Jsondto);
-		
-		
 		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isBadRequest());
-		
-		
 	}
 
 	
@@ -299,10 +275,8 @@ class VisualizationTest {
 	@Transactional
 	@Commit
 	void DeleteVisualization() throws Exception {
-
 		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.delete("/visualization/1")
 				.contentType(MediaType.APPLICATION_JSON).content("1");
-
 		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isOk());
 
 	}
@@ -312,9 +286,7 @@ class VisualizationTest {
 	@Transactional
 	@Commit
 	void DeleteVisualizationDoNotExist() throws Exception {
-
 		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.delete("/visualization/98");
-
 		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isNotFound());
 
 	}
