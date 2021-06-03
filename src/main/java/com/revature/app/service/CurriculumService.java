@@ -30,15 +30,12 @@ public class CurriculumService {
 	private CurriculumDao curriculumDao;
 
 	@Transactional(rollbackOn = {CurriculumNotAddedException.class})
-	public Curriculum addCurriculum(CurriculumDto curriculumDto) throws CurriculumNotAddedException, EmptyParameterException {
+	public Curriculum addCurriculum(CurriculumDto curriculumDto) throws EmptyParameterException {
 		Curriculum curriculum = new Curriculum(0, curriculumDto.getName(), curriculumDto.getSkillList());
 		if(curriculumDto.getName().trim().equals("")) {
 			throw new EmptyParameterException(emptyName);
 		}
 		curriculum = curriculumDao.save(curriculum);
-		if (curriculum == null || curriculum.getCurriculumId() == 0) {
-			throw new CurriculumNotAddedException("Couldn't add curriculum into the database.");
-		}
 		return curriculum;
 	}
 
@@ -69,14 +66,28 @@ public class CurriculumService {
 	}
 
 	@Transactional
-	public Curriculum updateCurriculumByID(int i, CurriculumDto curriculumDto) {
-	  
-	  Curriculum curriculumToUpdate = curriculumDao.findByCurriculumId(i);
-	  
-	  curriculumToUpdate.setCurriculumName(curriculumDto.getName());
-	  curriculumToUpdate.setSkillList(curriculumDto.getSkillList());
-	 
-	  return curriculumDao.save(curriculumToUpdate);
+	public Curriculum updateCurriculumByID(String curId, CurriculumDto curriculumDto) throws EmptyParameterException, CurriculumNotFoundException, BadParameterException {
+		Curriculum curriculum = null;
+		try {
+			if(curId.trim().equals("")){
+				throw new EmptyParameterException(emptyParam);
+			}
+			if(curriculumDto.getName().trim().equals("")){
+				throw new EmptyParameterException("The curriculum name was left blank");
+			}
+			int id = Integer.parseInt(curId);
+			curriculum = curriculumDao.findByCurriculumId(id);
+			if(curriculum == null) {
+				throw new CurriculumNotFoundException("The category could not be updated because it couldn't be found");
+			} else {
+				curriculum.setCurriculumName(curriculumDto.getName());
+				curriculum.setSkillList(curriculumDto.getSkillList());
+				curriculum = curriculumDao.save(curriculum);
+			}
+			return curriculum;
+		} catch (NumberFormatException e) {
+			throw new BadParameterException(badParam);
+		}
 	}
 
 	@Transactional(rollbackOn = {CurriculumNotFoundException.class, ForeignKeyConstraintException.class})

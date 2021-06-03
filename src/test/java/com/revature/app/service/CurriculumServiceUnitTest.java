@@ -27,7 +27,6 @@ import com.revature.app.exception.CurriculumNotFoundException;
 import com.revature.app.exception.EmptyCurriculumException;
 import com.revature.app.exception.EmptyParameterException;
 import com.revature.app.exception.ForeignKeyConstraintException;
-import com.revature.app.exception.VisualizationNotFoundException;
 import com.revature.app.model.Category;
 import com.revature.app.model.Curriculum;
 import com.revature.app.model.Skill;
@@ -60,16 +59,6 @@ class CurriculumServiceUnitTest {
 			curriculumService.addCurriculum(curriculumDto);
 		} catch (EmptyParameterException e) {
 			assertEquals("The curriculum name was left blank", e.getMessage());
-		}
-	}
-
-	@Test
-	void test_addCurriculum_NoSkill_failed() throws EmptyParameterException {
-		try {
-			CurriculumDto curriculumDto = new CurriculumDto("Language", null);
-			curriculumService.addCurriculum(curriculumDto);
-		} catch (CurriculumNotAddedException e) {
-			assertEquals("Couldn't add curriculum into the database.", e.getMessage());
 		}
 	}
 
@@ -107,12 +96,12 @@ class CurriculumServiceUnitTest {
 	}
 
 	@Test
-	void test_updatebyID_success() {
+	void test_updatebyID_success() throws EmptyParameterException, CurriculumNotFoundException, BadParameterException {
 		when(curriculumDao.findByCurriculumId(1)).thenReturn(new Curriculum(1, "BackEnd Developer", new ArrayList<>()));
 		when(curriculumDao.save(new Curriculum(1, "Update Developer", new ArrayList<>())))
 				.thenReturn(new Curriculum(1, "Update Developer", new ArrayList<>()));
 
-		Curriculum actual = curriculumService.updateCurriculumByID(1, new CurriculumDto("Update Developer"));
+		Curriculum actual = curriculumService.updateCurriculumByID("1", new CurriculumDto("Update Developer"));
 		Curriculum expected = new Curriculum(1, "Update Developer", new ArrayList<>());
 
 		assertEquals(expected, actual);
@@ -174,7 +163,7 @@ class CurriculumServiceUnitTest {
 	}
 	
 	@Test
-	public void test_getAllCategoryiesByCurriculum_visualizationNotFound() throws EmptyParameterException, BadParameterException, CurriculumNotFoundException {
+	public void test_getAllCategoryiesByCurriculum_curriculaNotFound() throws EmptyParameterException, BadParameterException, CurriculumNotFoundException {
 		try {
 			curriculumService.getAllCategoriesByCurriculum("20202020");
 			fail("VisualizationNotFoundException was not thrown");

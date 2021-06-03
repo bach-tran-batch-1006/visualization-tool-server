@@ -30,8 +30,6 @@ public class CategoryService {
 	@Autowired
 	private CategoryDAO categoryDAO;
 	
-	private static Logger logger = LoggerFactory.getLogger(CategoryService.class);
-	
 	String badParam = "The skill ID provided must be of type int";
 	String emptyParam = "The skill ID was left blank";
 

@@ -12,6 +12,7 @@ import com.revature.app.dto.VisualizationDTO;
 import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.EmptyParameterException;
 import com.revature.app.exception.VisualizationNotFoundException;
+import com.revature.app.model.Category;
 import com.revature.app.model.Skill;
 import com.revature.app.model.Visualization;
 
@@ -120,6 +121,28 @@ public class VisualizationService {
 			//Now it runs the query of the database to get all the skills
 			List<Skill> skillList = visualizationDao.skillVisList(id);
 			return skillList;
+		} catch (NumberFormatException e) {
+			throw new BadParameterException(badParam);
+		}
+	}
+	
+	@Transactional(rollbackOn = {VisualizationNotFoundException.class})
+	public List<Category> getAllCategoriesByVisualization(String visID) throws EmptyParameterException, BadParameterException, VisualizationNotFoundException {
+		try {
+			if(visID.trim().equals("")){
+				throw new EmptyParameterException(emptyParam);
+			}
+			int id = Integer.parseInt(visID);
+			Visualization vis = visualizationDao.findById(id);
+			if (vis == null) {
+				throw new VisualizationNotFoundException("Visualization not found");
+			}
+			//The above code is just a sanity check to make sure that the visualization exists before getting
+			//the skills by the visualization 
+			
+			//Now it runs the query of the database to get all the skills
+			List<Category> catList = visualizationDao.catVisList(id);
+			return catList;
 		} catch (NumberFormatException e) {
 			throw new BadParameterException(badParam);
 		}

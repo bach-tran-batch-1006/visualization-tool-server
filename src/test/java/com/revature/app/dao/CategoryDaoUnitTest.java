@@ -27,7 +27,7 @@ import com.revature.app.model.Category;
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
-class CategoryDAOUnitTest {
+class CategoryDaoUnitTest {
 	
 	@Autowired
 	private CategoryDAO categoryDAO;

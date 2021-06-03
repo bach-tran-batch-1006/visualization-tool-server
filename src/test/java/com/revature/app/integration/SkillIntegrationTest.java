@@ -34,7 +34,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.app.dao.SkillDAO;
-import com.revature.app.dto.MessageDTO;
 import com.revature.app.dto.SkillDTO;
 import com.revature.app.model.Category;
 import com.revature.app.model.Skill;

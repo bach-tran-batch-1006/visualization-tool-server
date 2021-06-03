@@ -27,7 +27,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.app.dto.CategoryDTO;
 import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.CategoryBlankInputException;
-import com.revature.app.exception.CategoryInvalidIdException;
 import com.revature.app.exception.CategoryNotFoundException;
 import com.revature.app.exception.EmptyParameterException;
 import com.revature.app.exception.ForeignKeyConstraintException;
