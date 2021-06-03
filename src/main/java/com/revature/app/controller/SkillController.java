@@ -21,6 +21,7 @@ import com.revature.app.dto.MessageDTO;
 import com.revature.app.dto.SkillDTO;
 import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.EmptyParameterException;
+import com.revature.app.exception.ForeignKeyConstraintException;
 import com.revature.app.exception.SkillNotAddedException;
 import com.revature.app.exception.SkillNotDeletedException;
 import com.revature.app.exception.SkillNotFoundException;
@@ -100,6 +101,8 @@ public class SkillController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		} catch (SkillNotFoundException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+		} catch (ForeignKeyConstraintException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	
 	}

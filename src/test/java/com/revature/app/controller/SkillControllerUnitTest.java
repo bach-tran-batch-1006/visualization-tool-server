@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.app.dto.SkillDTO;
 import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.EmptyParameterException;
+import com.revature.app.exception.ForeignKeyConstraintException;
 import com.revature.app.exception.SkillNotAddedException;
 import com.revature.app.exception.SkillNotDeletedException;
 import com.revature.app.exception.SkillNotFoundException;
@@ -50,7 +51,7 @@ class SkillControllerUnitTest {
 	
 	
 	@BeforeEach
-	void setup() throws BadParameterException, EmptyParameterException, SkillNotFoundException, SkillNotAddedException, SkillNotUpdatedException, SkillNotDeletedException {
+	void setup() throws BadParameterException, EmptyParameterException, SkillNotFoundException, SkillNotAddedException, SkillNotUpdatedException, SkillNotDeletedException, ForeignKeyConstraintException {
 		om = new ObjectMapper();
 		mockMvc = MockMvcBuilders.standaloneSetup(skillController).build();
 		Skill skill1 = new Skill(1, "Skill1", new Category(1, "Cat1", null));
@@ -82,6 +83,7 @@ class SkillControllerUnitTest {
 		lenient().when(mockSkillService.deleteSkill(eq("3"))).thenThrow(new SkillNotFoundException());
 		lenient().when(mockSkillService.deleteSkill(eq(" "))).thenThrow(new EmptyParameterException());
 		lenient().when(mockSkillService.deleteSkill(eq("test"))).thenThrow(new BadParameterException());
+		lenient().when(mockSkillService.deleteSkill(eq("4"))).thenThrow(new ForeignKeyConstraintException());
 	}
 	
 	
@@ -256,6 +258,11 @@ class SkillControllerUnitTest {
 	@Test
 	void test_deleteSkill_badParameter() throws Exception {
 		mockMvc.perform(delete("/skill/test")).andExpect(MockMvcResultMatchers.status().is(400));
+	}
+	
+	@Test
+	void test_deleteSkill_foreignKey() throws Exception {
+		mockMvc.perform(delete("/skill/4")).andExpect(MockMvcResultMatchers.status().is(400));
 	}
 	
 

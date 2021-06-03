@@ -3,6 +3,7 @@ package com.revature.app.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -24,6 +25,10 @@ import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.CurriculumNotAddedException;
 import com.revature.app.exception.CurriculumNotFoundException;
 import com.revature.app.exception.EmptyCurriculumException;
+import com.revature.app.exception.EmptyParameterException;
+import com.revature.app.exception.ForeignKeyConstraintException;
+import com.revature.app.exception.VisualizationNotFoundException;
+import com.revature.app.model.Category;
 import com.revature.app.model.Curriculum;
 import com.revature.app.model.Skill;
 
@@ -38,7 +43,7 @@ class CurriculumServiceUnitTest {
 	private CurriculumService curriculumService;
 
 	@Test
-	void test_addCurriculum_success() throws BadParameterException, CurriculumNotAddedException {
+	void test_addCurriculum_success() throws CurriculumNotAddedException, EmptyParameterException {
 		when(curriculumDao.save(new Curriculum(0, "BackEnd Developer", new ArrayList<>())))
 				.thenReturn(new Curriculum(1, "BackEnd Developer", new ArrayList<>()));
 
@@ -53,14 +58,13 @@ class CurriculumServiceUnitTest {
 		try {
 			CurriculumDto curriculumDto = new CurriculumDto(" ", new ArrayList<Skill>());
 			curriculumService.addCurriculum(curriculumDto);
-		} catch (BadParameterException e) {
-			assertEquals("Curriculum can not be blank.", e.getMessage());
+		} catch (EmptyParameterException e) {
+			assertEquals("The curriculum name was left blank", e.getMessage());
 		}
 	}
 
 	@Test
-	void test_addCurriculum_NoSkill_failed() throws CurriculumNotAddedException, BadParameterException {
-
+	void test_addCurriculum_NoSkill_failed() throws EmptyParameterException {
 		try {
 			CurriculumDto curriculumDto = new CurriculumDto("Language", null);
 			curriculumService.addCurriculum(curriculumDto);
@@ -70,24 +74,21 @@ class CurriculumServiceUnitTest {
 	}
 
 	@Test
-	void test_getCurriculumById_success() throws CurriculumNotFoundException {
-
+	void test_getCurriculumById_success() throws CurriculumNotFoundException, BadParameterException, EmptyParameterException {
 		when(curriculumDao.findByCurriculumId(1)).thenReturn(new Curriculum(1, "BackEnd Developer", new ArrayList<>()));
-
-		Curriculum actual = curriculumService.getCurriculumByID(1);
+		Curriculum actual = curriculumService.getCurriculumByID("1");
 		Curriculum expected = new Curriculum(1, "BackEnd Developer", new ArrayList<>());
-
 		assertEquals(expected, actual);
 	}
 
 	@Test
-	void test_getCurriculum_Idnotexist() throws CurriculumNotFoundException {
+	void test_getCurriculum_Idnotexist() throws BadParameterException, EmptyParameterException {
 		try {
 			new CurriculumDto("Language", null);
-			curriculumService.getCurriculumByID(10);
+			curriculumService.getCurriculumByID("10");
 			
 		} catch (CurriculumNotFoundException e) {
-			assertEquals("Curriculum not found", e.getMessage());
+			assertEquals("The curriculum with ID 10 could not be found.", e.getMessage());
 		}
 	}
 
@@ -105,17 +106,6 @@ class CurriculumServiceUnitTest {
 		assertEquals(expected, actual);
 	}
 
-	@Test()
-	void test_getAllCurriculum_NoCurriculumFound() {
-		try {
-			if(! curriculumService.getAllCurriculum().isEmpty()) {
-				fail("No Curriculum found");
-			}
-		}catch(EmptyCurriculumException e) {
-			assertEquals("No Curriculum found", e.getMessage());
-		}
-	}
-
 	@Test
 	void test_updatebyID_success() {
 		when(curriculumDao.findByCurriculumId(1)).thenReturn(new Curriculum(1, "BackEnd Developer", new ArrayList<>()));
@@ -130,24 +120,67 @@ class CurriculumServiceUnitTest {
 
 
 	@Test
-	void test_delete_success() throws CurriculumNotFoundException {
+	void test_delete_success() throws CurriculumNotFoundException, EmptyParameterException, BadParameterException, ForeignKeyConstraintException {
 		when(curriculumDao.findByCurriculumId(1)).thenReturn(new Curriculum(1, "Delete Developer", new ArrayList<>()));
 
 		Curriculum expected = new Curriculum(1, "Delete Developer", new ArrayList<>());
-		Curriculum actual = curriculumService.deleteCurriculumByID(1);
+		Curriculum actual = curriculumService.deleteCurriculumByID("1");
 		
 		assertEquals(expected, actual);
 	}
 
 	@Test
-	void test_delete_failed() {
+	void test_delete_notFound() throws EmptyParameterException, BadParameterException, ForeignKeyConstraintException {
 		try {
-			curriculumService.deleteCurriculumByID(1);
-			
-		}catch(CurriculumNotFoundException e) {
+			curriculumService.deleteCurriculumByID("1");
+		} catch(CurriculumNotFoundException e) {
 			assertEquals("The curriculum could not be deleted because it couldn't be found", e.getMessage());
 		}
 
+	}
+
+//
+	@Test
+	public void test_getAllCategoryiesByCurriculum_happy() throws EmptyParameterException, BadParameterException, CurriculumNotFoundException {
+		when(curriculumDao.findByCurriculumId(1)).thenReturn(new Curriculum(1, "test", null));
+		Category testCat1 = new Category(0, "TestCat1", "TestDescription");
+		Category testCat2 = new Category(0, "TestCat2", "TestDescription");
+		List<Category> expected = new ArrayList<Category>();
+		expected.add(testCat1);
+		expected.add(testCat2);
+		when(curriculumDao.catCurList(1)).thenReturn(expected);
+		List<Category> actual = curriculumService.getAllCategoriesByCurriculum("1");
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void test_getAllCategoryiesByCurriculum_emptyParameter() throws BadParameterException, CurriculumNotFoundException {
+		try {
+			curriculumService.getAllCategoriesByCurriculum(" ");
+			fail("EmptyParameterException was not thrown");
+		} catch (EmptyParameterException e) {
+			assertEquals(e.getMessage(), "The curriculum ID was left blank");
+		}
+	}
+	
+	@Test
+	public void test_getAllCategoryiesByCurriculum_badParameter() throws EmptyParameterException, CurriculumNotFoundException {
+		try {
+			curriculumService.getAllCategoriesByCurriculum("test");
+			fail("BadParameterException was not thrown");
+		} catch (BadParameterException e) {
+			assertEquals(e.getMessage(), "The curriculum ID provided must be of type int");
+		}
+	}
+	
+	@Test
+	public void test_getAllCategoryiesByCurriculum_visualizationNotFound() throws EmptyParameterException, BadParameterException, CurriculumNotFoundException {
+		try {
+			curriculumService.getAllCategoriesByCurriculum("20202020");
+			fail("VisualizationNotFoundException was not thrown");
+		} catch (CurriculumNotFoundException e) {
+			assertEquals(e.getMessage(), "Curriculum not found");
+		}
 	}
 
 }

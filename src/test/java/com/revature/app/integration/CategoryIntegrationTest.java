@@ -40,8 +40,6 @@ import com.revature.app.service.CategoryService;
 @DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
 @ActiveProfiles("test")
 @SpringBootTest
-
-
 public class CategoryIntegrationTest {
 	
 	
@@ -65,12 +63,6 @@ public class CategoryIntegrationTest {
         this.om = new ObjectMapper();
        
     }
-	
-	@Test
-	void test_TestEndpoint() throws Exception {
-		this.mockMvc.perform(get("/categoryTest"))
-			.andExpect(MockMvcResultMatchers.status().isOk());
-	}
 	
 	@Test 
 	void test_getAllCategories_TestEndpoint() throws Exception {
@@ -140,7 +132,7 @@ public class CategoryIntegrationTest {
 		
 		this.mockMvc.perform(put("/category/99")
 			.contentType(MediaType.APPLICATION_JSON).content(inputJson))
-			.andExpect(MockMvcResultMatchers.status().isBadRequest());
+			.andExpect(MockMvcResultMatchers.status().is(404));
 	}
 	
 	@Test 
@@ -157,6 +149,6 @@ public class CategoryIntegrationTest {
 		
 		this.mockMvc.perform(delete("/category/99")
 			.contentType(MediaType.APPLICATION_JSON).content(inputJson))
-			.andExpect(MockMvcResultMatchers.status().isBadRequest());
+			.andExpect(MockMvcResultMatchers.status().is(404));
 	}
 }

@@ -21,6 +21,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Commit;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -33,6 +35,7 @@ import com.revature.app.model.Visualization;
 @DataJpaTest
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
 public class VisualizationDaoTest {
 
 	@Autowired
@@ -153,16 +156,24 @@ public class VisualizationDaoTest {
 	void test_skillVisList() {
 		Session session = em.unwrap(Session.class);
 		
-		//Add a category to the database, all skills will share this
-		Category testCat = new Category(0, "Test", "TestDescription");
+		//Add a categories to the database
+		Category testCat1 = new Category(0, "TestCat1", "TestDescription");
+		Category testCat2 = new Category(0, "TestCat1", "TestDescription");
+		Category testCat3 = new Category(0, "TestCat1", "TestDescription");
 		em.getTransaction().begin();
-		em.persist(testCat);
+		em.persist(testCat1);
+		em.getTransaction().commit();
+		em.getTransaction().begin();
+		em.persist(testCat2);
+		em.getTransaction().commit();
+		em.getTransaction().begin();
+		em.persist(testCat3);
 		em.getTransaction().commit();
 		
 		//Add 3 skills to the database
 		Skill testSkill1 = new Skill(0, "TestSkill1", session.get(Category.class, 1));
-		Skill testSkill2 = new Skill(0, "TestSkill2", session.get(Category.class, 1));
-		Skill testSkill3 = new Skill(0, "TestSkill3", session.get(Category.class, 1));
+		Skill testSkill2 = new Skill(0, "TestSkill2", session.get(Category.class, 2));
+		Skill testSkill3 = new Skill(0, "TestSkill3", session.get(Category.class, 3));
 		em.getTransaction().begin();
 		em.persist(testSkill1);
 		em.getTransaction().commit();
@@ -211,6 +222,27 @@ public class VisualizationDaoTest {
 		assertEquals(expected, (ArrayList<Skill>) actual);
 	}
 	
+	@Test
+	@Commit
+	@Order(51)
+	void test_catVisList() {
+		Session session = em.unwrap(Session.class);
+		
+		//Print out the sanityCheck to make sure that everything is persisted in the database
+		Visualization sanityCheck = session.get(Visualization.class, 2);
+		System.out.println(sanityCheck);
+		
+		//Create the expected list of categories
+		ArrayList<Category> expected = new ArrayList<Category>();
+		expected.add(session.get(Category.class, 1)); 
+		expected.add(session.get(Category.class, 2)); 
+		expected.add(session.get(Category.class, 3)); 
+		
+		//Now actually test the method
+		List<Category> actual = visualDao.catVisList(2);
+		assertEquals(expected, (ArrayList<Category>) actual);
+	}
+
 	
 	
 	

@@ -21,6 +21,7 @@ import com.revature.app.dao.SkillDAO;
 import com.revature.app.dto.SkillDTO;
 import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.EmptyParameterException;
+import com.revature.app.exception.ForeignKeyConstraintException;
 import com.revature.app.exception.SkillNotAddedException;
 import com.revature.app.exception.SkillNotDeletedException;
 import com.revature.app.exception.SkillNotFoundException;
@@ -252,14 +253,14 @@ class SkillServiceUnitTest {
 
 //	
 	@Test
-	void test_deleteSkill_happy() throws EmptyParameterException, BadParameterException, SkillNotDeletedException, SkillNotFoundException {
+	void test_deleteSkill_happy() throws EmptyParameterException, BadParameterException, SkillNotDeletedException, SkillNotFoundException, ForeignKeyConstraintException {
 		Skill expected = new Skill(1, "TestSkill", new Category(1, "TestCat", null));
 		Skill actual = skillService.deleteSkill("4");
 		assertEquals(expected, actual);
 	}
 	
 	@Test
-	void test_deleteSkill_IDDoesntExist() throws EmptyParameterException, BadParameterException, SkillNotDeletedException {
+	void test_deleteSkill_IDDoesntExist() throws EmptyParameterException, BadParameterException, SkillNotDeletedException, ForeignKeyConstraintException {
 		try {
 			skillService.deleteSkill("0");
 			fail("SkillNotFoundException was not thrown");
@@ -269,7 +270,7 @@ class SkillServiceUnitTest {
 	}
 	
 	@Test
-	void test_deleteSkill_BadParameter() throws EmptyParameterException, SkillNotDeletedException, SkillNotFoundException {
+	void test_deleteSkill_BadParameter() throws EmptyParameterException, SkillNotDeletedException, SkillNotFoundException, ForeignKeyConstraintException {
 		try {
 			skillService.deleteSkill("test");
 			fail("BadParameterException was not thrown");
@@ -279,7 +280,7 @@ class SkillServiceUnitTest {
 	}
 	
 	@Test
-	void test_deleteSkill_emptyParameter() throws BadParameterException, SkillNotDeletedException, SkillNotFoundException {
+	void test_deleteSkill_emptyParameter() throws BadParameterException, SkillNotDeletedException, SkillNotFoundException, ForeignKeyConstraintException {
 		try {
 			skillService.deleteSkill("      ");
 			fail("EmptyParameterException was not thrown");
@@ -289,7 +290,7 @@ class SkillServiceUnitTest {
 	}
 	
 	@Test
-	void test_deleteSkill_skillNotDeleted() throws EmptyParameterException, BadParameterException, SkillNotFoundException {
+	void test_deleteSkill_skillNotDeleted() throws EmptyParameterException, BadParameterException, SkillNotFoundException, ForeignKeyConstraintException {
 		try {
 			skillService.deleteSkill("5");
 			fail("SkillNotDeletedException was not thrown");

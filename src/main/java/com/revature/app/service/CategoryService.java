@@ -11,9 +11,18 @@ import org.springframework.stereotype.Service;
 
 import com.revature.app.dao.CategoryDAO;
 import com.revature.app.dto.CategoryDTO;
+import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.CategoryBlankInputException;
 import com.revature.app.exception.CategoryInvalidIdException;
+import com.revature.app.exception.CategoryNotFoundException;
+import com.revature.app.exception.EmptyParameterException;
+import com.revature.app.exception.ForeignKeyConstraintException;
+import com.revature.app.exception.SkillNotAddedException;
+import com.revature.app.exception.SkillNotDeletedException;
+import com.revature.app.exception.SkillNotFoundException;
+import com.revature.app.exception.SkillNotUpdatedException;
 import com.revature.app.model.Category;
+import com.revature.app.model.Skill;
 
 @Service
 public class CategoryService {
@@ -22,26 +31,18 @@ public class CategoryService {
 	private CategoryDAO categoryDAO;
 	
 	private static Logger logger = LoggerFactory.getLogger(CategoryService.class);
+	
+	String badParam = "The skill ID provided must be of type int";
+	String emptyParam = "The skill ID was left blank";
 
 	@Transactional
 	public Category addCategory(CategoryDTO inputCategory) throws CategoryBlankInputException {
-		try {
-			if (inputCategory.getCategoryName().trim().equals("") || inputCategory.getCategoryName() == null) {
-				logger.warn("blank input name: CategoryService.addCategory()");
-				throw new CategoryBlankInputException("Category name cannot be blank");
-			}
-
-		} catch (NullPointerException e) {
-			logger.warn("null input name: CategoryService.addCategory()" );
-			throw new CategoryBlankInputException("Category name cannot be blank");
+		Category category = null;
+		if(inputCategory.getCategoryName().trim().equals("")) {
+			throw new CategoryBlankInputException("The category name was left blank");
 		}
-
-		Category category = new Category();
-		category.setCategoryName(inputCategory.getCategoryName());
-		category.setCategoryDescription(inputCategory.getCategoryDescription());
-
+		category = new Category(0, inputCategory.getCategoryName(), inputCategory.getCategoryDescription());
 		category = categoryDAO.save(category);
-		categoryDAO.flush();
 		return category;
 	}
 
@@ -52,63 +53,50 @@ public class CategoryService {
 	}
 
 	@Transactional
-	public Category updateCategory(int id, CategoryDTO inputCategory)
-			throws CategoryBlankInputException, CategoryInvalidIdException {
+	public Category updateCategory(String catId, CategoryDTO inputCategory) throws BadParameterException, CategoryNotFoundException, EmptyParameterException {
 		Category categoryToUpdate = null;
-
-		if (id > 0) {
-			categoryToUpdate = categoryDAO.findById(id);
-
-			if (categoryToUpdate == null) {
-				logger.warn("Category Id not found: CategoryService.updateCategory()" );
-				throw new CategoryInvalidIdException("Category ID: " + id + " does not exist");
-			}
-
-		} else {
-			logger.warn("Id is negative: CategoryService.updateCategory()" );
-			throw new CategoryInvalidIdException("ID: " + id + " cannot be a negative number");
-		}
-
 		try {
-			if (inputCategory.getCategoryName().trim().equals("") || inputCategory.getCategoryName() == null) {
-				logger.warn("Category name is blank: CategoryService.updateCategory()" );
-				throw new CategoryBlankInputException("Category name cannot be blank");
+			if(catId.trim().equals("")){
+				throw new EmptyParameterException(emptyParam);
 			}
-
-		} catch (NullPointerException e) {
-			logger.warn("Category name is null: CategoryService.updateCategory()" );
-			throw new CategoryBlankInputException("Category name cannot be blank");
+			if(inputCategory.getCategoryName().trim().equals("")){
+				throw new EmptyParameterException("The category name was left blank");
+			}
+			int id = Integer.parseInt(catId);
+			categoryToUpdate = categoryDAO.findById(id);
+			if(categoryToUpdate == null) {
+				throw new CategoryNotFoundException("The category could not be updated because it couldn't be found");
+			} else {
+				categoryToUpdate.setCategoryName(inputCategory.getCategoryName());
+				categoryToUpdate.setCategoryDescription(inputCategory.getCategoryDescription());
+				categoryToUpdate = categoryDAO.save(categoryToUpdate);
+			}
+			return categoryToUpdate;
+		} catch (NumberFormatException e) {
+			throw new BadParameterException(badParam);
 		}
-
-		categoryToUpdate.setCategoryName(inputCategory.getCategoryName());
-		categoryToUpdate.setCategoryDescription(inputCategory.getCategoryDescription());
-
-		categoryDAO.save(categoryToUpdate);
-		categoryDAO.flush();
-
-		return categoryToUpdate;
 	}
 	
 	@Transactional
-	public String deleteCategory(int id) throws CategoryInvalidIdException {
+	public Category deleteCategory(String catId) throws EmptyParameterException, CategoryNotFoundException, BadParameterException, ForeignKeyConstraintException {
 		Category categoryToDelete = null;
-		if (id > 0) {
-			categoryToDelete = categoryDAO.findById(id);
-
-			if (categoryToDelete == null) {
-				logger.warn("Category Id not found: CategoryService.deleteCategory()" );
-				throw new CategoryInvalidIdException("Category ID: " + id + " does not exist");
+		try {
+			if(catId.trim().equals("")){
+				throw new EmptyParameterException(emptyParam);
 			}
-
-		} else {
-			logger.warn("Category Id is negative: CategoryService.deleteCategory()" );
-			throw new CategoryInvalidIdException("ID: " + id + " cannot be a negative number");
+			int id = Integer.parseInt(catId);
+			categoryToDelete = categoryDAO.findById(id);
+			if(categoryToDelete == null) {
+				throw new CategoryNotFoundException("The skill could not be deleted because it couldn't be found");
+			} else {
+				categoryDAO.delete(categoryToDelete);
+			}
+			return categoryToDelete;
+		} catch (NumberFormatException e) {
+			throw new BadParameterException(badParam);
+		} catch (org.springframework.dao.DataIntegrityViolationException e) {
+			throw new ForeignKeyConstraintException("Please remove this category from all skills before attempting to delete this category");
 		}
-		
-		categoryDAO.delete(categoryToDelete);
-		
-		return "Success";
-		
 	}
 	
 
