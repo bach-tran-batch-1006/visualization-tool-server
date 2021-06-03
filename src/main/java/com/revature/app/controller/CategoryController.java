@@ -16,8 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.revature.app.dto.CategoryDTO;
+import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.CategoryBlankInputException;
 import com.revature.app.exception.CategoryInvalidIdException;
+import com.revature.app.exception.CategoryNotFoundException;
+import com.revature.app.exception.EmptyParameterException;
+import com.revature.app.exception.ForeignKeyConstraintException;
 import com.revature.app.model.Category;
 import com.revature.app.service.CategoryService;
 
@@ -31,46 +35,47 @@ public class CategoryController {
 	@PostMapping(path = "category")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public Category addCategory(@RequestBody CategoryDTO categoryDTO) throws CategoryBlankInputException {
-
 		try {
 			return categoryService.addCategory(categoryDTO);
 		} catch (CategoryBlankInputException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 
 		}
-
 	}
 
 	@GetMapping(path = "category")
 	public List<Category> getAllCategories() {
-
 		return categoryService.getAllCategories();
 	}
 
 	@PutMapping(path = "category/{id}")
-	public Category updateCategory(@PathVariable("id") int id, @RequestBody CategoryDTO categoryDTO) {
+	public Category updateCategory(@PathVariable("id") String id, @RequestBody CategoryDTO categoryDTO) {
 		try {
 			return categoryService.updateCategory(id, categoryDTO);
-		} catch (CategoryBlankInputException e) {
+		} catch (EmptyParameterException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		} catch (CategoryInvalidIdException e) {
+		} catch (BadParameterException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-
+		} catch (CategoryNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
 	}
 
 	@DeleteMapping(path = "category/{id}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public void deleteCategory(@PathVariable("id") int id) {
+	public Object deleteCategory(@PathVariable("id") String id) {
 		try {
 			categoryService.deleteCategory(id);
-		} catch (CategoryInvalidIdException e) {
+			return id;
+		} catch (EmptyParameterException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		} catch (CategoryNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+		} catch (BadParameterException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		} catch (ForeignKeyConstraintException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
-	@GetMapping(path = "categoryTest")
-	public String testEndpoint() {
-		return "Category Working!";
-	}
 }

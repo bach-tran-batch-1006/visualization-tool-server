@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.mockito.InjectMocks;
@@ -27,8 +28,11 @@ import org.mockito.quality.Strictness;
 
 import com.revature.app.dao.CategoryDAO;
 import com.revature.app.dto.CategoryDTO;
+import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.CategoryBlankInputException;
 import com.revature.app.exception.CategoryInvalidIdException;
+import com.revature.app.exception.CategoryNotFoundException;
+import com.revature.app.exception.EmptyParameterException;
 import com.revature.app.model.Category;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,11 +49,8 @@ class CategoryServiceUnitTest {
 	@Test
 	void testGetAllCategories_positive() {
 		List<Category> expected = new ArrayList<>();
-		
 		when(categoryDAO.findAll()).thenReturn(expected);
-		
 		List<Category> actual = categoryService.getAllCategories();
-		
 		assertEquals(expected, actual);
 	}
 	
@@ -67,7 +68,7 @@ class CategoryServiceUnitTest {
 	}
     
 	@ParameterizedTest
-	@NullAndEmptySource
+	@EmptySource
 	void testAddCategory_negative_BlankInputException(String categoryName) {
 			assertThrows(CategoryBlankInputException.class, () -> {
 				categoryService.addCategory(new CategoryDTO(categoryName, "Programming Language"));
@@ -75,55 +76,52 @@ class CategoryServiceUnitTest {
 	}
 	
 	@Test
-	void testUpdateCategory_positive() throws CategoryBlankInputException, CategoryInvalidIdException {
+	void testUpdateCategory_positive() throws CategoryBlankInputException, CategoryInvalidIdException, BadParameterException, CategoryNotFoundException, EmptyParameterException {
 		Category oldCategory = new Category(1, "Language", "Programming Language");
 		Category expected = new Category(1, "DevOps", "set of practices that combines software development and IT operations.");
 		CategoryDTO categoryDTO = new CategoryDTO("DevOps", "set of practices that combines software development and IT operations.");
 		
 		lenient().when(categoryDAO.findById(eq(1))).thenReturn(oldCategory);
 		lenient().when(categoryDAO.save(oldCategory)).thenReturn(expected);
-		
-		Category actual = categoryService.updateCategory(1, categoryDTO);
-		
+		Category actual = categoryService.updateCategory("1", categoryDTO);
 		assertEquals(expected, actual);
 	}
 	
 	@ParameterizedTest
-	@NullAndEmptySource
+	@EmptySource
 	void testUpdateCategory_negative_blankInputException(String categoryName) {
 		CategoryDTO inputCategoryDTO = new CategoryDTO(categoryName, "Programming Language");
 		
 		
-		assertThrows(CategoryBlankInputException.class, () -> {
+		assertThrows(EmptyParameterException.class, () -> {
 			lenient().when(categoryDAO.findById(eq(1))).thenReturn(new Category(1, "Language", "Programming Language"));
-			categoryService.updateCategory(1, inputCategoryDTO);
+			categoryService.updateCategory("1", inputCategoryDTO);
 		});	
 	}
 	
 	@ParameterizedTest
 	@MethodSource("invalidIds")
-	void testUpdateCategory_negative_invalidIdException(int id) {
+	void testUpdateCategory_negative_invalidIdException(String id) {
 		
 		CategoryDTO inputCategoryDTO = new CategoryDTO("Language", "Programming Language");
 		
-		assertThrows(CategoryInvalidIdException.class, () -> {
+		assertThrows(CategoryNotFoundException.class, () -> {
 			categoryService.updateCategory(id, inputCategoryDTO);
 		});
 	}
 	
 	private static Stream<Arguments> invalidIds() {
 		return Stream.of(
-				Arguments.of(-1),
-				Arguments.of(999)
+				Arguments.of("-1"),
+				Arguments.of("999")
 				);
 	}
 	
 	
 	@ParameterizedTest
 	@MethodSource("invalidIds")
-	void testDeleteCategory_negative_invalidIdException(int id) {
-	
-		assertThrows(CategoryInvalidIdException.class, () -> {
+	void testDeleteCategory_negative_invalidIdException(String id) {
+		assertThrows(CategoryNotFoundException.class, () -> {
 			categoryService.deleteCategory(id);
 		});
 	}

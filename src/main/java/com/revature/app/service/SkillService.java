@@ -11,6 +11,7 @@ import com.revature.app.dao.SkillDAO;
 import com.revature.app.dto.SkillDTO;
 import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.EmptyParameterException;
+import com.revature.app.exception.ForeignKeyConstraintException;
 import com.revature.app.exception.SkillNotAddedException;
 import com.revature.app.exception.SkillNotDeletedException;
 import com.revature.app.exception.SkillNotFoundException;
@@ -91,8 +92,8 @@ public class SkillService {
 		}
 	}
 
-	@Transactional(rollbackOn = {SkillNotDeletedException.class, SkillNotFoundException.class})
-	public Skill deleteSkill(String skillID) throws EmptyParameterException, BadParameterException, SkillNotDeletedException, SkillNotFoundException {
+	@Transactional(rollbackOn = {SkillNotDeletedException.class, SkillNotFoundException.class, ForeignKeyConstraintException.class})
+	public Skill deleteSkill(String skillID) throws EmptyParameterException, BadParameterException, SkillNotDeletedException, SkillNotFoundException, ForeignKeyConstraintException {
 		Skill skill = null;
 		try {
 			if(skillID.trim().equals("")){
@@ -111,6 +112,8 @@ public class SkillService {
 			return skill;
 		} catch (NumberFormatException e) {
 			throw new BadParameterException(badParam);
+		} catch (org.springframework.dao.DataIntegrityViolationException e) {
+			throw new ForeignKeyConstraintException("Please remove this skill from all curricula before attempting to delete this skill");
 		}
 	}
 	

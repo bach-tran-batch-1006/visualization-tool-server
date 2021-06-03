@@ -25,8 +25,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.app.dto.CategoryDTO;
+import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.CategoryBlankInputException;
 import com.revature.app.exception.CategoryInvalidIdException;
+import com.revature.app.exception.CategoryNotFoundException;
+import com.revature.app.exception.EmptyParameterException;
+import com.revature.app.exception.ForeignKeyConstraintException;
 import com.revature.app.model.Category;
 import com.revature.app.service.CategoryService;
 
@@ -96,7 +100,7 @@ class CategoryControllerUnitTest {
 		CategoryDTO inputCategory = new CategoryDTO("Language", "Programming Language");
 		String inputJson = om.writeValueAsString(inputCategory);
 		
-		when(categoryService.updateCategory(eq(1),eq(inputCategory))).thenReturn(expected);
+		when(categoryService.updateCategory(eq("1"),eq(inputCategory))).thenReturn(expected);
 		
 		this.mockMvc.perform(put("/category/1").contentType(MediaType.APPLICATION_JSON).content(inputJson))
 		.andExpect(status().isOk()).andExpect(content().json(expectedJson));
@@ -104,12 +108,10 @@ class CategoryControllerUnitTest {
 	
 	@Test
 	void testUpdateCategory_negative_CategoryBlankInputException_() throws Exception {
-		
-		
 		CategoryDTO inputCategory = new CategoryDTO("", "Programming Language");
 		String inputJson = om.writeValueAsString(inputCategory);
 		
-		when(categoryService.updateCategory(eq(1),eq(inputCategory))).thenThrow(CategoryBlankInputException.class);
+		when(categoryService.updateCategory(eq("1"),eq(inputCategory))).thenThrow(EmptyParameterException.class);
 		
 		this.mockMvc.perform(put("/category/1").contentType(MediaType.APPLICATION_JSON).content(inputJson))
 		.andExpect(status().isBadRequest());
@@ -122,26 +124,41 @@ class CategoryControllerUnitTest {
 		CategoryDTO inputCategory = new CategoryDTO("Language", "Programming Language");
 		String inputJson = om.writeValueAsString(inputCategory);
 		
-		when(categoryService.updateCategory(eq(3),eq(inputCategory))).thenThrow(CategoryInvalidIdException.class);
+		when(categoryService.updateCategory(eq("3"),eq(inputCategory))).thenThrow(CategoryNotFoundException.class);
 		
 		this.mockMvc.perform(put("/category/3").contentType(MediaType.APPLICATION_JSON).content(inputJson))
-		.andExpect(status().isBadRequest());
+		.andExpect(status().is(404));
 	}
 	
 	@Test
 	void test_deleteCategory_positive() throws Exception{
-		
-
-		when(categoryService.deleteCategory(eq(3))).thenReturn("Success");
-		
+		when(categoryService.deleteCategory(eq("3"))).thenReturn(null);
 		this.mockMvc.perform(delete("/category/3")).andExpect(status().isNoContent());
-		
 	}
 
 	@Test
-	void test_deleteCategory_negative_CategoryInvalidIdException() throws Exception {
-		when(categoryService.deleteCategory(eq(3))).thenThrow(CategoryInvalidIdException.class);
+	void test_deleteCategory_negative_CategoryNotFoundException() throws Exception {
+		when(categoryService.deleteCategory(eq("3"))).thenThrow(CategoryNotFoundException.class);
+		this.mockMvc.perform(delete("/category/3")).andExpect(status().is(404));
+	}
+	
+	@Test
+	void test_deleteCategory_negative_ForeignKeyException() throws Exception {
+		when(categoryService.deleteCategory(eq("3"))).thenThrow(ForeignKeyConstraintException.class);
 		this.mockMvc.perform(delete("/category/3")).andExpect(status().isBadRequest());
 	}
+	
+	@Test
+	void test_deleteCategory_negative_BadParameter() throws Exception {
+		when(categoryService.deleteCategory(eq("test"))).thenThrow(BadParameterException.class);
+		this.mockMvc.perform(delete("/category/test")).andExpect(status().isBadRequest());
+	}
+	
+	@Test
+	void test_deleteCategory_negative_EmptyParameter() throws Exception {
+		when(categoryService.deleteCategory(eq(" "))).thenThrow(EmptyParameterException.class);
+		this.mockMvc.perform(delete("/category/ ")).andExpect(status().isBadRequest());
+	}
+	
 	
 }

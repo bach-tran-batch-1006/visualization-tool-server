@@ -3,7 +3,6 @@ package com.revature.app.service;
 
 import java.util.List;
 
-import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,24 +14,28 @@ import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.CurriculumNotAddedException;
 import com.revature.app.exception.CurriculumNotFoundException;
 import com.revature.app.exception.EmptyCurriculumException;
+import com.revature.app.exception.EmptyParameterException;
+import com.revature.app.exception.ForeignKeyConstraintException;
+import com.revature.app.model.Category;
 import com.revature.app.model.Curriculum;
 
 @Service
 public class CurriculumService {
 
+	String badParam = "The curriculum ID provided must be of type int";
+	String emptyParam = "The curriculum ID was left blank";
+	String emptyName = "The curriculum name was left blank";
+	
 	@Autowired
 	private CurriculumDao curriculumDao;
 
 	@Transactional(rollbackOn = {CurriculumNotAddedException.class})
-	public Curriculum addCurriculum(CurriculumDto curriculumDto) throws BadParameterException, CurriculumNotAddedException {
+	public Curriculum addCurriculum(CurriculumDto curriculumDto) throws CurriculumNotAddedException, EmptyParameterException {
 		Curriculum curriculum = new Curriculum(0, curriculumDto.getName(), curriculumDto.getSkillList());
-		
 		if(curriculumDto.getName().trim().equals("")) {
-			throw new BadParameterException("Curriculum can not be blank.");
+			throw new EmptyParameterException(emptyName);
 		}
-		
 		curriculum = curriculumDao.save(curriculum);
-
 		if (curriculum == null || curriculum.getCurriculumId() == 0) {
 			throw new CurriculumNotAddedException("Couldn't add curriculum into the database.");
 		}
@@ -40,24 +43,28 @@ public class CurriculumService {
 	}
 
 	@Transactional(rollbackOn = {CurriculumNotFoundException.class})
-	public Curriculum getCurriculumByID(int i) throws CurriculumNotFoundException {
+	public Curriculum getCurriculumByID(String curId) throws CurriculumNotFoundException, BadParameterException, EmptyParameterException {
+		Curriculum curriculum = null;
 		try {
-			return curriculumDao.findByCurriculumId(i);
-		} catch (NoResultException e) {
-			throw new CurriculumNotFoundException("Curriculum not found");
+			if(curId.trim().equals("")){
+				throw new EmptyParameterException(emptyParam);
+			}
+			int id = Integer.parseInt(curId);
+			curriculum = curriculumDao.findByCurriculumId(id);
+			if(curriculum == null) {
+				throw new CurriculumNotFoundException("The curriculum with ID " + curId + " could not be found.");
+			} else {
+				return curriculum;
+			}
+		} catch (NumberFormatException e) {
+			throw new BadParameterException(badParam);
 		}
 	}
 
 	@Transactional(rollbackOn = {EmptyCurriculumException.class})
-	public List<Curriculum> getAllCurriculum() throws EmptyCurriculumException {
-
+	public List<Curriculum> getAllCurriculum() {
 		List<Curriculum> curricula;
-
 		curricula = curriculumDao.findAll();
-
-		if (curricula.isEmpty()) {
-			throw new EmptyCurriculumException("No Curriculum found");
-		}
 		return curricula;
 	}
 
@@ -70,15 +77,50 @@ public class CurriculumService {
 	  curriculumToUpdate.setSkillList(curriculumDto.getSkillList());
 	 
 	  return curriculumDao.save(curriculumToUpdate);
-	 }
-
-	@Transactional(rollbackOn = {CurriculumNotFoundException.class})
-	public Curriculum deleteCurriculumByID(int i) throws CurriculumNotFoundException {
-		Curriculum curriculum = curriculumDao.findByCurriculumId(1);
-		if(curriculum == null) {
-			throw new CurriculumNotFoundException("The curriculum could not be deleted because it couldn't be found");
-		}
-		curriculumDao.deleteById(1);
-		return curriculum;
 	}
+
+	@Transactional(rollbackOn = {CurriculumNotFoundException.class, ForeignKeyConstraintException.class})
+	public Curriculum deleteCurriculumByID(String curId) throws CurriculumNotFoundException, EmptyParameterException, BadParameterException, ForeignKeyConstraintException {
+		Curriculum curriculum = null;
+		try {
+			if(curId.trim().equals("")){
+				throw new EmptyParameterException(emptyParam);
+			}
+			int id = Integer.parseInt(curId);
+			curriculum = curriculumDao.findByCurriculumId(id);
+			if(curriculum == null) {
+				throw new CurriculumNotFoundException("The curriculum could not be deleted because it couldn't be found");
+			} else {
+				curriculumDao.delete(curriculum);
+			}
+			return curriculum;
+		} catch (NumberFormatException e) {
+			throw new BadParameterException(badParam);
+		} catch (org.springframework.dao.DataIntegrityViolationException e) {
+			throw new ForeignKeyConstraintException("Please remove this curriculum from all visualizations before attempting to delete this curriculum");
+		}
+	}
+	
+	@Transactional(rollbackOn = {CurriculumNotFoundException.class})
+	public List<Category> getAllCategoriesByCurriculum(String curID) throws EmptyParameterException, BadParameterException, CurriculumNotFoundException {
+		try {
+			if(curID.trim().equals("")){
+				throw new EmptyParameterException(emptyParam);
+			}
+			int id = Integer.parseInt(curID);
+			Curriculum cur = curriculumDao.findByCurriculumId(id);
+			if (cur == null) {
+				throw new CurriculumNotFoundException("Curriculum not found");
+			}
+			//The above code is just a sanity check to make sure that the visualization exists before getting
+			//the skills by the visualization 
+			
+			//Now it runs the query of the database to get all the skills
+			List<Category> catList = curriculumDao.catCurList(id);
+			return catList;
+		} catch (NumberFormatException e) {
+			throw new BadParameterException(badParam);
+		}
+	}
+	
 }

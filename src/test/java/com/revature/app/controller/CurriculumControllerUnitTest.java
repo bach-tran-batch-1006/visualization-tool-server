@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.app.dto.CurriculumDto;
 import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.CurriculumNotFoundException;
+import com.revature.app.exception.EmptyParameterException;
 import com.revature.app.model.Skill;
 import com.revature.app.service.CurriculumService;
 
@@ -49,7 +50,7 @@ class CurriculumControllerUnitTest {
 		CurriculumDto input = new CurriculumDto(" ", new ArrayList<Skill>());
 		String inputJson = om.writeValueAsString(input);
 		
-		when(curriculumService.addCurriculum(input)).thenThrow(BadParameterException.class);
+		when(curriculumService.addCurriculum(input)).thenThrow(EmptyParameterException.class);
 		
 		this.mockMvc.perform(post("/curriculum").contentType(MediaType.APPLICATION_JSON).content(inputJson))
 		.andExpect(status().isBadRequest());
@@ -60,7 +61,7 @@ class CurriculumControllerUnitTest {
 			
 		String inputJson = om.writeValueAsString("1000");
 		
-		when(curriculumService.getCurriculumByID(1000)).thenThrow(CurriculumNotFoundException.class);
+		when(curriculumService.getCurriculumByID("1000")).thenThrow(CurriculumNotFoundException.class);
 		
 		mockMvc.perform(get("/curriculum/1000")).andExpect(MockMvcResultMatchers.status().isNotFound());
 	}
