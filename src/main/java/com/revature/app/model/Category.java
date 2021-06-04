@@ -24,7 +24,7 @@ public class Category {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@JoinColumn(name = "category_id")
+	@Column(name = "category_id")
 	private int categoryId;
 	
 	@Column(name = "category_name")
