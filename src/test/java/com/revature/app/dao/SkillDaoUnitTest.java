@@ -2,7 +2,9 @@ package com.revature.app.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -10,6 +12,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.transaction.Transactional;
 
 import org.hibernate.Session;
+import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -26,6 +29,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.revature.app.dto.SkillDTO;
 import com.revature.app.model.Category;
+import com.revature.app.model.Curriculum;
 import com.revature.app.model.Skill;
 
 @ExtendWith(SpringExtension.class)
@@ -152,4 +156,5 @@ class SkillDaoUnitTest {
 		assertEquals(null, actual);
 	}
 	
+
 }

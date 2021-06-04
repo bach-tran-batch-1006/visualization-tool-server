@@ -1,5 +1,7 @@
 package com.revature.app.integration;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.Commit;
@@ -36,6 +37,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.app.dao.SkillDAO;
 import com.revature.app.dto.SkillDTO;
 import com.revature.app.model.Category;
+import com.revature.app.model.Curriculum;
 import com.revature.app.model.Skill;
 import com.revature.app.service.SkillService;
 
@@ -291,14 +293,8 @@ class SkillIntegrationTest {
 	@Order(4)
 	@Transactional
 	void test_deleteSkill_happy() throws Exception {
-		Category testCat = new Category(1, "TestCat", "Description");
-		Skill expected = new Skill(1, "UpdatedTestSkill", testCat);
-		
 		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
 				.delete("/skill/1");
-		
-		String skillJson = objectMapper.writeValueAsString(expected);
-		
 		this.mockMvc
 			.perform(builder)
 			.andExpect(MockMvcResultMatchers.status().is(200));
@@ -338,6 +334,34 @@ class SkillIntegrationTest {
 		this.mockMvc
 			.perform(builder)
 			.andExpect(MockMvcResultMatchers.status().is(400));
+	}
+	
+	@Test
+	@Order(50)
+	void test_deleteSkill_foreignKeyFailure() throws Exception {
+		Session session = em.unwrap(Session.class);
+		
+		//Add a new skill to the database directly that will fail to be deleted in the test
+		Skill testSkill = new Skill(0, "TestForeignSkill", session.get(Category.class, 1));
+		em.getTransaction().begin();
+		em.persist(testSkill);
+		em.getTransaction().commit();
+		
+		//Add a curriculum that holds the skill
+		ArrayList<Skill> skillList = new ArrayList<Skill>();
+		skillList.add(session.get(Skill.class, 2));
+		Curriculum testCurr = new Curriculum(0, "TestCurr", skillList);
+		em.getTransaction().begin();
+		em.persist(testCurr);
+		em.getTransaction().commit();
+		
+		//Print out the category and skill as a sanity check
+		System.out.println(session.get(Skill.class, 2));
+		System.out.println(session.get(Curriculum.class, 1));
+		
+		//Now to test the method
+		this.mockMvc.perform(delete("/skill/2")).andExpect(MockMvcResultMatchers.status().is(400));
+
 	}
 	
 

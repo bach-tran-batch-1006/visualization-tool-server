@@ -38,7 +38,7 @@ class VisualizationControllerTest {
 	private ObjectMapper objectmapper;
 	
 	@Mock
-	private VisualizationService mockservice;
+	private VisualizationService mockService;
 
 	@InjectMocks
 	private VisualizationController vscontroller;
@@ -55,16 +55,38 @@ class VisualizationControllerTest {
 		VisualizationDTO nameupdate= new VisualizationDTO("newname", null);
 		List <Visualization> all = new ArrayList<>();
 		all.add(visualization);
-		lenient().when(mockservice.createVisualization(visualizationdto)).thenReturn(visualization);
-		lenient().when(mockservice.findVisualizationByID("1")).thenReturn(visualization);
-		lenient().when(mockservice.findVisualizationByID("35")).thenThrow(new VisualizationNotFoundException());
-		lenient().when(mockservice.updateVisualizationByID("1", nameupdate)).thenReturn(updatevisualization);
-		lenient().when(mockservice.updateVisualizationByID("98", nameupdate)).thenThrow(new VisualizationNotFoundException());
-		lenient().when(mockservice.deleteVisualizationByID("1")).thenReturn(1);
-		lenient().when(mockservice.deleteVisualizationByID("98")).thenThrow(new VisualizationNotFoundException());
-		lenient().when(mockservice.findAllVisualization()).thenReturn(all);
-		lenient().when(mockservice.createVisualization(visualizationdtoblank)).thenThrow(new EmptyParameterException());
-		lenient().when(mockservice.updateVisualizationByID("1",visualizationdtoblank)).thenThrow(new EmptyParameterException());
+		lenient().when(mockService.createVisualization(visualizationdto)).thenReturn(visualization);
+		
+		lenient().when(mockService.findVisualizationByID("1")).thenReturn(visualization);
+		lenient().when(mockService.findVisualizationByID("35")).thenThrow(new VisualizationNotFoundException());
+		lenient().when(mockService.findVisualizationByID(" ")).thenThrow(new EmptyParameterException());
+		lenient().when(mockService.findVisualizationByID("test")).thenThrow(new BadParameterException());
+		
+		
+		lenient().when(mockService.updateVisualizationByID("1", nameupdate)).thenReturn(updatevisualization);
+		lenient().when(mockService.updateVisualizationByID("98", nameupdate)).thenThrow(new VisualizationNotFoundException());
+		lenient().when(mockService.updateVisualizationByID("test", nameupdate)).thenThrow(new BadParameterException());
+		
+		
+		lenient().when(mockService.deleteVisualizationByID("1")).thenReturn(1);
+		lenient().when(mockService.deleteVisualizationByID("98")).thenThrow(new VisualizationNotFoundException());
+		lenient().when(mockService.deleteVisualizationByID(" ")).thenThrow(new EmptyParameterException());
+		lenient().when(mockService.deleteVisualizationByID("test")).thenThrow(new BadParameterException());
+		
+		
+		lenient().when(mockService.findAllVisualization()).thenReturn(all);
+		lenient().when(mockService.createVisualization(visualizationdtoblank)).thenThrow(new EmptyParameterException());
+		lenient().when(mockService.updateVisualizationByID("1",visualizationdtoblank)).thenThrow(new EmptyParameterException());
+		
+		lenient().when(mockService.getAllSkillsByVisualization("1")).thenReturn(null);
+		lenient().when(mockService.getAllSkillsByVisualization("2")).thenThrow(new VisualizationNotFoundException());
+		lenient().when(mockService.getAllSkillsByVisualization("test")).thenThrow(new BadParameterException());
+		lenient().when(mockService.getAllSkillsByVisualization(" ")).thenThrow(new EmptyParameterException());
+		
+		lenient().when(mockService.getAllCategoriesByVisualization("1")).thenReturn(null);
+		lenient().when(mockService.getAllCategoriesByVisualization("2")).thenThrow(new VisualizationNotFoundException());
+		lenient().when(mockService.getAllCategoriesByVisualization("test")).thenThrow(new BadParameterException());
+		lenient().when(mockService.getAllCategoriesByVisualization(" ")).thenThrow(new EmptyParameterException());
 	}
 
 	@Test
@@ -93,6 +115,7 @@ class VisualizationControllerTest {
 
 	}
 
+//
 	@Test
 	void FindEndpoint() throws Exception {
 		Visualization visualization = new Visualization(1, "first", null);
@@ -105,8 +128,19 @@ class VisualizationControllerTest {
 	@Test
 	void FindEndpointInvalidVisualizationDoNotExist() throws Exception {
 		mockmvc.perform(get("/visualization/35")).andExpect(MockMvcResultMatchers.status().isNotFound());
-
 	}
+	
+	@Test
+	void test_findByID_EmptyID() throws Exception {
+		mockmvc.perform(get("/visualization/ ")).andExpect(MockMvcResultMatchers.status().is(400));
+	}
+	
+	@Test
+	void test_findByID_BadID() throws Exception {
+		mockmvc.perform(get("/visualization/test")).andExpect(MockMvcResultMatchers.status().is(400));
+	}
+
+//
 
 	@Test
 	void UpdateEndpointvalidVisualization() throws Exception {
@@ -133,9 +167,6 @@ class VisualizationControllerTest {
 
 		this.mockmvc.perform(put("/visualization/98").contentType(MediaType.APPLICATION_JSON).content(bodystring))
 				.andExpect(MockMvcResultMatchers.status().isNotFound());
-			
-	
-
 	}
 	
 	@Test
@@ -146,26 +177,41 @@ class VisualizationControllerTest {
 
 		this.mockmvc.perform(put("/visualization/1").contentType(MediaType.APPLICATION_JSON).content(bodystring))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest());
-
+	}
+	
+	@Test
+	void test_updateVisualization_badID() throws Exception {
+		VisualizationDTO bodyupdate = new VisualizationDTO("newname", null);
+		String bodystring = this.objectmapper.writeValueAsString(bodyupdate);
+		this.mockmvc.perform(put("/visualization/test").contentType(MediaType.APPLICATION_JSON).content(bodystring))
+				.andExpect(MockMvcResultMatchers.status().isBadRequest());
 	}
 
+//
 	@Test
-
 	void deleteEndpointvalidVisualization() throws Exception {
-
 		mockmvc.perform(delete("/visualization/1").contentType(MediaType.APPLICATION_JSON))
 		.andExpect(MockMvcResultMatchers.status().isOk())
 		.andExpect(MockMvcResultMatchers.content().json("1"));
-
 	}
 
 	@Test
 	void deleteEndpointDoNotExistVisualization() throws Exception {
-
 		mockmvc.perform(delete("/visualization/98")).andExpect(MockMvcResultMatchers.status().isNotFound());
-
+	}
+	
+	@Test
+	void test_deleteVisualization_badID() throws Exception {
+		mockmvc.perform(delete("/visualization/test")).andExpect(MockMvcResultMatchers.status().is(400));
+	}
+	
+	@Test
+	void test_deleteVisualization_emptyID() throws Exception {
+		mockmvc.perform(delete("/visualization/ ")).andExpect(MockMvcResultMatchers.status().is(400));
 	}
 
+	
+//
 	@Test
 	void GetallEndpointvalidVisualizations() throws Exception {
 		Visualization visualization = new Visualization(1, "first", null);
@@ -176,6 +222,48 @@ class VisualizationControllerTest {
 		.andExpect(MockMvcResultMatchers.content().json(allexpect))
 		.andExpect(MockMvcResultMatchers.status().isOk());
 
+	}
+	
+//
+	@Test
+	void test_getAllUniqueSkillsByVisualization_happy() throws Exception {
+		mockmvc.perform(get("/visualization/1/skills")).andExpect(MockMvcResultMatchers.status().is(200));
+	}
+	
+	@Test
+	void test_getAllUniqueSkillsByVisualization_VisualizationNotFound() throws Exception {
+		mockmvc.perform(get("/visualization/2/skills")).andExpect(MockMvcResultMatchers.status().is(404));
+	}
+	
+	@Test
+	void test_getAllUniqueSkillsByVisualization_badID() throws Exception {
+		mockmvc.perform(get("/visualization/test/skills")).andExpect(MockMvcResultMatchers.status().is(400));
+	}
+	
+	@Test
+	void test_getAllUniqueSkillsByVisualization_emptyID() throws Exception {
+		mockmvc.perform(get("/visualization/ /skills")).andExpect(MockMvcResultMatchers.status().is(400));
+	}
+	
+//
+	@Test
+	void test_getAllUniqueCategoriesByVisualization_happy() throws Exception {
+		mockmvc.perform(get("/visualization/1/categories")).andExpect(MockMvcResultMatchers.status().is(200));
+	}
+	
+	@Test
+	void test_getAllUniqueCategoriesByVisualization_visualizationNotFound() throws Exception {
+		mockmvc.perform(get("/visualization/2/categories")).andExpect(MockMvcResultMatchers.status().is(404));
+	}
+	
+	@Test
+	void test_getAllUniqueCategoriesByVisualization_badID() throws Exception {
+		mockmvc.perform(get("/visualization/test/categories")).andExpect(MockMvcResultMatchers.status().is(400));
+	}
+	
+	@Test
+	void test_getAllUniqueCategoriesByVisualization_emptyID() throws Exception {
+		mockmvc.perform(get("/visualization/ /categories")).andExpect(MockMvcResultMatchers.status().is(400));
 	}
 
 }

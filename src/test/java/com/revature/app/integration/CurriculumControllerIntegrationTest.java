@@ -1,6 +1,7 @@
 package com.revature.app.integration;
 
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,7 @@ import javax.persistence.EntityManagerFactory;
 
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -41,6 +43,7 @@ import com.revature.app.dto.CurriculumDto;
 import com.revature.app.model.Category;
 import com.revature.app.model.Curriculum;
 import com.revature.app.model.Skill;
+import com.revature.app.model.Visualization;
 import com.revature.app.service.CurriculumService;
 
 @SpringBootTest
@@ -249,19 +252,46 @@ class CurriculumControllerIntegrationTest {
 
 	@Test
 	@Order(4)
-	@Transactional
+	@Commit
 	void test_deleteCurriculumById_success() throws Exception {
-		Session session = em.unwrap(Session.class);
-		Curriculum expected = session.get(Curriculum.class, 1);
-		if (expected == null) {
-			fail("Nothing to delete in database");
-		}
-
-		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.delete("/curriculum/1");
-
-		String curriculumJson = om.writeValueAsString(expected);
-
-		this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().is(200))
-				.andExpect(MockMvcResultMatchers.content().json(curriculumJson));
+		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
+				.delete("/curriculum/1");
+		
+		this.mockMvc
+			.perform(builder)
+			.andExpect(MockMvcResultMatchers.status().is(200));
 	}
+	
+	@Test
+	@Order(50)
+	void test_deleteSkill_foreignKeyFailure() throws Exception {
+		Session session = em.unwrap(Session.class);
+		
+		//Add a new curriculum to the database directly that will fail to be deleted in the test
+		ArrayList<Skill> skillList = new ArrayList<Skill>();
+		skillList.add(session.get(Skill.class, 1));
+		Curriculum testCurr = new Curriculum(0, "TestCurr", skillList);
+		em.getTransaction().begin();
+		em.persist(testCurr);
+		em.getTransaction().commit();
+		
+		//Add a Visualization the Curriculum is a part of
+		ArrayList<Curriculum> currList = new ArrayList<Curriculum>();
+		currList.add(session.get(Curriculum.class, 3));
+		Visualization testVis = new Visualization(0, "TestVis", currList);
+		em.getTransaction().begin();
+		em.persist(testVis);
+		em.getTransaction().commit();
+		
+		//Print out the category and skill as a sanity check
+		System.out.println(session.get(Skill.class, 1));
+		System.out.println(session.get(Curriculum.class, 3));
+		System.out.println(session.get(Visualization.class, 1));
+		
+		//Now to test the method
+		this.mockMvc.perform(delete("/curriculum/3")).andExpect(MockMvcResultMatchers.status().is(400));
+
+	}
+	
+	
 }

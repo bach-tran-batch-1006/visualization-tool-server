@@ -6,6 +6,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.revature.app.dao.CurriculumDao;
@@ -102,12 +103,13 @@ public class CurriculumService {
 			if(curriculum == null) {
 				throw new CurriculumNotFoundException("The curriculum could not be deleted because it couldn't be found");
 			} else {
-				curriculumDao.delete(curriculum);
+				curriculumDao.deleteById(curriculum.getCurriculumId());
+				curriculumDao.flush();
 			}
 			return curriculum;
 		} catch (NumberFormatException e) {
 			throw new BadParameterException(badParam);
-		} catch (org.springframework.dao.DataIntegrityViolationException e) {
+		} catch (DataIntegrityViolationException e) {
 			throw new ForeignKeyConstraintException("Please remove this curriculum from all visualizations before attempting to delete this curriculum");
 		}
 	}
@@ -127,8 +129,7 @@ public class CurriculumService {
 			//the skills by the visualization 
 			
 			//Now it runs the query of the database to get all the skills
-			List<Category> catList = curriculumDao.catCurList(id);
-			return catList;
+			return curriculumDao.catCurList(id);
 		} catch (NumberFormatException e) {
 			throw new BadParameterException(badParam);
 		}

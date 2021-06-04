@@ -22,10 +22,7 @@ import com.revature.app.dto.SkillDTO;
 import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.EmptyParameterException;
 import com.revature.app.exception.ForeignKeyConstraintException;
-import com.revature.app.exception.SkillNotAddedException;
-import com.revature.app.exception.SkillNotDeletedException;
 import com.revature.app.exception.SkillNotFoundException;
-import com.revature.app.exception.SkillNotUpdatedException;
 import com.revature.app.model.Category;
 import com.revature.app.model.Skill;
 
@@ -147,7 +144,7 @@ class SkillServiceUnitTest {
 	
 //	
 	@Test
-	void test_addSkill_happy() throws EmptyParameterException, SkillNotAddedException {
+	void test_addSkill_happy() throws EmptyParameterException {
 		SkillDTO skillDTO = new SkillDTO("TestSkill", new Category(1, "TestCat", null));
 		Skill expected = new Skill(1, "TestSkill", new Category(1, "TestCat", null));
 		Skill actual = skillService.addSkill(skillDTO);
@@ -155,7 +152,7 @@ class SkillServiceUnitTest {
 	}
 	
 	@Test
-	void test_addSkill_emptyName() throws SkillNotAddedException {
+	void test_addSkill_emptyName() {
 		try {
 			SkillDTO skillDTO = new SkillDTO("  ", new Category(1, "TestCat", null));
 			skillService.addSkill(skillDTO);
@@ -165,31 +162,9 @@ class SkillServiceUnitTest {
 		}
 	}
 	
-	@Test
-	void test_addSkill_badCategory() throws EmptyParameterException {
-		try {
-			SkillDTO skillDTO = new SkillDTO("Test", new Category(0, "BadCat", null));
-			skillService.addSkill(skillDTO);
-			fail("SkillNotAddedException was not thrown");
-		} catch (SkillNotAddedException e) {
-			assertEquals(e.getMessage(), "The skill could not be added due to a database issue");
-		}
-	}
-	
-	@Test
-	void test_addSkill_duplicateSkill() throws EmptyParameterException {
-		try {
-			SkillDTO skillDTO = new SkillDTO("Duplicate", new Category(1, "TestCat", null));
-			skillService.addSkill(skillDTO);
-			fail("SkillNotAddedException was not thrown");
-		} catch (SkillNotAddedException e) {
-			assertEquals(e.getMessage(), "The skill could not be added due to a database issue");
-		}
-	}
-	
 //	
 	@Test
-	void test_updateSkill_happy() throws EmptyParameterException, SkillNotUpdatedException, BadParameterException, SkillNotFoundException {
+	void test_updateSkill_happy() throws EmptyParameterException,  BadParameterException, SkillNotFoundException {
 		SkillDTO upSkill = new SkillDTO("TestSkill", new Category(1, "TestCat", null));
 		Skill expected = new Skill(1, "TestSkill", new Category(1, "TestCat", null));
 		Skill actual = skillService.updateSkill("3", upSkill);
@@ -197,17 +172,7 @@ class SkillServiceUnitTest {
 	}
 	
 	@Test
-	void test_updateSkill_skillNotUpdated() throws EmptyParameterException, SkillNotUpdatedException, BadParameterException, SkillNotFoundException {		
-		try {
-			SkillDTO upSkill = new SkillDTO("TestSkill", new Category(1, "TestCat", null));
-			skillService.updateSkill("2", upSkill);
-		} catch (SkillNotUpdatedException e) {
-			assertEquals(e.getMessage(), "The skill could not be updated due to a database issue");
-		}
-	}
-	
-	@Test
-	void test_updateSkill_noSkillToUpdate() throws EmptyParameterException, SkillNotUpdatedException, BadParameterException, SkillNotFoundException {
+	void test_updateSkill_noSkillToUpdate() throws EmptyParameterException,  BadParameterException, SkillNotFoundException {
 		try {
 			SkillDTO upSkill = new SkillDTO("TestSkill", new Category(1, "TestCat", null));
 			skillService.updateSkill("5", upSkill);
@@ -217,7 +182,7 @@ class SkillServiceUnitTest {
 	}
 	
 	@Test
-	void test_updateSkill_emptyID() throws SkillNotUpdatedException, SkillNotFoundException {
+	void test_updateSkill_emptyID() throws  SkillNotFoundException {
 		try {
 			SkillDTO upSkill = new SkillDTO("", new Category(1, "", null));
 			skillService.updateSkill("   ", upSkill);
@@ -230,7 +195,7 @@ class SkillServiceUnitTest {
 	}
 	
 	@Test
-	void test_updateSkill_badParameter() throws SkillNotUpdatedException, EmptyParameterException, SkillNotFoundException {
+	void test_updateSkill_badParameter() throws  EmptyParameterException, SkillNotFoundException {
 		try {
 			SkillDTO upSkill = new SkillDTO("Test", new Category(1, "", null));
 			skillService.updateSkill("test", upSkill);
@@ -241,7 +206,7 @@ class SkillServiceUnitTest {
 	}
 	
 	@Test
-	void test_updateSkill_emptyName() throws SkillNotUpdatedException, BadParameterException, SkillNotFoundException {
+	void test_updateSkill_emptyName() throws  BadParameterException, SkillNotFoundException {
 		try {
 			SkillDTO upSkill = new SkillDTO("", new Category(1, "", null));
 			skillService.updateSkill("1", upSkill);
@@ -253,14 +218,14 @@ class SkillServiceUnitTest {
 
 //	
 	@Test
-	void test_deleteSkill_happy() throws EmptyParameterException, BadParameterException, SkillNotDeletedException, SkillNotFoundException, ForeignKeyConstraintException {
+	void test_deleteSkill_happy() throws EmptyParameterException, BadParameterException,  SkillNotFoundException, ForeignKeyConstraintException {
 		Skill expected = new Skill(1, "TestSkill", new Category(1, "TestCat", null));
 		Skill actual = skillService.deleteSkill("4");
 		assertEquals(expected, actual);
 	}
 	
 	@Test
-	void test_deleteSkill_IDDoesntExist() throws EmptyParameterException, BadParameterException, SkillNotDeletedException, ForeignKeyConstraintException {
+	void test_deleteSkill_IDDoesntExist() throws EmptyParameterException, BadParameterException,  ForeignKeyConstraintException {
 		try {
 			skillService.deleteSkill("0");
 			fail("SkillNotFoundException was not thrown");
@@ -270,7 +235,7 @@ class SkillServiceUnitTest {
 	}
 	
 	@Test
-	void test_deleteSkill_BadParameter() throws EmptyParameterException, SkillNotDeletedException, SkillNotFoundException, ForeignKeyConstraintException {
+	void test_deleteSkill_BadParameter() throws EmptyParameterException,  SkillNotFoundException, ForeignKeyConstraintException {
 		try {
 			skillService.deleteSkill("test");
 			fail("BadParameterException was not thrown");
@@ -280,22 +245,12 @@ class SkillServiceUnitTest {
 	}
 	
 	@Test
-	void test_deleteSkill_emptyParameter() throws BadParameterException, SkillNotDeletedException, SkillNotFoundException, ForeignKeyConstraintException {
+	void test_deleteSkill_emptyParameter() throws BadParameterException,  SkillNotFoundException, ForeignKeyConstraintException {
 		try {
 			skillService.deleteSkill("      ");
 			fail("EmptyParameterException was not thrown");
 		} catch (EmptyParameterException e) {
 			assertEquals(e.getMessage(), "The skill ID was left blank");
-		}
-	}
-	
-	@Test
-	void test_deleteSkill_skillNotDeleted() throws EmptyParameterException, BadParameterException, SkillNotFoundException, ForeignKeyConstraintException {
-		try {
-			skillService.deleteSkill("5");
-			fail("SkillNotDeletedException was not thrown");
-		} catch (SkillNotDeletedException e) {
-			assertEquals(e.getMessage(), "The skill could not be deleted because of a database issue");
 		}
 	}
 	

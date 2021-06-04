@@ -21,10 +21,7 @@ import com.revature.app.dto.SkillDTO;
 import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.EmptyParameterException;
 import com.revature.app.exception.ForeignKeyConstraintException;
-import com.revature.app.exception.SkillNotAddedException;
-import com.revature.app.exception.SkillNotDeletedException;
 import com.revature.app.exception.SkillNotFoundException;
-import com.revature.app.exception.SkillNotUpdatedException;
 import com.revature.app.model.Skill;
 import com.revature.app.service.SkillService;
 
@@ -73,9 +70,6 @@ public class SkillController {
 		} catch (EmptyParameterException e) {
 			logger.warn("User left a parameter blank while trying to add a skill to the database");
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		} catch (SkillNotAddedException e) {
-			logger.error("Something went wrong with the database while adding a skill");
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 	
@@ -88,9 +82,6 @@ public class SkillController {
 			return ResponseEntity.status(202).body(skill);
 		} catch (EmptyParameterException e) {
 			logger.warn("User left a parameter blank while trying to update a skill in the database");
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		} catch (SkillNotUpdatedException e) {
-			logger.error("Something went wrong with the database while updating a skill");
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		} catch (BadParameterException e) {
 			logger.warn("User gave a bad parameter while trying to update a skill in the database");
@@ -113,9 +104,6 @@ public class SkillController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		} catch (BadParameterException e) {
 			logger.warn("User gave a bad parameter while trying to delete a skill from the database");
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		} catch (SkillNotDeletedException e) {
-			logger.error("Something went wrong with the database while deleting a skill");
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		} catch (SkillNotFoundException e) {
 			logger.warn("User attempted to delete a skill in the database that did not exist");
