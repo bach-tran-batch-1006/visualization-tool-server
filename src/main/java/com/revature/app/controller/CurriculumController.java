@@ -98,7 +98,7 @@ public class CurriculumController {
 		try {
 			curriculum = service.deleteCurriculumByID(curriculumId);
 			logger.info("User deleted the curriculum with the id " + curriculumId);
-			return curriculum;
+			return curriculum.getCurriculumId();
 		} catch (CurriculumNotFoundException e) {
 			logger.warn("User attempted to delete a curriculum in the database that did not exist");
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -114,7 +114,7 @@ public class CurriculumController {
 		}
 	}
 	
-	@GetMapping(path="curriculum/{id}/category")
+	@GetMapping(path="curriculum/{id}/categories")
 	public Object getAllCategoriesById(@PathVariable("id") String curriculumId) {
 		List<Category> catList;
 		try {

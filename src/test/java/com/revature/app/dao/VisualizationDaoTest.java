@@ -41,8 +41,8 @@ public class VisualizationDaoTest {
 	@Autowired
 	private VisualizationDao visualDao;
 	
-	@Autowired EntityManagerFactory emf;
-	
+	@Autowired
+	EntityManagerFactory emf;
 	private EntityManager em;
 	
 	@BeforeEach

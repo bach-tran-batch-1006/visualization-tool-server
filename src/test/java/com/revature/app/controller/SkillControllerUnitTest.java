@@ -27,10 +27,7 @@ import com.revature.app.dto.SkillDTO;
 import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.EmptyParameterException;
 import com.revature.app.exception.ForeignKeyConstraintException;
-import com.revature.app.exception.SkillNotAddedException;
-import com.revature.app.exception.SkillNotDeletedException;
 import com.revature.app.exception.SkillNotFoundException;
-import com.revature.app.exception.SkillNotUpdatedException;
 import com.revature.app.model.Category;
 import com.revature.app.model.Skill;
 import com.revature.app.service.SkillService;
@@ -51,7 +48,7 @@ class SkillControllerUnitTest {
 	
 	
 	@BeforeEach
-	void setup() throws BadParameterException, EmptyParameterException, SkillNotFoundException, SkillNotAddedException, SkillNotUpdatedException, SkillNotDeletedException, ForeignKeyConstraintException {
+	void setup() throws BadParameterException, EmptyParameterException, SkillNotFoundException, ForeignKeyConstraintException {
 		om = new ObjectMapper();
 		mockMvc = MockMvcBuilders.standaloneSetup(skillController).build();
 		Skill skill1 = new Skill(1, "Skill1", new Category(1, "Cat1", null));
@@ -67,19 +64,14 @@ class SkillControllerUnitTest {
 		
 		lenient().when(mockSkillService.addSkill(skillDTO1)).thenReturn(skill1);
 		lenient().when(mockSkillService.addSkill(skillDTO2)).thenThrow(new EmptyParameterException());
-		lenient().when(mockSkillService.addSkill(skillDTO3)).thenThrow(new SkillNotAddedException());
-		lenient().when(mockSkillService.addSkill(skillDTO4)).thenThrow(new SkillNotAddedException());
 		
 		lenient().when(mockSkillService.updateSkill(eq("1"), eq(skillDTO1))).thenReturn(skill1);
-		lenient().when(mockSkillService.updateSkill(eq("2"), eq(skillDTO1))).thenThrow(new SkillNotUpdatedException());
 		lenient().when(mockSkillService.updateSkill(eq(" "), eq(skillDTO1))).thenThrow(new EmptyParameterException());
 		lenient().when(mockSkillService.updateSkill(eq("test"), eq(skillDTO1))).thenThrow(new BadParameterException());
 		lenient().when(mockSkillService.updateSkill(eq("1"), eq(skillDTO2))).thenThrow(new EmptyParameterException());
 		lenient().when(mockSkillService.updateSkill(eq("1"), eq(skillDTO3))).thenThrow(new SkillNotFoundException());
-		lenient().when(mockSkillService.updateSkill(eq("1"), eq(skillDTO4))).thenThrow(new SkillNotUpdatedException());
 		
 		lenient().when(mockSkillService.deleteSkill(eq("1"))).thenReturn(skill1);
-		lenient().when(mockSkillService.deleteSkill(eq("2"))).thenThrow(new SkillNotDeletedException());
 		lenient().when(mockSkillService.deleteSkill(eq("3"))).thenThrow(new SkillNotFoundException());
 		lenient().when(mockSkillService.deleteSkill(eq(" "))).thenThrow(new EmptyParameterException());
 		lenient().when(mockSkillService.deleteSkill(eq("test"))).thenThrow(new BadParameterException());
@@ -145,27 +137,6 @@ class SkillControllerUnitTest {
 				).andExpect(MockMvcResultMatchers.status().is(400));
 	}
 	
-	@Test
-	void test_addSkill_badCategory() throws Exception {
-		SkillDTO problemSkill = new SkillDTO("ProblemCat", new Category(1, "   ", "Description"));
-		String body = om.writeValueAsString(problemSkill);
-		mockMvc.perform(
-				post("/skill")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(body)
-				).andExpect(MockMvcResultMatchers.status().is(400));
-	}
-	
-	@Test
-	void test_addSkill_duplicateSkill() throws Exception {
-		SkillDTO problemSkill = new SkillDTO("ProblemSkill", new Category(1, "TestCat", "Description"));
-		String body = om.writeValueAsString(problemSkill);
-		mockMvc.perform(
-				post("/skill")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(body)
-				).andExpect(MockMvcResultMatchers.status().is(400));
-	}
 	
 //	
 	@Test
@@ -222,27 +193,11 @@ class SkillControllerUnitTest {
 				.content(body)
 				).andExpect(MockMvcResultMatchers.status().is(400));
 	}
-	
-	@Test
-	void test_updateSkill_badCategory() throws Exception {
-		SkillDTO skillDTO = new SkillDTO("ProblemCat", new Category(1, "   ", "Description"));
-		String body = om.writeValueAsString(skillDTO);
-		mockMvc.perform(
-				put("/skill/1")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(body)
-				).andExpect(MockMvcResultMatchers.status().is(400));
-	}
 
 //	
 	@Test
 	void test_deleteSkill_happy() throws Exception {
 		mockMvc.perform(delete("/skill/1")).andExpect(MockMvcResultMatchers.status().is(200));
-	}
-	
-	@Test
-	void test_deleteSkill_badID() throws Exception {
-		mockMvc.perform(delete("/skill/2")).andExpect(MockMvcResultMatchers.status().is(400));
 	}
 	
 	@Test

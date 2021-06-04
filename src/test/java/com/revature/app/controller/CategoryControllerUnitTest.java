@@ -117,6 +117,17 @@ class CategoryControllerUnitTest {
 	}
 	
 	@Test
+	void test_updateCategory_badParameter() throws Exception {
+		CategoryDTO inputCategory = new CategoryDTO("Test", "Programming Language");
+		String inputJson = om.writeValueAsString(inputCategory);
+		
+		when(categoryService.updateCategory(eq("test"),eq(inputCategory))).thenThrow(BadParameterException.class);
+		
+		this.mockMvc.perform(put("/category/test").contentType(MediaType.APPLICATION_JSON).content(inputJson))
+		.andExpect(status().isBadRequest());
+	}
+	
+	@Test
 	void testUpdateCategory_negative_CategoryInvalidIdException_() throws Exception {
 		
 		
@@ -158,6 +169,7 @@ class CategoryControllerUnitTest {
 		when(categoryService.deleteCategory(eq(" "))).thenThrow(EmptyParameterException.class);
 		this.mockMvc.perform(delete("/category/ ")).andExpect(status().isBadRequest());
 	}
+	
 	
 	
 }

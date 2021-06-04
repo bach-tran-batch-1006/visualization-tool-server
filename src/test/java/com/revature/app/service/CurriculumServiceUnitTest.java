@@ -27,6 +27,7 @@ import com.revature.app.exception.CurriculumNotFoundException;
 import com.revature.app.exception.EmptyCurriculumException;
 import com.revature.app.exception.EmptyParameterException;
 import com.revature.app.exception.ForeignKeyConstraintException;
+import com.revature.app.exception.SkillNotFoundException;
 import com.revature.app.model.Category;
 import com.revature.app.model.Curriculum;
 import com.revature.app.model.Skill;
@@ -80,6 +81,27 @@ class CurriculumServiceUnitTest {
 			assertEquals("The curriculum with ID 10 could not be found.", e.getMessage());
 		}
 	}
+	
+	@Test
+	void test_getCurriculum_badID() throws CurriculumNotFoundException, EmptyParameterException {
+		try {
+			curriculumService.getCurriculumByID("test");
+			fail("BadParameterException was not thrown");
+		} catch (BadParameterException e) {
+			assertEquals(e.getMessage(), "The curriculum ID provided must be of type int");
+		}
+	}
+	
+	@Test
+	void test_getCurriculum_emptyID() throws CurriculumNotFoundException, BadParameterException {
+		try {
+			curriculumService.getCurriculumByID("   ");
+			fail("EmptyParameterException was not thrown");
+		} catch (EmptyParameterException e) {
+			assertEquals(e.getMessage(), "The curriculum ID was left blank");
+		}
+	}
+//
 
 	@Test
 	void test_getAllCurriculum_success() throws EmptyCurriculumException {
@@ -95,6 +117,7 @@ class CurriculumServiceUnitTest {
 		assertEquals(expected, actual);
 	}
 
+//
 	@Test
 	void test_updatebyID_success() throws EmptyParameterException, CurriculumNotFoundException, BadParameterException {
 		when(curriculumDao.findByCurriculumId(1)).thenReturn(new Curriculum(1, "BackEnd Developer", new ArrayList<>()));
@@ -107,7 +130,52 @@ class CurriculumServiceUnitTest {
 		assertEquals(expected, actual);
 	}
 
-
+	
+	@Test
+	void test_updateCurriculum_badID() throws EmptyParameterException, CurriculumNotFoundException {
+		try {
+			CurriculumDto upCurr = new CurriculumDto("TestCurr", null);
+			curriculumService.updateCurriculumByID("test", upCurr);
+			fail("BadParameterException was not thrown");
+		} catch (BadParameterException e) {
+			assertEquals(e.getMessage(), "The curriculum ID provided must be of type int");
+		}
+	}
+	
+	@Test
+	void test_updateCurriculum_emptyID() throws CurriculumNotFoundException, BadParameterException {
+		try {
+			CurriculumDto upCurr = new CurriculumDto("TestCurr", null);
+			curriculumService.updateCurriculumByID("   ", upCurr);
+			fail("EmptyParameterException was not thrown");
+		} catch (EmptyParameterException e) {
+			assertEquals(e.getMessage(), "The curriculum ID was left blank");
+		}
+	}
+	
+	@Test
+	void test_updateCurriculum_emptyName() throws CurriculumNotFoundException, BadParameterException {
+		try {
+			CurriculumDto upCurr = new CurriculumDto("    ", null);
+			curriculumService.updateCurriculumByID("1", upCurr);
+			fail("EmptyParameterException was not thrown");
+		} catch (EmptyParameterException e) {
+			assertEquals(e.getMessage(), "The curriculum name was left blank");
+		}
+	}
+	
+	@Test
+	void test_updateCurriculum_curriculumNotFound() throws EmptyParameterException, BadParameterException {
+		try {
+			CurriculumDto upCurr = new CurriculumDto("TestCurr", null);
+			curriculumService.updateCurriculumByID("1", upCurr);
+			fail("CurriculumNotFoundException was not thrown");
+		} catch (CurriculumNotFoundException e) {
+			assertEquals(e.getMessage(), "The category could not be updated because it couldn't be found");
+		}
+	}
+	
+//
 	@Test
 	void test_delete_success() throws CurriculumNotFoundException, EmptyParameterException, BadParameterException, ForeignKeyConstraintException {
 		when(curriculumDao.findByCurriculumId(1)).thenReturn(new Curriculum(1, "Delete Developer", new ArrayList<>()));
@@ -126,6 +194,26 @@ class CurriculumServiceUnitTest {
 			assertEquals("The curriculum could not be deleted because it couldn't be found", e.getMessage());
 		}
 
+	}
+	
+	@Test
+	void test_delete_badID() throws CurriculumNotFoundException, EmptyParameterException, ForeignKeyConstraintException {
+		try {
+			curriculumService.deleteCurriculumByID("test");
+			fail("BadParameterException was not thrown");
+		} catch (BadParameterException e) {
+			assertEquals(e.getMessage(), "The curriculum ID provided must be of type int");
+		}
+	}
+	
+	@Test
+	void test_delete_emptyID() throws CurriculumNotFoundException, BadParameterException, ForeignKeyConstraintException {
+		try {
+			curriculumService.deleteCurriculumByID("    ");
+			fail("EmptyParameterException was not thrown");
+		} catch (EmptyParameterException e) {
+			assertEquals(e.getMessage(), "The curriculum ID was left blank");
+		}
 	}
 
 //

@@ -3,6 +3,7 @@ package com.revature.app.dao;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.revature.app.model.Category;
@@ -14,4 +15,7 @@ public interface CategoryDAO extends JpaRepository<Category, Integer>{
 	public List<Category> findAll();
     
 	public Category findById(int categoryId);
+	
+	//public void deleteById(int id) throws Exception;
+	
 }

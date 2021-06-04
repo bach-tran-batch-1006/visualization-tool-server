@@ -3,6 +3,7 @@ package com.revature.app.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.lenient;
@@ -27,11 +28,13 @@ import org.mockito.quality.Strictness;
 
 import com.revature.app.dao.CategoryDAO;
 import com.revature.app.dto.CategoryDTO;
+import com.revature.app.dto.SkillDTO;
 import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.CategoryBlankInputException;
 import com.revature.app.exception.CategoryInvalidIdException;
 import com.revature.app.exception.CategoryNotFoundException;
 import com.revature.app.exception.EmptyParameterException;
+import com.revature.app.exception.ForeignKeyConstraintException;
 import com.revature.app.model.Category;
 
 @ExtendWith(MockitoExtension.class)
@@ -98,6 +101,29 @@ class CategoryServiceUnitTest {
 		});	
 	}
 	
+	
+	@Test
+	void test_updateCategory_emptyID() throws BadParameterException, CategoryNotFoundException {
+		try {
+			CategoryDTO upCat = new CategoryDTO("DevOps", "set of practices that combines software development and IT operations.");
+			categoryService.updateCategory("   ", upCat);
+			fail("EmptyParameterException was not thrown");
+		} catch (EmptyParameterException e) {
+			assertEquals(e.getMessage(), "The category ID was left blank");
+		} 
+	}
+	
+	@Test
+	void test_updateCategory_badID() throws CategoryNotFoundException, EmptyParameterException {
+		try {
+			CategoryDTO upCat = new CategoryDTO("DevOps", "set of practices that combines software development and IT operations.");
+			categoryService.updateCategory("test", upCat);
+			fail("BadParameterException was not thrown");
+		} catch (BadParameterException e) {
+			assertEquals(e.getMessage(), "The category ID provided must be of type int");
+		} 
+	}
+	
 	@ParameterizedTest
 	@MethodSource("invalidIds")
 	void testUpdateCategory_negative_invalidIdException(String id) {
@@ -123,6 +149,26 @@ class CategoryServiceUnitTest {
 		assertThrows(CategoryNotFoundException.class, () -> {
 			categoryService.deleteCategory(id);
 		});
+	}
+	
+	@Test
+	void test_deleteCategory_emptyID() throws CategoryNotFoundException, BadParameterException, ForeignKeyConstraintException {
+		try {
+			categoryService.deleteCategory("   ");
+			fail("EmptyParameterException was not thrown");
+		} catch (EmptyParameterException e) {
+			assertEquals(e.getMessage(), "The category ID was left blank");
+		} 
+	}
+	
+	@Test
+	void test_deleteCategory_badID() throws EmptyParameterException, CategoryNotFoundException, ForeignKeyConstraintException {
+		try {
+			categoryService.deleteCategory("test");
+			fail("BadParameterException was not thrown");
+		} catch (BadParameterException e) {
+			assertEquals(e.getMessage(), "The category ID provided must be of type int");
+		} 
 	}
 	
 	
