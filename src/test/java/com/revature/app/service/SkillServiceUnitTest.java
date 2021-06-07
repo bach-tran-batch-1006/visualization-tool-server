@@ -110,7 +110,7 @@ class SkillServiceUnitTest {
 		} catch (BadParameterException e) {
 			fail("Wrong exception was thrown");
 		} catch (SkillNotFoundException e) {
-			assertEquals(e.getMessage(), "The skill with ID 0 could not be found.");
+			assertEquals("The skill with ID 0 could not be found.", e.getMessage());
 		}
 	}
 	
@@ -122,7 +122,7 @@ class SkillServiceUnitTest {
 		} catch (EmptyParameterException e) {
 			fail("Wrong exception was thrown");
 		} catch (BadParameterException e) {
-			assertEquals(e.getMessage(), "The skill ID provided must be of type int");
+			assertEquals("The skill ID provided must be of type int", e.getMessage());
 		} catch (SkillNotFoundException e) {
 			fail("Wrong exception was thrown");
 		}
@@ -134,7 +134,7 @@ class SkillServiceUnitTest {
 			skillService.getSkillByID("   ");
 			fail("EmptyParameterException was not thrown");
 		} catch (EmptyParameterException e) {
-			assertEquals(e.getMessage(), "The skill ID was left blank");
+			assertEquals("The skill ID was left blank", e.getMessage());
 		} catch (BadParameterException e) {
 			fail("Wrong exception was thrown");
 		} catch (SkillNotFoundException e) {
@@ -158,7 +158,7 @@ class SkillServiceUnitTest {
 			skillService.addSkill(skillDTO);
 			fail("EmptyParameterException was not thrown");
 		} catch (EmptyParameterException e) {
-			assertEquals(e.getMessage(), "The skill name was left blank");
+			assertEquals("The skill name was left blank", e.getMessage());
 		}
 	}
 	
@@ -177,7 +177,7 @@ class SkillServiceUnitTest {
 			SkillDTO upSkill = new SkillDTO("TestSkill", new Category(1, "TestCat", null));
 			skillService.updateSkill("5", upSkill);
 		} catch (SkillNotFoundException e) {
-			assertEquals(e.getMessage(), "The skill could not be updated because it couldn't be found");
+			assertEquals("The skill could not be updated because it couldn't be found", e.getMessage());
 		}
 	}
 	
@@ -188,7 +188,7 @@ class SkillServiceUnitTest {
 			skillService.updateSkill("   ", upSkill);
 			fail("EmptyParameterException was not thrown");
 		} catch (EmptyParameterException e) {
-			assertEquals(e.getMessage(), "The skill ID was left blank");
+			assertEquals("The skill ID was left blank", e.getMessage());
 		} catch (BadParameterException e) {
 			fail("Wrong exception was thrown");
 		}
@@ -201,7 +201,7 @@ class SkillServiceUnitTest {
 			skillService.updateSkill("test", upSkill);
 			fail("BadParameterException was not thrown");
 		} catch (BadParameterException e) {
-			assertEquals(e.getMessage(), "The skill ID provided must be of type int");
+			assertEquals("The skill ID provided must be of type int", e.getMessage());
 		}
 	}
 	
@@ -212,7 +212,7 @@ class SkillServiceUnitTest {
 			skillService.updateSkill("1", upSkill);
 			fail("EmptyParameterException was not thrown");
 		} catch (EmptyParameterException e) {
-			assertEquals(e.getMessage(), "The skill name was left blank");
+			assertEquals("The skill name was left blank", e.getMessage());
 		}
 	}
 
@@ -230,7 +230,7 @@ class SkillServiceUnitTest {
 			skillService.deleteSkill("0");
 			fail("SkillNotFoundException was not thrown");
 		} catch (SkillNotFoundException e) {
-			assertEquals(e.getMessage(), "The skill could not be deleted because it couldn't be found");
+			assertEquals("The skill could not be deleted because it couldn't be found", e.getMessage());
 		}
 	}
 	
@@ -240,7 +240,7 @@ class SkillServiceUnitTest {
 			skillService.deleteSkill("test");
 			fail("BadParameterException was not thrown");
 		} catch (BadParameterException e) {
-			assertEquals(e.getMessage(), "The skill ID provided must be of type int");
+			assertEquals("The skill ID provided must be of type int", e.getMessage());
 		}
 	}
 	
@@ -250,7 +250,7 @@ class SkillServiceUnitTest {
 			skillService.deleteSkill("      ");
 			fail("EmptyParameterException was not thrown");
 		} catch (EmptyParameterException e) {
-			assertEquals(e.getMessage(), "The skill ID was left blank");
+			assertEquals("The skill ID was left blank", e.getMessage());
 		}
 	}
 	

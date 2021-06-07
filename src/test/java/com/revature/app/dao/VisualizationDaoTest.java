@@ -3,7 +3,6 @@ package com.revature.app.dao;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +35,7 @@ import com.revature.app.model.Visualization;
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
-public class VisualizationDaoTest {
+class VisualizationDaoTest {
 
 	@Autowired
 	private VisualizationDao visualDao;
@@ -101,17 +100,6 @@ public class VisualizationDaoTest {
 		assertEquals(1, actual.getVisualizationId());
 	}
 
-	@Test
-	@Order(21)
-	void testGetInvalidVisualization() {
-		try {
-			Visualization v = visualDao.getById(Integer.MAX_VALUE);
-			System.out.println(v);
-			fail("Exception not caught");
-		} catch (javax.persistence.EntityNotFoundException e) {
-			assertEquals("Unable to find com.revature.app.model.Visualization with id 2147483647", e.getMessage());
-		}
-	}
 
 	// updates
 
@@ -129,26 +117,6 @@ public class VisualizationDaoTest {
 	}
 
 	// deletes
-	@Test
-	@Commit
-	@Order(40)
-	void testDeleteValidVisualization() {
-		visualDao.deleteById(1);
-	}
-
-	@Test
-	@Commit
-	@Order(41)
-	void testDeleteInvalidVisualization() {
-		try {
-			Visualization v = visualDao.getById(Integer.MAX_VALUE);
-			 System.out.println(v);
-			 fail("Exception not caught");
-		} catch (javax.persistence.EntityNotFoundException e) {
-			System.out.println(e.getMessage());
-		}
-	}
-	
 	
 	@Test
 	@Commit

@@ -41,7 +41,7 @@ public class Curriculum {
 	private List<Skill> skillList;
 	
 	public Curriculum(CurriculumDto dto) {
-		this.curriculumName = dto.name;
-		this.skillList = dto.skillList;
+		this.curriculumName = dto.getName();
+		this.skillList = dto.getSkillList();
 	}
 }

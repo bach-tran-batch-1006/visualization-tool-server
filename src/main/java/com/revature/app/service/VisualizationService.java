@@ -8,7 +8,6 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.revature.app.dao.CurriculumDao;
 import com.revature.app.dao.VisualizationDao;
 import com.revature.app.dto.VisualizationDTO;
 import com.revature.app.exception.BadParameterException;
@@ -26,6 +25,7 @@ public class VisualizationService {
 	String badParam = "The visualization ID provided must be of type int";
 	String emptyParam = "The visualization ID was left blank";
 	String emptyName = "The visualization name was left blank";
+	String notFound = "Visualization not found";
 	
 	@Autowired
 	private CurriculumService curriculumService;
@@ -55,7 +55,7 @@ public class VisualizationService {
 			int id = Integer.parseInt(visId);
 			Visualization vis = visualizationDao.findById(id);
 			if (vis == null) {
-				throw new VisualizationNotFoundException("Visualization not found");
+				throw new VisualizationNotFoundException(notFound);
 			}
 			return vis;
 		} catch (NumberFormatException e) {
@@ -63,7 +63,7 @@ public class VisualizationService {
 		}
 	}
 
-	@Transactional
+	@Transactional(rollbackOn = {VisualizationNotFoundException.class})
 	public Visualization updateVisualizationByID(String visID, VisualizationDTO visualizationDto) throws VisualizationNotFoundException, BadParameterException, EmptyParameterException {
 		try {
 			if(visID.trim().equals("")){
@@ -75,9 +75,9 @@ public class VisualizationService {
 			int id = Integer.parseInt(visID);
 			Visualization vis = visualizationDao.findById(id);
 			if (vis == null) {
-				throw new VisualizationNotFoundException("Visualization not found");
+				throw new VisualizationNotFoundException(notFound);
 			} else {
-				ArrayList<Curriculum> persistantCurriculumList = new ArrayList<Curriculum>();
+				ArrayList<Curriculum> persistantCurriculumList = new ArrayList<>();
 				if(visualizationDto.getCurricula() != null) {
 					for (Curriculum eachCurriculumDTO : (ArrayList<Curriculum>) visualizationDto.getCurricula()) { 
 						persistantCurriculumList.add(curriculumService.getCurriculumByID(String.valueOf(eachCurriculumDTO.getCurriculumId())));
@@ -102,7 +102,7 @@ public class VisualizationService {
 			int id = Integer.parseInt(visID);
 			Visualization vis = visualizationDao.findById(id);
 			if (vis == null) {
-				throw new VisualizationNotFoundException("Visualization not found");
+				throw new VisualizationNotFoundException(notFound);
 			}
 			visualizationDao.deleteById(id);
 			return id;
@@ -126,14 +126,13 @@ public class VisualizationService {
 			int id = Integer.parseInt(visID);
 			Visualization vis = visualizationDao.findById(id);
 			if (vis == null) {
-				throw new VisualizationNotFoundException("Visualization not found");
+				throw new VisualizationNotFoundException(notFound);
 			}
 			//The above code is just a sanity check to make sure that the visualization exists before getting
 			//the skills by the visualization 
 			
 			//Now it runs the query of the database to get all the skills
-			List<Skill> skillList = visualizationDao.skillVisList(id);
-			return skillList;
+			return visualizationDao.skillVisList(id);
 		} catch (NumberFormatException e) {
 			throw new BadParameterException(badParam);
 		}
@@ -148,14 +147,13 @@ public class VisualizationService {
 			int id = Integer.parseInt(visID);
 			Visualization vis = visualizationDao.findById(id);
 			if (vis == null) {
-				throw new VisualizationNotFoundException("Visualization not found");
+				throw new VisualizationNotFoundException(notFound);
 			}
 			//The above code is just a sanity check to make sure that the visualization exists before getting
 			//the skills by the visualization 
 			
 			//Now it runs the query of the database to get all the skills
-			List<Category> catList = visualizationDao.catVisList(id);
-			return catList;
+			return visualizationDao.catVisList(id);
 		} catch (NumberFormatException e) {
 			throw new BadParameterException(badParam);
 		}

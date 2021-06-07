@@ -1,6 +1,5 @@
 package com.revature.app.integration;
 
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -46,7 +45,7 @@ import com.revature.app.service.CategoryService;
 @DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
 @ActiveProfiles("test")
 @SpringBootTest
-public class CategoryIntegrationTest {
+class CategoryIntegrationTest {
 	
 	
 	private MockMvc mockMvc;

@@ -5,7 +5,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,13 +34,16 @@ public class CategoryController {
 	private CategoryService categoryService;
 	
 	private static Logger logger = LoggerFactory.getLogger(CategoryController.class);
+	
+	String goodLog = "User called the endpoint ";
 
 	@PostMapping(path = "category")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public Category addCategory(@RequestBody CategoryDTO categoryDTO) throws CategoryBlankInputException {
 		try {
 			Category category = categoryService.addCategory(categoryDTO);
-			logger.info("User called the endpoint to add a category to the database");
+			String logString = String.format(goodLog, "to add a category to the database");
+			logger.info(logString);
 			return category;
 		} catch (CategoryBlankInputException e) {
 			logger.warn("User left a parameter blank while trying to add a category to the database");
@@ -59,7 +61,9 @@ public class CategoryController {
 	public Category updateCategory(@PathVariable("id") String id, @RequestBody CategoryDTO categoryDTO) {
 		try {
 			Category category = categoryService.updateCategory(id, categoryDTO);
-			logger.info("User called the endpoint to update information about category with id " + id);
+			String logString = String.format(goodLog, "to update a category in the database with id %s");
+			logString = String.format(logString, id);
+			logger.info(logString);
 			return category;
 		} catch (EmptyParameterException e) {
 			logger.warn("User left a parameter blank while trying to update a category in the database");
@@ -78,7 +82,9 @@ public class CategoryController {
 	public Object deleteCategory(@PathVariable("id") String id) {
 		try {
 			categoryService.deleteCategory(id);
-			logger.info("User deleted the category with the id " + id);
+			String logString = String.format(goodLog, "to delete a category from the database with id %s");
+			logString = String.format(logString, id);
+			logger.info(logString);
 			return id;
 		} catch (EmptyParameterException e) {
 			logger.warn("User left a parameter blank while trying to delete a category from the database");

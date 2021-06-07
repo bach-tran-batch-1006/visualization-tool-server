@@ -2,10 +2,6 @@ package com.revature.app.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -27,7 +23,6 @@ import com.revature.app.exception.CurriculumNotFoundException;
 import com.revature.app.exception.EmptyCurriculumException;
 import com.revature.app.exception.EmptyParameterException;
 import com.revature.app.exception.ForeignKeyConstraintException;
-import com.revature.app.exception.SkillNotFoundException;
 import com.revature.app.model.Category;
 import com.revature.app.model.Curriculum;
 import com.revature.app.model.Skill;
@@ -88,7 +83,7 @@ class CurriculumServiceUnitTest {
 			curriculumService.getCurriculumByID("test");
 			fail("BadParameterException was not thrown");
 		} catch (BadParameterException e) {
-			assertEquals(e.getMessage(), "The curriculum ID provided must be of type int");
+			assertEquals("The curriculum ID provided must be of type int", e.getMessage());
 		}
 	}
 	
@@ -98,7 +93,7 @@ class CurriculumServiceUnitTest {
 			curriculumService.getCurriculumByID("   ");
 			fail("EmptyParameterException was not thrown");
 		} catch (EmptyParameterException e) {
-			assertEquals(e.getMessage(), "The curriculum ID was left blank");
+			assertEquals("The curriculum ID was left blank", e.getMessage());
 		}
 	}
 //
@@ -138,7 +133,7 @@ class CurriculumServiceUnitTest {
 			curriculumService.updateCurriculumByID("test", upCurr);
 			fail("BadParameterException was not thrown");
 		} catch (BadParameterException e) {
-			assertEquals(e.getMessage(), "The curriculum ID provided must be of type int");
+			assertEquals("The curriculum ID provided must be of type int", e.getMessage());
 		}
 	}
 	
@@ -149,7 +144,7 @@ class CurriculumServiceUnitTest {
 			curriculumService.updateCurriculumByID("   ", upCurr);
 			fail("EmptyParameterException was not thrown");
 		} catch (EmptyParameterException e) {
-			assertEquals(e.getMessage(), "The curriculum ID was left blank");
+			assertEquals("The curriculum ID was left blank", e.getMessage());
 		}
 	}
 	
@@ -160,7 +155,7 @@ class CurriculumServiceUnitTest {
 			curriculumService.updateCurriculumByID("1", upCurr);
 			fail("EmptyParameterException was not thrown");
 		} catch (EmptyParameterException e) {
-			assertEquals(e.getMessage(), "The curriculum name was left blank");
+			assertEquals("The curriculum name was left blank", e.getMessage());
 		}
 	}
 	
@@ -171,7 +166,7 @@ class CurriculumServiceUnitTest {
 			curriculumService.updateCurriculumByID("1", upCurr);
 			fail("CurriculumNotFoundException was not thrown");
 		} catch (CurriculumNotFoundException e) {
-			assertEquals(e.getMessage(), "The category could not be updated because it couldn't be found");
+			assertEquals("The category could not be updated because it couldn't be found", e.getMessage());
 		}
 	}
 	
@@ -202,7 +197,7 @@ class CurriculumServiceUnitTest {
 			curriculumService.deleteCurriculumByID("test");
 			fail("BadParameterException was not thrown");
 		} catch (BadParameterException e) {
-			assertEquals(e.getMessage(), "The curriculum ID provided must be of type int");
+			assertEquals("The curriculum ID provided must be of type int", e.getMessage());
 		}
 	}
 	
@@ -212,13 +207,13 @@ class CurriculumServiceUnitTest {
 			curriculumService.deleteCurriculumByID("    ");
 			fail("EmptyParameterException was not thrown");
 		} catch (EmptyParameterException e) {
-			assertEquals(e.getMessage(), "The curriculum ID was left blank");
+			assertEquals("The curriculum ID was left blank", e.getMessage());
 		}
 	}
 
 //
 	@Test
-	public void test_getAllCategoryiesByCurriculum_happy() throws EmptyParameterException, BadParameterException, CurriculumNotFoundException {
+	void test_getAllCategoryiesByCurriculum_happy() throws EmptyParameterException, BadParameterException, CurriculumNotFoundException {
 		when(curriculumDao.findByCurriculumId(1)).thenReturn(new Curriculum(1, "test", null));
 		Category testCat1 = new Category(0, "TestCat1", "TestDescription");
 		Category testCat2 = new Category(0, "TestCat2", "TestDescription");
@@ -231,32 +226,32 @@ class CurriculumServiceUnitTest {
 	}
 	
 	@Test
-	public void test_getAllCategoryiesByCurriculum_emptyParameter() throws BadParameterException, CurriculumNotFoundException {
+	void test_getAllCategoryiesByCurriculum_emptyParameter() throws BadParameterException, CurriculumNotFoundException {
 		try {
 			curriculumService.getAllCategoriesByCurriculum(" ");
 			fail("EmptyParameterException was not thrown");
 		} catch (EmptyParameterException e) {
-			assertEquals(e.getMessage(), "The curriculum ID was left blank");
+			assertEquals("The curriculum ID was left blank", e.getMessage());
 		}
 	}
 	
 	@Test
-	public void test_getAllCategoryiesByCurriculum_badParameter() throws EmptyParameterException, CurriculumNotFoundException {
+	void test_getAllCategoryiesByCurriculum_badParameter() throws EmptyParameterException, CurriculumNotFoundException {
 		try {
 			curriculumService.getAllCategoriesByCurriculum("test");
 			fail("BadParameterException was not thrown");
 		} catch (BadParameterException e) {
-			assertEquals(e.getMessage(), "The curriculum ID provided must be of type int");
+			assertEquals("The curriculum ID provided must be of type int", e.getMessage());
 		}
 	}
 	
 	@Test
-	public void test_getAllCategoryiesByCurriculum_curriculaNotFound() throws EmptyParameterException, BadParameterException, CurriculumNotFoundException {
+	void test_getAllCategoryiesByCurriculum_curriculaNotFound() throws EmptyParameterException, BadParameterException, CurriculumNotFoundException {
 		try {
 			curriculumService.getAllCategoriesByCurriculum("20202020");
 			fail("VisualizationNotFoundException was not thrown");
 		} catch (CurriculumNotFoundException e) {
-			assertEquals(e.getMessage(), "Curriculum not found");
+			assertEquals("Curriculum not found", e.getMessage());
 		}
 	}
 

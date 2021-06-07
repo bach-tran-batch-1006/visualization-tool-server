@@ -4,12 +4,9 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.hibernate.*;
-import org.hibernate.exception.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.*;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.*;
 
 import com.revature.app.dao.CategoryDAO;
 import com.revature.app.dto.CategoryDTO;

@@ -1,6 +1,5 @@
 package com.revature.app.controller;
 
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -99,7 +98,7 @@ class CategoryControllerUnitTest {
 		CategoryDTO inputCategory = new CategoryDTO("Language", "Programming Language");
 		String inputJson = om.writeValueAsString(inputCategory);
 		
-		when(categoryService.updateCategory(eq("1"),eq(inputCategory))).thenReturn(expected);
+		when(categoryService.updateCategory("1", inputCategory)).thenReturn(expected);
 		
 		this.mockMvc.perform(put("/category/1").contentType(MediaType.APPLICATION_JSON).content(inputJson))
 		.andExpect(status().isOk()).andExpect(content().json(expectedJson));
@@ -110,7 +109,7 @@ class CategoryControllerUnitTest {
 		CategoryDTO inputCategory = new CategoryDTO("", "Programming Language");
 		String inputJson = om.writeValueAsString(inputCategory);
 		
-		when(categoryService.updateCategory(eq("1"),eq(inputCategory))).thenThrow(EmptyParameterException.class);
+		when(categoryService.updateCategory("1", inputCategory)).thenThrow(EmptyParameterException.class);
 		
 		this.mockMvc.perform(put("/category/1").contentType(MediaType.APPLICATION_JSON).content(inputJson))
 		.andExpect(status().isBadRequest());
@@ -121,7 +120,7 @@ class CategoryControllerUnitTest {
 		CategoryDTO inputCategory = new CategoryDTO("Test", "Programming Language");
 		String inputJson = om.writeValueAsString(inputCategory);
 		
-		when(categoryService.updateCategory(eq("test"),eq(inputCategory))).thenThrow(BadParameterException.class);
+		when(categoryService.updateCategory("test", inputCategory)).thenThrow(BadParameterException.class);
 		
 		this.mockMvc.perform(put("/category/test").contentType(MediaType.APPLICATION_JSON).content(inputJson))
 		.andExpect(status().isBadRequest());
@@ -134,7 +133,7 @@ class CategoryControllerUnitTest {
 		CategoryDTO inputCategory = new CategoryDTO("Language", "Programming Language");
 		String inputJson = om.writeValueAsString(inputCategory);
 		
-		when(categoryService.updateCategory(eq("3"),eq(inputCategory))).thenThrow(CategoryNotFoundException.class);
+		when(categoryService.updateCategory("3", inputCategory)).thenThrow(CategoryNotFoundException.class);
 		
 		this.mockMvc.perform(put("/category/3").contentType(MediaType.APPLICATION_JSON).content(inputJson))
 		.andExpect(status().is(404));
@@ -142,31 +141,31 @@ class CategoryControllerUnitTest {
 	
 	@Test
 	void test_deleteCategory_positive() throws Exception{
-		when(categoryService.deleteCategory(eq("3"))).thenReturn(null);
+		when(categoryService.deleteCategory("3")).thenReturn(null);
 		this.mockMvc.perform(delete("/category/3")).andExpect(status().isNoContent());
 	}
 
 	@Test
 	void test_deleteCategory_negative_CategoryNotFoundException() throws Exception {
-		when(categoryService.deleteCategory(eq("3"))).thenThrow(CategoryNotFoundException.class);
+		when(categoryService.deleteCategory("3")).thenThrow(CategoryNotFoundException.class);
 		this.mockMvc.perform(delete("/category/3")).andExpect(status().is(404));
 	}
 	
 	@Test
 	void test_deleteCategory_negative_ForeignKeyException() throws Exception {
-		when(categoryService.deleteCategory(eq("3"))).thenThrow(ForeignKeyConstraintException.class);
+		when(categoryService.deleteCategory("3")).thenThrow(ForeignKeyConstraintException.class);
 		this.mockMvc.perform(delete("/category/3")).andExpect(status().isBadRequest());
 	}
 	
 	@Test
 	void test_deleteCategory_negative_BadParameter() throws Exception {
-		when(categoryService.deleteCategory(eq("test"))).thenThrow(BadParameterException.class);
+		when(categoryService.deleteCategory("test")).thenThrow(BadParameterException.class);
 		this.mockMvc.perform(delete("/category/test")).andExpect(status().isBadRequest());
 	}
 	
 	@Test
 	void test_deleteCategory_negative_EmptyParameter() throws Exception {
-		when(categoryService.deleteCategory(eq(" "))).thenThrow(EmptyParameterException.class);
+		when(categoryService.deleteCategory(" ")).thenThrow(EmptyParameterException.class);
 		this.mockMvc.perform(delete("/category/ ")).andExpect(status().isBadRequest());
 	}
 	

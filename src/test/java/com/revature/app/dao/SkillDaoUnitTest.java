@@ -1,10 +1,6 @@
 package com.revature.app.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -12,7 +8,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.transaction.Transactional;
 
 import org.hibernate.Session;
-import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -29,7 +24,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.revature.app.dto.SkillDTO;
 import com.revature.app.model.Category;
-import com.revature.app.model.Curriculum;
 import com.revature.app.model.Skill;
 
 @ExtendWith(SpringExtension.class)
@@ -63,7 +57,7 @@ class SkillDaoUnitTest {
 		skillDAO.save(new Skill(0, "Test", session.get(Category.class, 1)));
 		//Adding in another one to make sure we have two
 		List<Skill> actual = skillDAO.findAll();
-		assertTrue(actual.size() == 2);
+		assertEquals(2, actual.size());
 	}
 	
 	@Test
@@ -72,7 +66,7 @@ class SkillDaoUnitTest {
 	@Commit
 	void test_getAllSkills_noSkills() {
 		List<Skill> actual = skillDAO.findAll();
-		assertTrue(actual.size() == 0);
+		assertEquals(0, actual.size());
 	}
 
 //
@@ -87,14 +81,6 @@ class SkillDaoUnitTest {
 		assertEquals(expected, actual);
 	}
 	
-	@Test
-	@Transactional
-	@Order(0)
-	@Commit
-	void test_getSkillbyID_SkillDoesntExist() {
-		Skill actual = skillDAO.findById(2);
-		assertEquals(null, actual);
-	}
 	
 //	
 	@Test
@@ -124,7 +110,7 @@ class SkillDaoUnitTest {
 		Skill actual = skillDAO.getById(1);
 		actual.updateFromDTO(dto);
 		actual = skillDAO.save(actual);
-		assertEquals(actual, expected);
+		assertEquals(expected, actual);
 	}
 	
 	@Test
@@ -144,7 +130,7 @@ class SkillDaoUnitTest {
 	void test_deleteSkill_happy() {
 		Skill actual = skillDAO.findById(2);
 		skillDAO.delete(actual);
-		assertTrue(skillDAO.findById(2) == null);
+		assertEquals(null, skillDAO.findById(2));
 	}
 	
 	@Test
