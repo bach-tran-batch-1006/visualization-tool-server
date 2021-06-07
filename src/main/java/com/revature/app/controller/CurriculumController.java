@@ -33,6 +33,8 @@ public class CurriculumController {
 	private CurriculumService service;
 	
 	private static Logger logger = LoggerFactory.getLogger(CurriculumController.class);
+	
+	String goodLog = "User called the endpoint ";
 
 	@GetMapping(path = "curriculum")
 	public Object getAllCurriculum() {
@@ -47,7 +49,9 @@ public class CurriculumController {
 		Curriculum curriculum = null;
 		try {
 			curriculum = service.getCurriculumByID(curriculumId);
-			logger.info("User called the endpoint to get information about curriculum with id " + curriculumId);
+			String logString = String.format(goodLog, "to get information about a curriculum in the database with id %s");
+			logString = String.format(logString, curriculumId);
+			logger.info(logString);
 			return curriculum;
 		} catch (CurriculumNotFoundException e) {
 			logger.warn("User requested information about a curriculum in the database that did not exist");
@@ -78,7 +82,9 @@ public class CurriculumController {
 	public Object updateCurriculumById(@PathVariable("id") String curriculumId, @RequestBody CurriculumDto dto) {
 		try {
 			Curriculum curriculum = service.updateCurriculumByID(curriculumId, dto);
-			logger.info("User called the endpoint to update information about curriculum with id " + curriculumId);
+			String logString = String.format(goodLog, "to update a curriculum in the database with id %s");
+			logString = String.format(logString, curriculumId);
+			logger.info(logString);
 			return curriculum;
 		} catch (EmptyParameterException e) {
 			logger.warn("User left a parameter blank while trying to update a curriculum in the database");
@@ -97,7 +103,9 @@ public class CurriculumController {
 		Curriculum curriculum = null;
 		try {
 			curriculum = service.deleteCurriculumByID(curriculumId);
-			logger.info("User deleted the curriculum with the id " + curriculumId);
+			String logString = String.format(goodLog, "to delete a curriculum from the database with id %s");
+			logString = String.format(logString, curriculumId);
+			logger.info(logString);
 			return curriculum.getCurriculumId();
 		} catch (CurriculumNotFoundException e) {
 			logger.warn("User attempted to delete a curriculum in the database that did not exist");

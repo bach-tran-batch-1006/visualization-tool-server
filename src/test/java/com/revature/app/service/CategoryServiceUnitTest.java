@@ -28,7 +28,6 @@ import org.mockito.quality.Strictness;
 
 import com.revature.app.dao.CategoryDAO;
 import com.revature.app.dto.CategoryDTO;
-import com.revature.app.dto.SkillDTO;
 import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.CategoryBlankInputException;
 import com.revature.app.exception.CategoryInvalidIdException;
@@ -109,7 +108,7 @@ class CategoryServiceUnitTest {
 			categoryService.updateCategory("   ", upCat);
 			fail("EmptyParameterException was not thrown");
 		} catch (EmptyParameterException e) {
-			assertEquals(e.getMessage(), "The category ID was left blank");
+			assertEquals("The category ID was left blank", e.getMessage());
 		} 
 	}
 	
@@ -120,7 +119,7 @@ class CategoryServiceUnitTest {
 			categoryService.updateCategory("test", upCat);
 			fail("BadParameterException was not thrown");
 		} catch (BadParameterException e) {
-			assertEquals(e.getMessage(), "The category ID provided must be of type int");
+			assertEquals("The category ID provided must be of type int", e.getMessage());
 		} 
 	}
 	
@@ -157,7 +156,7 @@ class CategoryServiceUnitTest {
 			categoryService.deleteCategory("   ");
 			fail("EmptyParameterException was not thrown");
 		} catch (EmptyParameterException e) {
-			assertEquals(e.getMessage(), "The category ID was left blank");
+			assertEquals("The category ID was left blank", e.getMessage());
 		} 
 	}
 	
@@ -167,7 +166,7 @@ class CategoryServiceUnitTest {
 			categoryService.deleteCategory("test");
 			fail("BadParameterException was not thrown");
 		} catch (BadParameterException e) {
-			assertEquals(e.getMessage(), "The category ID provided must be of type int");
+			assertEquals("The category ID provided must be of type int", e.getMessage());
 		} 
 	}
 	

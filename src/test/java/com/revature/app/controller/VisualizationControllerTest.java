@@ -162,9 +162,6 @@ class VisualizationControllerTest {
 		VisualizationDTO bodyupdate = new VisualizationDTO("newname", null);
 		String bodystring = this.objectmapper.writeValueAsString(bodyupdate);
 
-		Visualization visualization = new Visualization(1, "newname", null);
-		String expected = this.objectmapper.writeValueAsString(visualization);
-
 		this.mockmvc.perform(put("/visualization/98").contentType(MediaType.APPLICATION_JSON).content(bodystring))
 				.andExpect(MockMvcResultMatchers.status().isNotFound());
 	}

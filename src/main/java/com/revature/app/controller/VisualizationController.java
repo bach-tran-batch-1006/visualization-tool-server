@@ -34,6 +34,8 @@ public class VisualizationController {
 	private VisualizationService visualizationService;
 	
 	private static Logger logger = LoggerFactory.getLogger(VisualizationController.class);
+	
+	String goodLog = "User called the endpoint ";
 
 	@PostMapping(path = "visualization")
 	@ResponseStatus(HttpStatus.CREATED)
@@ -52,7 +54,9 @@ public class VisualizationController {
 	public Object findById(@PathVariable("id") String id) {
 		try {
 			Visualization vis = visualizationService.findVisualizationByID(id);
-			logger.info("User called the endpoint to get information about visualization with id " + id);
+			String logString = String.format(goodLog, "to get information about a visualization in the database with id %s");
+			logString = String.format(logString, id);
+			logger.info(logString);
 			return vis;
 		} catch (VisualizationNotFoundException e) {
 			logger.warn("User requested information about a visualization in the database that did not exist");
@@ -77,7 +81,9 @@ public class VisualizationController {
 	public Object updateVisualization(@PathVariable("id") String id, @RequestBody VisualizationDTO visualizationdto) {
 		try {
 			Visualization updatedVis = visualizationService.updateVisualizationByID(id, visualizationdto);
-			logger.info("User called the endpoint to update information about visualization with id " + id);
+			String logString = String.format(goodLog, "to update a visualization in the database with id %s");
+			logString = String.format(logString, id);
+			logger.info(logString);
 			return updatedVis;
 		} catch (VisualizationNotFoundException e) {
 			logger.warn("User asked for information about a visualization in the database that did not exist");
@@ -95,7 +101,9 @@ public class VisualizationController {
 	public Object deleteVisualization(@PathVariable("id") String id) {
 		try {
 			Integer deletedID = visualizationService.deleteVisualizationByID(id);
-			logger.info("User deleted the visualization with the id " + id);
+			String logString = String.format(goodLog, "to delete a visualization from the database with id %s");
+			logString = String.format(logString, id);
+			logger.info(logString);
 			return deletedID;
 		} catch (VisualizationNotFoundException e) {
 			logger.warn("User attempted to delete a visualization in the database that did not exist");
@@ -113,7 +121,9 @@ public class VisualizationController {
 	public Object getAllUniqueSkillsByVisualization(@PathVariable("id") String id){
 		try {
 			List<Skill> skillList = visualizationService.getAllSkillsByVisualization(id);
-			logger.info("User requested a list of all the skills of the visualization with id " + id);
+			String logString = String.format(goodLog, "to get all unique skills in a visualization from the database with id %s");
+			logString = String.format(logString, id);
+			logger.info(logString);
 			return skillList;
 		} catch (VisualizationNotFoundException e) {
 			logger.warn("User attempted to get all the skills by Visualization for a visualization that didn't exist in the database");
@@ -131,7 +141,9 @@ public class VisualizationController {
 	public Object getAllUniqueCategoriesByVisualization(@PathVariable("id") String id){
 		try {
 			List<Category> catList = visualizationService.getAllCategoriesByVisualization(id);
-			logger.info("User requested a list of all the categories of the visualization with id " + id);
+			String logString = String.format(goodLog, "to get all unique categories in a visualization from the database with id %s");
+			logString = String.format(logString, id);
+			logger.info(logString);
 			return catList;
 		} catch (VisualizationNotFoundException e) {
 			logger.warn("User attempted to get all the categories by Visualization for a visualization that didn't exist in the database");

@@ -28,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.revature.app.model.Category;
 import com.revature.app.model.Curriculum;
 import com.revature.app.model.Skill;
-import com.revature.app.model.Visualization;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest

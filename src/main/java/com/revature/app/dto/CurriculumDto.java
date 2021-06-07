@@ -8,15 +8,19 @@ import com.revature.app.model.Skill;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Data
 @NoArgsConstructor 
 @AllArgsConstructor
+@Getter
+@Setter
 public class CurriculumDto {
 
-	public String name;
-	public List<Skill> skillList;
+	private String name;
+	private List<Skill> skillList;
 	
 	public CurriculumDto(String name) {
 		this.name = name;

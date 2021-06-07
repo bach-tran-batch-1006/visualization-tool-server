@@ -16,6 +16,8 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -26,7 +28,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -167,7 +168,7 @@ class SkillIntegrationTest {
 		Skill expected = new Skill(1, "TestSkill", testCat);
 		String expectedJsonResponse = objectMapper.writeValueAsString(expected);
 		
-		MvcResult result = this.mockMvc
+		this.mockMvc
 			.perform(builder)
 			.andExpect(MockMvcResultMatchers.status().is(201))
 			.andExpect(MockMvcResultMatchers.content().json(expectedJsonResponse)).andReturn();
@@ -186,7 +187,7 @@ class SkillIntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(skillDTOJson);
 
-		MvcResult result = this.mockMvc
+		this.mockMvc
 			.perform(builder)
 			.andExpect(MockMvcResultMatchers.status().is(400)).andReturn();
 	}
@@ -210,22 +211,35 @@ class SkillIntegrationTest {
 		Skill expected = new Skill(1, "UpdatedTestSkill", testCat);
 		String expectedJsonResponse = objectMapper.writeValueAsString(expected);
 		
-		MvcResult result = this.mockMvc
+		this.mockMvc
 			.perform(builder)
 			.andExpect(MockMvcResultMatchers.status().is(202))
 			.andExpect(MockMvcResultMatchers.content().json(expectedJsonResponse)).andReturn();
 	}
 	
-	@Test
+	@ParameterizedTest
 	@Order(3)
 	@Transactional
-	void test_updateSkill_emptyName() throws Exception {
+	@CsvSource({
+		" , 1",
+		"UpdatedTestSkill, ",
+		"UpdatedTestSkill, test"
+	})
+	void test_updateSkill_negativeTests(String dtoName, String path) throws Exception {
+		if(dtoName == null) {
+			dtoName = " ";
+		}
+		if(path == null) {
+			path = " ";
+		}
+		//We are trying to test for empty values rather than null, but csvSource cannot differentiate between the two without
+		//changing files that are ignored by the github
 		Category testCat = new Category(1, "TestCat", "Description");
-		SkillDTO skillDTO = new SkillDTO("   ", testCat);
+		SkillDTO skillDTO = new SkillDTO(dtoName, testCat);
 		String skillDTOJson = objectMapper.writeValueAsString(skillDTO);
 		
 		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
-				.put("/skill/1")
+				.put("/skill/" + path)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(skillDTOJson);
 
@@ -234,23 +248,6 @@ class SkillIntegrationTest {
 			.andExpect(MockMvcResultMatchers.status().is(400));
 	}
 	
-	@Test
-	@Order(3)
-	@Transactional
-	void test_updateSkill_emptyPathParam() throws Exception {
-		Category testCat = new Category(1, "TestCat", "Description");
-		SkillDTO skillDTO = new SkillDTO("UpdatedTestSkill", testCat);
-		String skillDTOJson = objectMapper.writeValueAsString(skillDTO);
-		
-		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
-				.put("/skill/   ")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(skillDTOJson);
-
-		this.mockMvc
-			.perform(builder)
-			.andExpect(MockMvcResultMatchers.status().is(400));
-	}
 	
 	@Test
 	@Order(0)
@@ -270,23 +267,7 @@ class SkillIntegrationTest {
 			.andExpect(MockMvcResultMatchers.status().is(404));
 	}
 	
-	@Test
-	@Order(3)
-	@Transactional
-	void test_updateSkill_badParameter() throws Exception {
-		Category testCat = new Category(1, "TestCat", "Description");
-		SkillDTO skillDTO = new SkillDTO("UpdatedTestSkill", testCat);
-		String skillDTOJson = objectMapper.writeValueAsString(skillDTO);
-		
-		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
-				.put("/skill/test")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(skillDTOJson);
-
-		this.mockMvc
-			.perform(builder)
-			.andExpect(MockMvcResultMatchers.status().is(400));
-	}
+	
 
 //	
 	@Test

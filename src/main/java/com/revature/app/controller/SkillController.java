@@ -34,6 +34,8 @@ public class SkillController {
 	
 	private static Logger logger = LoggerFactory.getLogger(SkillController.class);
 	
+	String goodLog = "User called the endpoint ";
+	
 	@GetMapping(path="allSkills")
 	public Object getAllSkills() {
 		List<Skill> skillList;
@@ -46,7 +48,9 @@ public class SkillController {
 	public Object getSkillByID(@PathVariable("id") String skillID) {
 		try {
 			Skill skill = skillService.getSkillByID(skillID);
-			logger.info("User called the endpoint to get information about skill with id " + skillID);
+			String logString = String.format(goodLog, "to get information about a skill in the database with id %s");
+			logString = String.format(logString, skillID);
+			logger.info(logString);
 			return skill;
 		} catch (BadParameterException e) {
 			logger.warn("User gave a bad parameter while trying to get information about a skill in the database");
@@ -78,7 +82,9 @@ public class SkillController {
 		Skill skill = null;
 		try {
 			skill = skillService.updateSkill(skillID, skillDTO);
-			logger.info("User called the endpoint to update information about skill with id " + skillID);
+			String logString = String.format(goodLog, "to update a skill in the database with id %s");
+			logString = String.format(logString, skillID);
+			logger.info(logString);
 			return ResponseEntity.status(202).body(skill);
 		} catch (EmptyParameterException e) {
 			logger.warn("User left a parameter blank while trying to update a skill in the database");
@@ -97,7 +103,9 @@ public class SkillController {
 		Skill skill = null;
 		try {
 			skill = skillService.deleteSkill(skillID);
-			logger.info("User deleted the skill with the id " + skillID);
+			String logString = String.format(goodLog, "to delete a skill in the database with id %s");
+			logString = String.format(logString, skillID);
+			logger.info(logString);
 			return skill.getSkillId();
 		} catch (EmptyParameterException e) {
 			logger.warn("User left a parameter blank while trying to delete a skill from the database");

@@ -55,7 +55,6 @@ class SkillControllerUnitTest {
 		SkillDTO skillDTO1 = new SkillDTO("TestSkill", new Category(1, "TestCat", "Description"));
 		SkillDTO skillDTO2 = new SkillDTO(" ", new Category(1, "TestCat", "Description"));
 		SkillDTO skillDTO3 = new SkillDTO("ProblemSkill", new Category(1, "TestCat", "Description"));
-		SkillDTO skillDTO4 = new SkillDTO("ProblemCat", new Category(1, "   ", "Description"));
 		
 		lenient().when(mockSkillService.getSkillByID(eq("1"))).thenReturn(skill1);
 		lenient().when(mockSkillService.getSkillByID(eq("2"))).thenThrow(new SkillNotFoundException());
@@ -94,8 +93,6 @@ class SkillControllerUnitTest {
 //
 	@Test
 	void test_getSkillByID_happy() throws Exception {
-		Skill expected = new Skill(1, "Skill1", new Category(1, "Cat1", null));
-		//Skill actual = skillController.getSkillByID();
 		mockMvc.perform(get("/skill/1")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 	

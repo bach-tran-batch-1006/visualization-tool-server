@@ -11,7 +11,6 @@ import javax.persistence.EntityManagerFactory;
 
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -200,20 +199,7 @@ class CurriculumControllerIntegrationTest {
 		// getHttpRequest("/curriculum/1", expected);
 		performTest(request, 200, expected);
 	}
-	/*
-	 * @Test
-	 * 
-	 * @Order(100)
-	 * 
-	 * @Transactional void test_getCurriculumById_NotFoundException() throws
-	 * Exception { Session session = em.unwrap(Session.class); if
-	 * (session.get(Curriculum.class, 1) == null) { fail("nothing is committed"); }
-	 * 
-	 * CurriculumDto expected = generateTestDto(); MockHttpServletRequestBuilder
-	 * request = MockMvcRequestBuilders.get("/curriculum/1000000"); //
-	 * getHttpRequest("/curriculum/1", expected); performTest(request, 200,
-	 * expected); }
-	 */
+
 
 	@Test
 	@Order(2)

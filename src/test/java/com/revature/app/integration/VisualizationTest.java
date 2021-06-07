@@ -1,8 +1,5 @@
 package com.revature.app.integration;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,11 +14,9 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
@@ -44,7 +39,6 @@ import com.revature.app.model.Category;
 import com.revature.app.model.Curriculum;
 import com.revature.app.model.Skill;
 import com.revature.app.model.Visualization;
-import com.revature.app.service.VisualizationService;
 
 @WebAppConfiguration
 @ExtendWith(SpringExtension.class)
@@ -59,9 +53,6 @@ class VisualizationTest {
 
 	private MockMvc mockmvc;
 	private ObjectMapper objectmapper;
-
-	@Autowired
-	private VisualizationService visService;
 
 	@Autowired
 	VisualizationDao visualizationDao;
@@ -96,7 +87,7 @@ class VisualizationTest {
 		em.persist(skill1);
 		em.getTransaction().commit();
 
-		List<Skill> skillList = new ArrayList();
+		List<Skill> skillList = new ArrayList<Skill>();
 		skillList.add(skill1);
 
 		Curriculum curriculum = new Curriculum(0, "testname", skillList);
@@ -130,22 +121,19 @@ class VisualizationTest {
 	@Commit
 	void CreateBlank() throws Exception {
 
-		List<Skill> skillList = new ArrayList();
+		List<Skill> skillList = new ArrayList<Skill>();
 		Curriculum curriculum = new Curriculum(0, "testname", skillList);
 
 		em.getTransaction().begin();
 		em.persist(curriculum);
 		em.getTransaction().commit();
 
-		List<Curriculum> list = new ArrayList<>();
+		List<Curriculum> list = new ArrayList<Curriculum>();
 		// list.add(curriculum);
 		VisualizationDTO vsdto = new VisualizationDTO("", list);
-		Visualization expected = new Visualization(1, "first", list);
 
 		objectmapper = new ObjectMapper();
 		String Jsondto = objectmapper.writeValueAsString(vsdto);
-
-		String vsExpected = this.objectmapper.writeValueAsString(expected);
 
 		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.post("/visualization")
 				.contentType(MediaType.APPLICATION_JSON).content(Jsondto);
@@ -248,25 +236,14 @@ class VisualizationTest {
 	@Transactional
 	@Commit
 	void getallVisualization() throws Exception {
-
-		
 		Session session = em.unwrap(Session.class);
 		Visualization expected= (session.get(Visualization.class, 1));
-		
 		List<Visualization> result = new ArrayList<>();
 		result.add(expected);
-		VisualizationDTO vsdto= new VisualizationDTO("newname", expected.getCurriculumList());
-
-	
-       String Jsondto = this.objectmapper.writeValueAsString(vsdto);
 		String vsExpected = this.objectmapper.writeValueAsString(result);
-
 		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.get("/visualization");
-				
-		
-		
 		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(MockMvcResultMatchers.content().json(vsExpected));
+			.andExpect(MockMvcResultMatchers.content().json(vsExpected));
 		
 	}
 	
