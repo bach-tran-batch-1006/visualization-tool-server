@@ -63,7 +63,7 @@ public class VisualizationService {
 		}
 	}
 
-	@Transactional(rollbackOn = {VisualizationNotFoundException.class})
+	@Transactional
 	public Visualization updateVisualizationByID(String visID, VisualizationDTO visualizationDto) throws VisualizationNotFoundException, BadParameterException, EmptyParameterException {
 		try {
 			if(visID.trim().equals("")){
