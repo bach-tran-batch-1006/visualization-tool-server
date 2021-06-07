@@ -196,15 +196,10 @@ class VisualizationTest {
 	@Transactional
 	@Commit
 	void updateVisualizationDoNotExist() throws Exception {
-
-		
 		Session session = em.unwrap(Session.class);
 		Visualization expected= (session.get(Visualization.class, 1));
 		VisualizationDTO vsdto= new VisualizationDTO("newname", expected.getCurriculumList());
-
-		
-	
-       String Jsondto = this.objectmapper.writeValueAsString(vsdto);
+		String Jsondto = this.objectmapper.writeValueAsString(vsdto);
 	
 
 		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.put("/visualization/98")
