@@ -1,5 +1,6 @@
 package com.revature.app.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -7,12 +8,15 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.revature.app.dao.CurriculumDao;
 import com.revature.app.dao.VisualizationDao;
 import com.revature.app.dto.VisualizationDTO;
 import com.revature.app.exception.BadParameterException;
+import com.revature.app.exception.CurriculumNotFoundException;
 import com.revature.app.exception.EmptyParameterException;
 import com.revature.app.exception.VisualizationNotFoundException;
 import com.revature.app.model.Category;
+import com.revature.app.model.Curriculum;
 import com.revature.app.model.Skill;
 import com.revature.app.model.Visualization;
 
@@ -22,6 +26,9 @@ public class VisualizationService {
 	String badParam = "The visualization ID provided must be of type int";
 	String emptyParam = "The visualization ID was left blank";
 	String emptyName = "The visualization name was left blank";
+	
+	@Autowired
+	private CurriculumService curriculumService;
 
 	@Autowired
 	private VisualizationDao visualizationDao;
@@ -70,12 +77,18 @@ public class VisualizationService {
 			if (vis == null) {
 				throw new VisualizationNotFoundException("Visualization not found");
 			} else {
-				vis.setCurriculumList(visualizationDto.getCurricula());
+				ArrayList<Curriculum> persistantCurriculumList = new ArrayList<Curriculum>();
+				if(visualizationDto.getCurricula() != null) {
+					for (Curriculum eachCurriculumDTO : (ArrayList<Curriculum>) visualizationDto.getCurricula()) { 
+						persistantCurriculumList.add(curriculumService.getCurriculumByID(String.valueOf(eachCurriculumDTO.getCurriculumId())));
+					}
+				}
+				vis.setCurriculumList(persistantCurriculumList);
 				vis.setVisualizationName(visualizationDto.getTitle());
 				vis = visualizationDao.save(vis);
 			}
 			return vis;		
-		} catch (NumberFormatException e) {
+		} catch (NumberFormatException | CurriculumNotFoundException e) {
 			throw new BadParameterException(badParam);
 		}
 	}
