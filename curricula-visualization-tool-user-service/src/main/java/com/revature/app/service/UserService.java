@@ -6,9 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.revature.app.dao.UserRepo;
 import com.revature.app.model.User;
-
-import com.revature.app.repos.UserRepo;
 
 import lombok.NoArgsConstructor;
 

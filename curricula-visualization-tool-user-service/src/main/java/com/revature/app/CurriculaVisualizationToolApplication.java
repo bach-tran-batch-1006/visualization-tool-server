@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 
 @ComponentScan("com.revature.app")
-@EnableJpaRepositories("com.revature.app.repos")
+@EnableJpaRepositories("com.revature.app.dao")
 @SpringBootApplication
 @EntityScan("com.revature.app.model")
 public class CurriculaVisualizationToolApplication {
