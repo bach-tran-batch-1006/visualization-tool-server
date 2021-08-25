@@ -21,7 +21,7 @@ import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.CurriculumNotFoundException;
 import com.revature.app.exception.EmptyParameterException;
 import com.revature.app.exception.ForeignKeyConstraintException;
-import com.revature.app.model.Category;
+//import com.revature.app.model.Category;
 import com.revature.app.model.Curriculum;
 import com.revature.app.service.CurriculumService;
 
@@ -122,22 +122,22 @@ public class CurriculumController {
 		}
 	}
 	
-	@GetMapping(path="curriculum/{id}/categories")
-	public Object getAllCategoriesById(@PathVariable("id") String curriculumId) {
-		List<Category> catList;
-		try {
-			catList = service.getAllCategoriesByCurriculum(curriculumId);
-			return catList;
-		} catch (EmptyParameterException e) {
-			logger.warn("User left a parameter blank while trying to get all the categories by curriculum");
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		} catch (BadParameterException e) {
-			logger.warn("User gave a bad parameter while trying to get all the categories by curriculum");
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		} catch (CurriculumNotFoundException e) {
-			logger.warn("User attempted to get all the categories by Curriculum for a curriculum that didn't exist in the database");
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-		}
-	}
+//	@GetMapping(path="curriculum/{id}/categories")
+//	public Object getAllCategoriesById(@PathVariable("id") String curriculumId) {
+//		List<Category> catList;
+//		try {
+//			catList = service.getAllCategoriesByCurriculum(curriculumId);
+//			return catList;
+//		} catch (EmptyParameterException e) {
+//			logger.warn("User left a parameter blank while trying to get all the categories by curriculum");
+//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+//		} catch (BadParameterException e) {
+//			logger.warn("User gave a bad parameter while trying to get all the categories by curriculum");
+//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+//		} catch (CurriculumNotFoundException e) {
+//			logger.warn("User attempted to get all the categories by Curriculum for a curriculum that didn't exist in the database");
+//			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+//		}
+//	}
 
 }

@@ -8,8 +8,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.revature.app.model.Category;
+//import com.revature.app.model.Category;
 import com.revature.app.model.Curriculum;
+import com.revature.app.model.Visualization;
 
 
 @Repository
@@ -25,6 +26,6 @@ public interface CurriculumDao extends JpaRepository<Curriculum, Integer>{
 			+ "JOIN s.category a "
 			+ "WHERE c.curriculumId = ?1 "
 			+ "ORDER BY a.categoryName ")
-	public List<Category> catCurList(int curriculumId);
+	public List<Visualization> catCurList(int curriculumId);
 
 }

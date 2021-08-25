@@ -39,4 +39,6 @@ public class Visualization {
 			joinColumns = {@JoinColumn(name = "visualization_id")},
 			inverseJoinColumns = {@JoinColumn(name = "curriculum_id")})
 	private List<Curriculum> curriculumList;
+	
+	
 }

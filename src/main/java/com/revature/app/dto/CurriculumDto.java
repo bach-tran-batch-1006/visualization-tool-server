@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 import java.util.List;
 
-import com.revature.app.model.Skill;
+//import com.revature.app.model.Skill;
+import com.revature.app.model.Visualization;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,11 +21,11 @@ import lombok.Setter;
 public class CurriculumDto {
 
 	private String name;
-	private List<Skill> skillList;
+	private List<Visualization> visList;
 	
 	public CurriculumDto(String name) {
 		this.name = name;
-		this.skillList = new ArrayList<>();
+		this.visList = new ArrayList<>();
 
 	}
 }

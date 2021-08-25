@@ -21,8 +21,9 @@ import com.revature.app.dto.VisualizationDTO;
 import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.EmptyParameterException;
 import com.revature.app.exception.VisualizationNotFoundException;
-import com.revature.app.model.Category;
-import com.revature.app.model.Skill;
+//import com.revature.app.model.Category;
+import com.revature.app.model.Curriculum;
+//import com.revature.app.model.Skill;
 import com.revature.app.model.Visualization;
 import com.revature.app.service.VisualizationService;
 
@@ -117,44 +118,44 @@ public class VisualizationController {
 		}
 	}
 	
-	@GetMapping("visualization/{id}/skills")
-	public Object getAllUniqueSkillsByVisualization(@PathVariable("id") String id){
-		try {
-			List<Skill> skillList = visualizationService.getAllSkillsByVisualization(id);
-			String logString = String.format(goodLog, "to get all unique skills in a visualization from the database with id %s");
-			logString = String.format(logString, id);
-			logger.info(logString);
-			return skillList;
-		} catch (VisualizationNotFoundException e) {
-			logger.warn("User attempted to get all the skills by Visualization for a visualization that didn't exist in the database");
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-		} catch (BadParameterException e) {
-			logger.warn("User gave a bad parameter while trying to get all the skills by Visualization");
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		} catch (EmptyParameterException e) {
-			logger.warn("User left a parameter blank while trying to get all the skills by Visualization");
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		}
-	}
+//	@GetMapping("visualization/{id}/skills")
+//	public Object getAllUniqueSkillsByVisualization(@PathVariable("id") String id){
+//		try {
+////			List<Curriculum> skillList = visualizationService.getAllSkillsByVisualization(id);
+//			String logString = String.format(goodLog, "to get all unique skills in a visualization from the database with id %s");
+//			logString = String.format(logString, id);
+//			logger.info(logString);
+////			return skillList;
+//		} catch (VisualizationNotFoundException e) {
+//			logger.warn("User attempted to get all the skills by Visualization for a visualization that didn't exist in the database");
+//			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+//		} catch (BadParameterException e) {
+//			logger.warn("User gave a bad parameter while trying to get all the skills by Visualization");
+//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+//		} catch (EmptyParameterException e) {
+//			logger.warn("User left a parameter blank while trying to get all the skills by Visualization");
+//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+//		}
+//	}
 	
-	@GetMapping("visualization/{id}/categories")
-	public Object getAllUniqueCategoriesByVisualization(@PathVariable("id") String id){
-		try {
-			List<Category> catList = visualizationService.getAllCategoriesByVisualization(id);
-			String logString = String.format(goodLog, "to get all unique categories in a visualization from the database with id %s");
-			logString = String.format(logString, id);
-			logger.info(logString);
-			return catList;
-		} catch (VisualizationNotFoundException e) {
-			logger.warn("User attempted to get all the categories by Visualization for a visualization that didn't exist in the database");
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-		} catch (BadParameterException e) {
-			logger.warn("User gave a bad parameter while trying to get all the categories by Visualization");
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		} catch (EmptyParameterException e) {
-			logger.warn("User left a parameter blank while trying to get all the categories by Visualization");
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		}
-	}
+//	@GetMapping("visualization/{id}/categories")
+//	public Object getAllUniqueCategoriesByVisualization(@PathVariable("id") String id){
+//		try {
+//			List<Category> catList = visualizationService.getAllCategoriesByVisualization(id);
+//			String logString = String.format(goodLog, "to get all unique categories in a visualization from the database with id %s");
+//			logString = String.format(logString, id);
+//			logger.info(logString);
+//			return catList;
+//		} catch (VisualizationNotFoundException e) {
+//			logger.warn("User attempted to get all the categories by Visualization for a visualization that didn't exist in the database");
+//			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+//		} catch (BadParameterException e) {
+//			logger.warn("User gave a bad parameter while trying to get all the categories by Visualization");
+//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+//		} catch (EmptyParameterException e) {
+//			logger.warn("User left a parameter blank while trying to get all the categories by Visualization");
+//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+//		}
+//	}
 
 }

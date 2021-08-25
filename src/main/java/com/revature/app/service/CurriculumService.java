@@ -17,8 +17,9 @@ import com.revature.app.exception.CurriculumNotFoundException;
 import com.revature.app.exception.EmptyCurriculumException;
 import com.revature.app.exception.EmptyParameterException;
 import com.revature.app.exception.ForeignKeyConstraintException;
-import com.revature.app.model.Category;
+//import com.revature.app.model.Category;
 import com.revature.app.model.Curriculum;
+import com.revature.app.model.Visualization;
 
 @Service
 public class CurriculumService {
@@ -32,7 +33,7 @@ public class CurriculumService {
 
 	@Transactional(rollbackOn = {CurriculumNotAddedException.class})
 	public Curriculum addCurriculum(CurriculumDto curriculumDto) throws EmptyParameterException {
-		Curriculum curriculum = new Curriculum(0, curriculumDto.getName(), curriculumDto.getSkillList());
+		Curriculum curriculum = new Curriculum(0, curriculumDto.getName(), curriculumDto.getVisList());
 		if(curriculumDto.getName().trim().equals("")) {
 			throw new EmptyParameterException(emptyName);
 		}
@@ -82,7 +83,7 @@ public class CurriculumService {
 				throw new CurriculumNotFoundException("The category could not be updated because it couldn't be found");
 			} else {
 				curriculum.setCurriculumName(curriculumDto.getName());
-				curriculum.setSkillList(curriculumDto.getSkillList());
+//				curriculum.setSkillList(curriculumDto.getSkillList());
 				curriculum = curriculumDao.save(curriculum);
 			}
 			return curriculum;
@@ -115,7 +116,7 @@ public class CurriculumService {
 	}
 	
 	@Transactional(rollbackOn = {CurriculumNotFoundException.class})
-	public List<Category> getAllCategoriesByCurriculum(String curID) throws EmptyParameterException, BadParameterException, CurriculumNotFoundException {
+	public List<Visualization> getAllCategoriesByCurriculum(String curID) throws EmptyParameterException, BadParameterException, CurriculumNotFoundException {
 		try {
 			if(curID.trim().equals("")){
 				throw new EmptyParameterException(emptyParam);
