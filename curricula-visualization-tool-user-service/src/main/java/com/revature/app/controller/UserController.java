@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,6 +54,16 @@ public class UserController {
 		}
 
 		//triggerMail(u.getEmail(),"Dear "+u.getFirst()+" "+u.getLast()+",\n"+"logged in at this time: "+dtf.format(now)+"\nif it was not you please update your password: @ "+updateInfoLink,"Time Store Security login");
+		return new ResponseEntity<User>(u, HttpStatus.OK);
+	}
+	
+	@GetMapping("/test/{id}")
+	public ResponseEntity<User> getUser(@PathVariable("id")int id){
+		User u = uServ.getUserById(id);
+		
+		if(u == null) {
+			return new ResponseEntity<User>(u, HttpStatus.FORBIDDEN);
+		}
 		return new ResponseEntity<User>(u, HttpStatus.OK);
 	}
 

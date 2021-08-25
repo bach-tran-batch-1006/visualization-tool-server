@@ -59,6 +59,6 @@ public User displayUser(String email) {
 	}
 
 	public User getUserById(int id) {
-		return uDao.getById(id);
+		return uDao.findById(id);
 	}
 }

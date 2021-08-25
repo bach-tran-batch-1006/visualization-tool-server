@@ -52,7 +52,7 @@ public class User {
     private String pass; // password
     
     //@OneToMany(mappedBy = "visualizationHolder", fetch = FetchType.LAZY)
-    @JsonIgnore
+    //@JsonIgnore
     //private List<Visualization> visualizationList = new ArrayList<Visualization>();
     
     public User(String first, String last, String email, String pass) {
@@ -70,5 +70,10 @@ public class User {
 		this.pass = pass;
 	}
 
+	public User(int id) {
+		super();
+		this.id = id;
+		
+	}
 
 }
