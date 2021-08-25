@@ -66,5 +66,17 @@ public class UserController {
 		}
 		return new ResponseEntity<User>(u, HttpStatus.OK);
 	}
+	
+	@PostMapping("/update")
+	public ResponseEntity<User>  updateBuyerCredentials(@RequestBody LinkedHashMap<String, String> user){
+		
+		User u = uServ.updateBuyer(  Integer.parseInt(user.get("id")) ,  user.get("newemail"), user.get("newpass"));
+		
+		if(u == null) {
+			return new ResponseEntity<User>(u, HttpStatus.FORBIDDEN);
+		}
+		
+		return new ResponseEntity<User>(u, HttpStatus.OK);
+	}
 
 }

@@ -61,4 +61,29 @@ public User displayUser(String email) {
 	public User getUserById(int id) {
 		return uDao.findById(id);
 	}
+	
+	
+	public User updateBuyer(int buyerid, String newemail, String newpass) {
+		User user = uDao.findById(buyerid);
+		    // crush the variables of the object found
+		  if (user ==null) {
+			return null;
+		} else {
+
+			if (!newemail.equals("")) {
+				
+				user.setEmail(newemail);
+			}
+			
+			if (!newpass.equals("")) {
+				
+				user.setPass(newpass);
+		}
+				 		   
+			  return  uDao.save(user);
+		
+		}
+		   
+		}
+	
 }
