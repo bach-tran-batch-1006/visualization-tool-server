@@ -166,14 +166,14 @@ class VisualizationDaoTest {
 //		em.getTransaction().commit();
 //		em.getTransaction().begin();
 //		em.persist(testCurr2);
-		em.getTransaction().commit();
+//		em.getTransaction().commit();
 		
 		//Re-add a visualization to the database that holds the two curriculums
-		ArrayList<Curriculum> currList = new ArrayList<Curriculum>();
-		currList.add(session.get(Curriculum.class, 1));
-		currList.add(session.get(Curriculum.class, 2));
-		Visualization visTest = new Visualization(0, "TestVis", currList);
-		Visualization sanityCheck = visualDao.save(visTest);
+//		ArrayList<Curriculum> currList = new ArrayList<Curriculum>();
+//		currList.add(session.get(Curriculum.class, 1));
+//		currList.add(session.get(Curriculum.class, 2));
+//		Visualization visTest = new Visualization(0, "TestVis", currList);
+//		Visualization sanityCheck = visualDao.save(visTest);
 		//Because of previous tests, the id of testVis will be 2 and not 1 
 		
 		//Create the expected list of skills
@@ -183,7 +183,7 @@ class VisualizationDaoTest {
 //		expected.add(session.get(Skill.class, 3)); 
 		
 		//Print out the sanityCheck to make sure that everything is persisted in the database
-		System.out.println(sanityCheck);
+//		System.out.println(sanityCheck);
 		
 		//Now actually test the method
 //		List<Skill> actual = visualDao.skillVisList(2);
