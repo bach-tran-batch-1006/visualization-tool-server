@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.revature.app.dto.UserDTO;
 import com.revature.app.model.User;
 import com.revature.app.service.UserService;
 
@@ -29,11 +30,11 @@ public class UserController {
 	private UserService uServ;
 	
 	@PostMapping("/register")
-	public ResponseEntity<User> createUser(@RequestBody LinkedHashMap<String, String> user){
-		System.out.println(user);
-		User u = new User(user.get("first"), user.get("last"), user.get("email"), user.get("pass"));
+	public ResponseEntity<User> createUser(@RequestBody UserDTO userDTO){
 		
-		u = uServ.registerUser(u);
+		//User u = new User(user.get("first"), user.get("last"), user.get("email"), user.get("pass"));
+		
+		User u = uServ.registerUser(userDTO);
 		
 		if(u != null) {
 			

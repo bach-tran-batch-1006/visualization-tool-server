@@ -22,7 +22,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.app.dto.UserDTO;
 import com.revature.app.model.User;
 import com.revature.app.service.UserService;
 
@@ -42,19 +44,86 @@ public class UserControllerUnitTest {
 	}
 	
 	@Test
-	void testCreateUser_positive() {
-		//User expected = new User("first","last","email","pass");
-		User notUser = new User("first","last","email","pass1");
+	void testCreateUser_positive() throws Exception {
+		UserController uControllerNoArg=new UserController();
+		User expected = new User(1,"first","last","email","pass");
+		String expectedJson = om.writeValueAsString(expected);
 		
-		User expected = new User("first","last","email","pass");
-		//String expectedJson = om.writeValueAsString(expected);
-//		CategoryDTO inputUser= new User("first","last","email","pass");
-//		String inputJson = om.writeValueAsString(inputUser);
-//		
-//		when(categoryService.addCategory(inputCategory)).thenReturn(expected);
-//		
-//		this.mockMvc.perform(post("/category").contentType(MediaType.APPLICATION_JSON).content(inputJson))
-//		.andExpect(status().isCreated()).andExpect(content().json(expectedJson));
+		UserDTO inputUser= new UserDTO("first","last","email","pass");
+		String inputJson = om.writeValueAsString(inputUser);
+		
+		when(uServ.registerUser(inputUser)).thenReturn(expected);
+		
+		this.mockMvc.perform(post("/user/register").contentType(MediaType.APPLICATION_JSON).content(inputJson))
+		.andExpect(status().isCreated()).andExpect(content().json(expectedJson));
 	}
 	
+	@Test
+	void testCreateUser_negative() throws Exception {
+		
+		User expected = null;
+		String expectedJson = om.writeValueAsString(expected);
+		
+		UserDTO inputUser= new UserDTO("first","last","email","pass");
+		String inputJson = om.writeValueAsString(inputUser);
+		
+		when(uServ.registerUser(inputUser)).thenReturn(expected);
+		
+		this.mockMvc.perform(post("/user/register").contentType(MediaType.APPLICATION_JSON).content(inputJson))
+		.andExpect(status().isConflict());
+	}
+	
+	@Test
+	void testLoginUser_positive() throws Exception {
+		
+		User expected = new User("email","pass");
+		String expectedJson = om.writeValueAsString(expected);
+		
+		User inputUser= new User("email","pass");
+		String inputJson = om.writeValueAsString(inputUser);
+		
+		when(uServ.loginUser("email","pass")).thenReturn(expected);
+		
+		this.mockMvc.perform(post("/user/login").contentType(MediaType.APPLICATION_JSON).content(inputJson))
+		.andExpect(status().isOk()).andExpect(content().json(expectedJson));
+	}
+	
+	@Test
+	void testLoginUser_negative() throws Exception {
+		
+		User expected = new User("email","pass");
+		String expectedJson = om.writeValueAsString(expected);
+		
+		User inputUser= new User("email","pass");
+		String inputJson = om.writeValueAsString(inputUser);
+		
+		when(uServ.loginUser("email","pass")).thenReturn(null);
+		
+		this.mockMvc.perform(post("/user/login").contentType(MediaType.APPLICATION_JSON).content(inputJson))
+		.andExpect(status().isForbidden());
+	}
+	
+	@Test
+	void testGetUserById_positive() throws Exception {
+
+		User expected = new User(1,"first","last","email","pass");
+		String expectedJson = om.writeValueAsString(expected);
+		
+		when(uServ.getUserById(1)).thenReturn(expected);
+		this.mockMvc.perform(get("/user/id/1")).andExpect(status().isOk()).andExpect(content().json(expectedJson));
+		
+		
+	}
+	
+	@Test
+	void testGetUserById_negative() throws Exception {
+
+		User expected = new User(1,"first","last","email","pass");
+		String expectedJson = om.writeValueAsString(expected);
+		
+		when(uServ.getUserById(1)).thenReturn(null);
+		this.mockMvc.perform(get("/user/id/1")).andExpect(status().isForbidden());
+		
+		
+	}
 }

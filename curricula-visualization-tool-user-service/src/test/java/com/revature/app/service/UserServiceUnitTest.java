@@ -26,6 +26,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
 import com.revature.app.dao.UserRepo;
+import com.revature.app.dto.UserDTO;
 import com.revature.app.model.User;
 
 
@@ -41,15 +42,59 @@ public class UserServiceUnitTest {
 	
 	@Test
 	void testResgisterUser_positive() {
+		UserService uNoArg = new UserService();
 		User user = new User("first","last","email","pass");
+		UserDTO userDTO = new UserDTO("first","last","email","pass");
+		
+		User notUser = new User("first","last","email","pass1");
+		
+		notUser = new User("email","pass1");
+		notUser = new User(1);
+		notUser.setEmail("email");
+		notUser.setFirst(null);
+		notUser.setLast(null);
+		notUser.setId(0);
+		notUser.setPass(null);
+		
+		when(uDao.save(user)).thenReturn(user);
+		
+		User actual = uServ.registerUser(userDTO);
+		System.out.println(actual);
+		assertEquals(actual.getEmail(), user.getEmail());
+		
+	}
+	
+	@Test
+	void testResgisterUser_negative() {
+		User user = new User("first","last","email","pass");
+		UserDTO userDTO = new UserDTO("first","last","email","pass");
+		UserDTO userDTOs = new UserDTO();
 		User notUser = new User("first","last","email","pass1");
 		notUser = new User("email","pass1");
 		notUser = new User(1);
 		
-		when(uDao.save(user)).thenReturn(user);
+		when(uDao.save(null)).thenReturn(null);
 		
-		User actual = uServ.registerUser(user);
-		assertEquals(actual, user);
+		User actual = uServ.registerUser(userDTO);
+		
+		
+		
+	}
+	
+	@Test
+	void testResgisterUser_negative_exception() throws Exception {
+		User user = new User("first","last","email","pass");
+		UserDTO userDTO = new UserDTO("first","last","email","pass");
+		
+		User notUser = new User("first","last","email","pass1");
+		notUser = new User("email","pass1");
+		notUser = new User(1);
+		Exception e = new Exception();
+		when(uDao.save(null)).thenThrow();
+		
+		User actual = uServ.registerUser(userDTO);
+		
+		
 		
 	}
 	
@@ -65,6 +110,30 @@ public class UserServiceUnitTest {
 		assertEquals(actual.getEmail(), user.getEmail());
 		
 	}
+	@Test
+	void testLoginUser_negative() {
+		User user = new User("first","last","email","pass");
+		User notUser = new User("first","last","email","pass1");
+		
+		when(uDao.findByEmail("email")).thenReturn(null);
+		
+		User actual = uServ.loginUser(user.getEmail(), user.getPass());
+		
+		
+		
+	}
+	@Test
+	void testLoginUser_wrong_password() {
+		User user = new User("first","last","email","pass");
+		User notUser = new User("first","last","email","pass1");
+		
+		when(uDao.findByEmail("email")).thenReturn(user);
+		
+		User actual = uServ.loginUser(notUser.getEmail(), notUser.getPass());
+		
+		
+		
+	}
 	
 	@Test
 	void testDisplay_positive() {
@@ -76,6 +145,17 @@ public class UserServiceUnitTest {
 		User actual = uServ.displayUser(user.getEmail());
 		
 		assertEquals(actual.getEmail(), user.getEmail());
+		
+	}
+	
+	@Test
+	void testDisplay_negative() {
+		User user = new User("first","last","email","pass");
+		User notUser = new User("first","last","email","pass1");
+		
+		when(uDao.findByEmail("email")).thenReturn(null);
+		
+		User actual = uServ.displayUser(user.getEmail());
 		
 	}
 	
