@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.revature.app.dao.UserRepo;
+import com.revature.app.dto.UserDTO;
 import com.revature.app.model.User;
 
 import lombok.NoArgsConstructor;
@@ -21,9 +22,15 @@ public class UserService {
 	
 	private UserRepo uDao;
 	
-	public User registerUser(User u) {
+	public User registerUser(UserDTO userDTO) {
+		User u = null;
+		UserDTO uNoargsDTO = new UserDTO();
+		UserDTO uAllNoargsDTO = new UserDTO("f","l","e","p");
+		u = new User(0, userDTO.getFirst(), userDTO.getLast(), userDTO.getEmail(), userDTO.getPass());
+		
 		try {
-			return uDao.save(u);
+			uDao.save(u);
+			return u;
 		} catch(Exception e) {
 			return null;
 		}
