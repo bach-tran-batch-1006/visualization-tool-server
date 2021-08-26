@@ -1,11 +1,15 @@
 package com.revature.app.controller;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.revature.app.dto.CurriculumDto;
@@ -28,6 +34,14 @@ import com.revature.app.service.CurriculumService;
 @CrossOrigin(origins = "*")
 @RestController
 public class CurriculumController {
+	@Bean
+    //@LoadBalanced
+    RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+    
+    @Autowired
+    private RestTemplate rest;
 
 	@Autowired
 	private CurriculumService service;
@@ -122,24 +136,29 @@ public class CurriculumController {
 		}
 	}
 	
-	/*
-	
 	@GetMapping(path="curriculum/{id}/categories")
-	public Object getAllCategoriesById(@PathVariable("id") String curriculumId) {
-		List<Category> catList;
+	public Set<Integer> getAllCategoriesById(@PathVariable("id") String curriculumId) {
+		Set<Integer> cats = new HashSet<Integer>();
 		try {
-			catList = service.getAllCategoriesByCurriculum(curriculumId);
-			return catList;
-		} catch (EmptyParameterException e) {
-			logger.warn("User left a parameter blank while trying to get all the categories by curriculum");
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		} catch (BadParameterException e) {
-			logger.warn("User gave a bad parameter while trying to get all the categories by curriculum");
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+			String url = "http://localhost:8089/skill/";
+			for (int i : service.getCurriculumByID(curriculumId).getSkillList()) {
+				ResponseEntity<Integer> res = this.rest.getForEntity((url + i + "/category"), Integer.class);
+				cats.add(res.getBody());
+			}
 		} catch (CurriculumNotFoundException e) {
-			logger.warn("User attempted to get all the categories by Curriculum for a curriculum that didn't exist in the database");
+			logger.warn("User attempted to access a curriculum in the database that did not exist while trying to return categories");
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+		} catch (BadParameterException e) {
+			logger.warn("User gave a bad parameter while trying to get information about a curriculum's categories in the database");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		} catch (EmptyParameterException e) {
+			logger.warn("User gave a bad parameter while trying to access a curriculum's categories in the database");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		} catch (RestClientException e) {
+			logger.warn("Failed to contact request microservice");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
-	}*/
-
+		
+	return cats;
+	}
 }
