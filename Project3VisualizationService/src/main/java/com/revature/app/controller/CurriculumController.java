@@ -1,6 +1,7 @@
 package com.revature.app.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,13 +123,16 @@ public class CurriculumController {
 		}
 	}
 	
-	/*
-	
 	@GetMapping(path="curriculum/{id}/categories")
-	public Object getAllCategoriesById(@PathVariable("id") String curriculumId) {
-		List<Category> catList;
+	public Set<Integer> getAllCategoriesById(@PathVariable("id") String curriculumId) {
+		//create empty category set
+		//get curriculum object
+		//get skill list
+		// for(skill in list){ call skill micro get cat and add to set}
+		//return set
+		Set<Integer> catList;
 		try {
-			catList = service.getAllCategoriesByCurriculum(curriculumId);
+			//catList = service.getAllCategoriesByCurriculum(curriculumId);
 			return catList;
 		} catch (EmptyParameterException e) {
 			logger.warn("User left a parameter blank while trying to get all the categories by curriculum");
@@ -140,6 +144,6 @@ public class CurriculumController {
 			logger.warn("User attempted to get all the categories by Curriculum for a curriculum that didn't exist in the database");
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
-	}*/
+	}
 
 }

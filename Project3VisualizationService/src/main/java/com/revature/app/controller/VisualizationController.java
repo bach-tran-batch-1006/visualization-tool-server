@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,13 +21,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.revature.app.dto.VisualizationDTO;
 import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.EmptyParameterException;
 import com.revature.app.exception.VisualizationNotFoundException;
-
+import com.revature.app.model.Curriculum;
 import com.revature.app.model.Visualization;
 import com.revature.app.service.VisualizationService;
 
@@ -37,15 +39,18 @@ public class VisualizationController {
 	@Autowired
 	private VisualizationService visualizationService;
 	
-	@Bean
-	//@LoadBalanced
-	RestTemplate restTemplate() {
-		return new RestTemplate();
-	}
-	
 	@Autowired
-	private RestTemplate rest;
+	private CurriculumController cControl;
 	
+//	@Bean
+//	//@LoadBalanced
+//	RestTemplate restTemplate() {
+//		return new RestTemplate();
+//	}
+//	
+//	@Autowired
+//	private RestTemplate rest;
+//	
 	
 	private static Logger logger = LoggerFactory.getLogger(VisualizationController.class);
 	
@@ -130,55 +135,67 @@ public class VisualizationController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
-	//still working on logic for the below methods
+	
+	//re-wrote logic should work
 	@GetMapping("visualization/{id}/skills")
 	public Set<Integer> getAllUniqueSkillsByVisualization(@PathVariable("id") String id){
-		//need to map to resource in other service
 		//try {
 			//loop through linked curricula, associated skills to set(doesn't keep duplicates)
-			String url = "http://localhost:8090/";
 			Set<Integer> skillList = new HashSet<Integer>();
-			this.rest.getForEntity(url, Object[].class);
-//			String logString = String.format(goodLog, "to get all unique skills in a visualization from the database with id %s");
-//			logString = String.format(logString, id);
-//			logger.info(logString);
+			try {
+				for(Curriculum c : visualizationService.findVisualizationByID(id).getCurriculumList()) {
+					for(Integer i : c.getSkillList()) {
+						
+							skillList.add(i);
+					}
+				}
+			} catch (VisualizationNotFoundException e) {
+				logger.warn("User requested information about a visualization in the database that did not exist");
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+			} catch (EmptyParameterException e) {
+				logger.warn("User left a parameter blank while trying to get information about a visualization in the database");
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+			} catch (BadParameterException e) {
+				logger.warn("User gave a bad parameter while trying to get information about a visualization in the database");
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+			}
+			
 			return skillList;
-//		} catch (VisualizationNotFoundException e) {
-//			logger.warn("User attempted to get all the skills by Visualization for a visualization that didn't exist in the database");
-//			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-//		} catch (BadParameterException e) {
-//			logger.warn("User gave a bad parameter while trying to get all the skills by Visualization");
-//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-//		} catch (EmptyParameterException e) {
-//			logger.warn("User left a parameter blank while trying to get all the skills by Visualization");
-//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-//		}
 	}
+	//re-wrote logic should work
 	@GetMapping("visualization/{id}/categories")
-	public Object getAllUniqueCategoriesByVisualization(@PathVariable("id") String id){
+	public Set<Integer> getAllUniqueCategoriesByVisualization(@PathVariable("id") String id){
+		//get visualization
+		//create set for cats
+		//for(curricula in vis.getCurricula()){
+		//	set catList = call to cControl;
+		//	for(int in catList){
+		//		cats.add(int)
+		//	}
+		//}
+		Set<Integer> uniqueCats = new HashSet<Integer>();
 		try {
-			List<Category> catList = visualizationService.getAllCategoriesByVisualization(id);
-			String logString = String.format(goodLog, "to get all unique categories in a visualization from the database with id %s");
-			logString = String.format(logString, id);
-			logger.info(logString);
-			return catList;
+			
+			for(Curriculum c : visualizationService.findVisualizationByID(id).getCurriculumList()) {
+				String catId = ""+c.getCurriculumId()+"";
+				for(Integer i : cControl.getAllCategoriesById(catId)) {
+					uniqueCats.add(i);
+				}
+				
+			}
+			
 		} catch (VisualizationNotFoundException e) {
-			logger.warn("User attempted to get all the categories by Visualization for a visualization that didn't exist in the database");
+			logger.warn("User requested information about a visualization in the database that did not exist");
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-		} catch (BadParameterException e) {
-			logger.warn("User gave a bad parameter while trying to get all the categories by Visualization");
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		} catch (EmptyParameterException e) {
-			logger.warn("User left a parameter blank while trying to get all the categories by Visualization");
+			logger.warn("User left a parameter blank while trying to get information about a visualization in the database");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		} catch (BadParameterException e) {
+			logger.warn("User gave a bad parameter while trying to get information about a visualization in the database");
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
+		
+		return uniqueCats;		
 	}
-	
-//	String url = "http://localhost:8090/Skills/" + id;
-//	ResponseEntity<String> res = this.rest.getForEntity(url, String.class);
-//	return res;
-	
-	
-	
 
 }
