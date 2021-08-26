@@ -15,9 +15,7 @@ import com.revature.app.model.Curriculum;
 @Repository
 public interface CurriculumDao extends JpaRepository<Curriculum, Integer>{	
 	
-
 	public Curriculum findByCurriculumId(int curriculumId);
-
 	public List<Curriculum> findAll();
 	
 	/* @Query(value = "SELECT distinct a FROM Curriculum c "
