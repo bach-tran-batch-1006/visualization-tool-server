@@ -35,9 +35,9 @@ import com.revature.app.dao.VisualizationDao;
 import com.revature.app.dto.VisualizationDTO;
 import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.VisualizationNotFoundException;
-import com.revature.app.model.Category;
+//import com.revature.app.model.Category;
 import com.revature.app.model.Curriculum;
-import com.revature.app.model.Skill;
+//import com.revature.app.model.Skill;
 import com.revature.app.model.Visualization;
 
 @WebAppConfiguration
@@ -71,197 +71,197 @@ class VisualizationTest {
 	
 	
 
-	@Test
-	@Order(2)
-	@Transactional
-	@Commit
-	void CreateEndpoint() throws Exception {
-		Category testcat = new Category(0, "testcat", "hopethiswork");
-		Skill skill1 = new Skill(0, "testskill", testcat);
+//	@Test
+//	@Order(2)
+//	@Transactional
+//	@Commit
+//	void CreateEndpoint() throws Exception {
+//		Category testcat = new Category(0, "testcat", "hopethiswork");
+//		Skill skill1 = new Skill(0, "testskill", testcat);
+//
+//		em.getTransaction().begin();
+//		em.persist(testcat);
+//		em.getTransaction().commit();
+//
+//		em.getTransaction().begin();
+//		em.persist(skill1);
+//		em.getTransaction().commit();
+//
+//		List<Skill> skillList = new ArrayList<Skill>();
+//		skillList.add(skill1);
 
-		em.getTransaction().begin();
-		em.persist(testcat);
-		em.getTransaction().commit();
+//		Curriculum curriculum = new Curriculum(0, "testname", skillList);
 
-		em.getTransaction().begin();
-		em.persist(skill1);
-		em.getTransaction().commit();
+//		em.getTransaction().begin();
+//		em.persist(curriculum);
+//		em.getTransaction().commit();
 
-		List<Skill> skillList = new ArrayList<Skill>();
-		skillList.add(skill1);
+//		List<Curriculum> curlist = new ArrayList<>();
+//		curlist.add(curriculum);
 
-		Curriculum curriculum = new Curriculum(0, "testname", skillList);
+//		VisualizationDTO vsdto = new VisualizationDTO("first", curlist);
+//		Visualization expected = new Visualization(1, "first", curlist);
 
-		em.getTransaction().begin();
-		em.persist(curriculum);
-		em.getTransaction().commit();
+//		objectmapper = new ObjectMapper();
+//		String Jsondto = objectmapper.writeValueAsString(vsdto);
 
-		List<Curriculum> curlist = new ArrayList<>();
-		curlist.add(curriculum);
+//		String vsExpected = this.objectmapper.writeValueAsString(expected);
 
-		VisualizationDTO vsdto = new VisualizationDTO("first", curlist);
-		Visualization expected = new Visualization(1, "first", curlist);
+//		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.post("/visualization")
+//				.contentType(MediaType.APPLICATION_JSON).content(Jsondto);
 
-		objectmapper = new ObjectMapper();
-		String Jsondto = objectmapper.writeValueAsString(vsdto);
+//		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isCreated())
+//				.andExpect(MockMvcResultMatchers.content().json(vsExpected));
+//
+//	}
+//
+//	@Test
+//	@Order(3)
+//	@Transactional
+//	@Commit
+//	void CreateBlank() throws Exception {
 
-		String vsExpected = this.objectmapper.writeValueAsString(expected);
+//		List<Skill> skillList = new ArrayList<Skill>();
+//		Curriculum curriculum = new Curriculum(0, "testname", skillList);
+//
+//		em.getTransaction().begin();
+//		em.persist(curriculum);
+//		em.getTransaction().commit();
+//
+//		List<Curriculum> list = new ArrayList<Curriculum>();
+//		// list.add(curriculum);
+//		VisualizationDTO vsdto = new VisualizationDTO("", list);
+//
+//		objectmapper = new ObjectMapper();
+//		String Jsondto = objectmapper.writeValueAsString(vsdto);
+//
+//		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.post("/visualization")
+//				.contentType(MediaType.APPLICATION_JSON).content(Jsondto);
+//
+//		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isBadRequest());
+//
+//	}
 
-		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.post("/visualization")
-				.contentType(MediaType.APPLICATION_JSON).content(Jsondto);
-
-		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isCreated())
-				.andExpect(MockMvcResultMatchers.content().json(vsExpected));
-
-	}
-
-	@Test
-	@Order(3)
-	@Transactional
-	@Commit
-	void CreateBlank() throws Exception {
-
-		List<Skill> skillList = new ArrayList<Skill>();
-		Curriculum curriculum = new Curriculum(0, "testname", skillList);
-
-		em.getTransaction().begin();
-		em.persist(curriculum);
-		em.getTransaction().commit();
-
-		List<Curriculum> list = new ArrayList<Curriculum>();
-		// list.add(curriculum);
-		VisualizationDTO vsdto = new VisualizationDTO("", list);
-
-		objectmapper = new ObjectMapper();
-		String Jsondto = objectmapper.writeValueAsString(vsdto);
-
-		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.post("/visualization")
-				.contentType(MediaType.APPLICATION_JSON).content(Jsondto);
-
-		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isBadRequest());
-
-	}
-
-	@Test
-	@Order(4)
-	@Transactional
-	@Commit
-	void findVisualization() throws Exception {
-
-		
-		Session session = em.unwrap(Session.class);
-		Visualization expected= (session.get(Visualization.class, 1));
-		
-
-		objectmapper = new ObjectMapper();
-
-		String vsExpected = this.objectmapper.writeValueAsString(expected);
-
-		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.get("/visualization/1");
-
-		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.content().json(vsExpected));
-
-	}
-	
-	
-	@Test
-	@Order(5)
-	@Transactional
-	@Commit
-	void updateVisualization() throws Exception {
-
-		
-		Session session = em.unwrap(Session.class);
-		Visualization expected= (session.get(Visualization.class, 1));
-		VisualizationDTO vsdto= new VisualizationDTO("newname", expected.getCurriculumList());
-
-		
-	   Visualization newvs= expected;
-	   newvs.setVisualizationName("newname");
-       String Jsondto = this.objectmapper.writeValueAsString(vsdto);
-		String vsExpected = this.objectmapper.writeValueAsString(newvs);
-
-		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.put("/visualization/1")
-				.contentType(MediaType.APPLICATION_JSON).content(Jsondto);
-		
-		
-		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(MockMvcResultMatchers.content().json(vsExpected));
-		
-	}
-	
-	@Test
-	@Order(6)
-	@Transactional
-	@Commit
-	void updateVisualizationDoNotExist() throws Exception {
-		Session session = em.unwrap(Session.class);
-		Visualization expected= (session.get(Visualization.class, 1));
-		VisualizationDTO vsdto= new VisualizationDTO("newname", expected.getCurriculumList());
-		String Jsondto = this.objectmapper.writeValueAsString(vsdto);
-	
-
-		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.put("/visualization/98")
-				.contentType(MediaType.APPLICATION_JSON).content(Jsondto);
-		
-		
-		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isNotFound());
-		
-		
-	}
-	@Test
-	@Order(7)
-	@Transactional
-	@Commit
-	void updateVisualizationBlankName() throws Exception {
-		Session session = em.unwrap(Session.class);
-		Visualization expected= (session.get(Visualization.class, 1));
-		VisualizationDTO vsdto= new VisualizationDTO("", expected.getCurriculumList());
-        String Jsondto = this.objectmapper.writeValueAsString(vsdto);
-		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.put("/visualization/1")
-				.contentType(MediaType.APPLICATION_JSON).content(Jsondto);
-		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isBadRequest());
-	}
-
-	
-	
-	@Test
-	@Order(8)
-	@Transactional
-	@Commit
-	void getallVisualization() throws Exception {
-		Session session = em.unwrap(Session.class);
-		Visualization expected= (session.get(Visualization.class, 1));
-		List<Visualization> result = new ArrayList<>();
-		result.add(expected);
-		String vsExpected = this.objectmapper.writeValueAsString(result);
-		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.get("/visualization");
-		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.content().json(vsExpected));
-		
-	}
-	
-	@Test
-	@Order(9)
-	@Transactional
-	@Commit
-	void DeleteVisualization() throws Exception {
-		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.delete("/visualization/1")
-				.contentType(MediaType.APPLICATION_JSON).content("1");
-		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isOk());
-
-	}
-
-	@Test
-	@Order(10)
-	@Transactional
-	@Commit
-	void DeleteVisualizationDoNotExist() throws Exception {
-		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.delete("/visualization/98");
-		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isNotFound());
-
-	}
-	
+//	@Test
+//	@Order(4)
+//	@Transactional
+//	@Commit
+//	void findVisualization() throws Exception {
+//
+//		
+//		Session session = em.unwrap(Session.class);
+//		Visualization expected= (session.get(Visualization.class, 1));
+//		
+//
+//		objectmapper = new ObjectMapper();
+//
+//		String vsExpected = this.objectmapper.writeValueAsString(expected);
+//
+//		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.get("/visualization/1");
+//
+//		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isOk())
+//				.andExpect(MockMvcResultMatchers.content().json(vsExpected));
+//
+//	}
+//	
+//	
+//	@Test
+//	@Order(5)
+//	@Transactional
+//	@Commit
+//	void updateVisualization() throws Exception {
+//
+//		
+//		Session session = em.unwrap(Session.class);
+//		Visualization expected= (session.get(Visualization.class, 1));
+//		VisualizationDTO vsdto= new VisualizationDTO("newname", expected.getCurriculumList());
+//
+//		
+//	   Visualization newvs= expected;
+//	   newvs.setVisualizationName("newname");
+//       String Jsondto = this.objectmapper.writeValueAsString(vsdto);
+//		String vsExpected = this.objectmapper.writeValueAsString(newvs);
+//
+//		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.put("/visualization/1")
+//				.contentType(MediaType.APPLICATION_JSON).content(Jsondto);
+//		
+//		
+//		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isOk())
+//		.andExpect(MockMvcResultMatchers.content().json(vsExpected));
+//		
+//	}
+//	
+//	@Test
+//	@Order(6)
+//	@Transactional
+//	@Commit
+//	void updateVisualizationDoNotExist() throws Exception {
+//		Session session = em.unwrap(Session.class);
+//		Visualization expected= (session.get(Visualization.class, 1));
+//		VisualizationDTO vsdto= new VisualizationDTO("newname", expected.getCurriculumList());
+//		String Jsondto = this.objectmapper.writeValueAsString(vsdto);
+//	
+//
+//		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.put("/visualization/98")
+//				.contentType(MediaType.APPLICATION_JSON).content(Jsondto);
+//		
+//		
+//		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isNotFound());
+//		
+//		
+//	}
+//	@Test
+//	@Order(7)
+//	@Transactional
+//	@Commit
+//	void updateVisualizationBlankName() throws Exception {
+//		Session session = em.unwrap(Session.class);
+//		Visualization expected= (session.get(Visualization.class, 1));
+//		VisualizationDTO vsdto= new VisualizationDTO("", expected.getCurriculumList());
+//        String Jsondto = this.objectmapper.writeValueAsString(vsdto);
+//		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.put("/visualization/1")
+//				.contentType(MediaType.APPLICATION_JSON).content(Jsondto);
+//		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isBadRequest());
+//	}
+//
+//	
+//	
+//	@Test
+//	@Order(8)
+//	@Transactional
+//	@Commit
+//	void getallVisualization() throws Exception {
+//		Session session = em.unwrap(Session.class);
+//		Visualization expected= (session.get(Visualization.class, 1));
+//		List<Visualization> result = new ArrayList<>();
+//		result.add(expected);
+//		String vsExpected = this.objectmapper.writeValueAsString(result);
+//		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.get("/visualization");
+//		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isOk())
+//			.andExpect(MockMvcResultMatchers.content().json(vsExpected));
+//		
+//	}
+//	
+//	@Test
+//	@Order(9)
+//	@Transactional
+//	@Commit
+//	void DeleteVisualization() throws Exception {
+//		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.delete("/visualization/1")
+//				.contentType(MediaType.APPLICATION_JSON).content("1");
+//		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isOk());
+//
+//	}
+//
+//	@Test
+//	@Order(10)
+//	@Transactional
+//	@Commit
+//	void DeleteVisualizationDoNotExist() throws Exception {
+//		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.delete("/visualization/98");
+//		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isNotFound());
+//
+//	}
+//	
 
 }

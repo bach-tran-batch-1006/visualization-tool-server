@@ -30,6 +30,9 @@ public class Visualization {
 	@Column(name = "visualization_id")
 	private int visualizationId;
 	
+	@Column(name = "user_id")
+	private int UserId;
+	
 	@Column(name = "visualization_name")
 	private String visualizationName;
 	
@@ -39,4 +42,6 @@ public class Visualization {
 			joinColumns = {@JoinColumn(name = "visualization_id")},
 			inverseJoinColumns = {@JoinColumn(name = "curriculum_id")})
 	private List<Curriculum> curriculumList;
+	
+	
 }
