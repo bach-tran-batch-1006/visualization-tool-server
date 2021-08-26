@@ -36,89 +36,87 @@ public class VisualizationService {
 	@Transactional
 	public Visualization createVisualization(VisualizationDTO visualizationDto) throws EmptyParameterException {
 		Visualization visualization = new Visualization();
-	
 		if (visualizationDto.getTitle().trim().equals("")) {
 			throw new EmptyParameterException(emptyName);
 		}
 		visualization.setVisualizationId(0);
-		visualization.setUserId(visualizationDto.getUserId());
 		visualization.setCurriculumList(visualizationDto.getCurricula());
 		visualization.setVisualizationName(visualizationDto.getTitle());
 		visualization = visualizationDao.save(visualization);
 		return visualization;
 	}
 
-//	@Transactional(rollbackOn = {VisualizationNotFoundException.class})
-//	public Visualization findVisualizationByID(String visId) throws VisualizationNotFoundException, EmptyParameterException, BadParameterException {
-//		try {
-//			if(visId.trim().equals("")){
-//				throw new EmptyParameterException(emptyParam);
-//			}
-//			int id = Integer.parseInt(visId);
-//			Visualization vis = visualizationDao.findById(id);
-//			if (vis == null) {
-//				throw new VisualizationNotFoundException(notFound);
-//			}
-//			return vis;
-//		} catch (NumberFormatException e) {
-//			throw new BadParameterException(badParam);
-//		}
-//	}
-//
-//	@Transactional
-//	public Visualization updateVisualizationByID(String visID, VisualizationDTO visualizationDto) throws VisualizationNotFoundException, BadParameterException, EmptyParameterException {
-//		try {
-//			if(visID.trim().equals("")){
-//				throw new EmptyParameterException(emptyParam);
-//			}
-//			if(visualizationDto.getTitle().trim().equals("")){
-//				throw new EmptyParameterException(emptyName);
-//			}
-//			int id = Integer.parseInt(visID);
-//			Visualization vis = visualizationDao.findById(id);
-//			if (vis == null) {
-//				throw new VisualizationNotFoundException(notFound);
-//			} else {
-//				ArrayList<Curriculum> persistantCurriculumList = new ArrayList<>();
-//				if(visualizationDto.getCurricula() != null) {
-//					for (Curriculum eachCurriculumDTO : (ArrayList<Curriculum>) visualizationDto.getCurricula()) { 
-//						persistantCurriculumList.add(curriculumService.getCurriculumByID(String.valueOf(eachCurriculumDTO.getCurriculumId())));
-//					}
-//				}
-//				vis.setCurriculumList(persistantCurriculumList);
-//				vis.setVisualizationName(visualizationDto.getTitle());
-//				vis = visualizationDao.save(vis);
-//			}
-//			return vis;		
-//		} catch (NumberFormatException | CurriculumNotFoundException e) {
-//			throw new BadParameterException(badParam);
-//		}
-//	}
-//
-//	@Transactional
-//	public int deleteVisualizationByID(String visID) throws VisualizationNotFoundException, BadParameterException, EmptyParameterException {
-//		try {
-//			if(visID.trim().equals("")){
-//				throw new EmptyParameterException(emptyParam);
-//			}
-//			int id = Integer.parseInt(visID);
-//			Visualization vis = visualizationDao.findById(id);
-//			if (vis == null) {
-//				throw new VisualizationNotFoundException(notFound);
-//			}
-//			visualizationDao.deleteById(id);
-//			return id;
-//		} catch (NumberFormatException e) {
-//			throw new BadParameterException(badParam);
-//		}
-//	}
-//
-//	
-//	public List<Visualization> findAllVisualization() {
-//		return visualizationDao.findAll();
-//	}
-//
-//	
+	@Transactional(rollbackOn = {VisualizationNotFoundException.class})
+	public Visualization findVisualizationByID(String visId) throws VisualizationNotFoundException, EmptyParameterException, BadParameterException {
+		try {
+			if(visId.trim().equals("")){
+				throw new EmptyParameterException(emptyParam);
+			}
+			int id = Integer.parseInt(visId);
+			Visualization vis = visualizationDao.findById(id);
+			if (vis == null) {
+				throw new VisualizationNotFoundException(notFound);
+			}
+			return vis;
+		} catch (NumberFormatException e) {
+			throw new BadParameterException(badParam);
+		}
+	}
+
+	@Transactional
+	public Visualization updateVisualizationByID(String visID, VisualizationDTO visualizationDto) throws VisualizationNotFoundException, BadParameterException, EmptyParameterException {
+		try {
+			if(visID.trim().equals("")){
+				throw new EmptyParameterException(emptyParam);
+			}
+			if(visualizationDto.getTitle().trim().equals("")){
+				throw new EmptyParameterException(emptyName);
+			}
+			int id = Integer.parseInt(visID);
+			Visualization vis = visualizationDao.findById(id);
+			if (vis == null) {
+				throw new VisualizationNotFoundException(notFound);
+			} else {
+				ArrayList<Curriculum> persistantCurriculumList = new ArrayList<>();
+				if(visualizationDto.getCurricula() != null) {
+					for (Curriculum eachCurriculumDTO : (ArrayList<Curriculum>) visualizationDto.getCurricula()) { 
+						persistantCurriculumList.add(curriculumService.getCurriculumByID(String.valueOf(eachCurriculumDTO.getCurriculumId())));
+					}
+				}
+				vis.setCurriculumList(persistantCurriculumList);
+				vis.setVisualizationName(visualizationDto.getTitle());
+				vis = visualizationDao.save(vis);
+			}
+			return vis;		
+		} catch (NumberFormatException | CurriculumNotFoundException e) {
+			throw new BadParameterException(badParam);
+		}
+	}
+
+	@Transactional
+	public int deleteVisualizationByID(String visID) throws VisualizationNotFoundException, BadParameterException, EmptyParameterException {
+		try {
+			if(visID.trim().equals("")){
+				throw new EmptyParameterException(emptyParam);
+			}
+			int id = Integer.parseInt(visID);
+			Visualization vis = visualizationDao.findById(id);
+			if (vis == null) {
+				throw new VisualizationNotFoundException(notFound);
+			}
+			visualizationDao.deleteById(id);
+			return id;
+		} catch (NumberFormatException e) {
+			throw new BadParameterException(badParam);
+		}
+	}
+
+	
+	public List<Visualization> findAllVisualization() {
+		return visualizationDao.findAll();
+	}
+
+	
 //	@Transactional(rollbackOn = {VisualizationNotFoundException.class})
 //	public List<Curriculum> getAllSkillsByVisualization(String visID) throws EmptyParameterException, BadParameterException, VisualizationNotFoundException {
 //		try {
@@ -139,9 +137,9 @@ public class VisualizationService {
 //			throw new BadParameterException(badParam);
 //		}
 //	}
-	
+//	
 //	@Transactional(rollbackOn = {VisualizationNotFoundException.class})
-//	public List<Curriculum> getAllCategoriesByVisualization(String visID) throws EmptyParameterException, BadParameterException, VisualizationNotFoundException {
+//	public List<Category> getAllCategoriesByVisualization(String visID) throws EmptyParameterException, BadParameterException, VisualizationNotFoundException {
 //		try {
 //			if(visID.trim().equals("")){
 //				throw new EmptyParameterException(emptyParam);

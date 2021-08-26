@@ -21,11 +21,11 @@ public interface CurriculumDao extends JpaRepository<Curriculum, Integer>{
 
 	public List<Curriculum> findAll();
 	
-//	@Query(value = "SELECT distinct a FROM Curriculum c "
-//			+ "JOIN c.skillList s "
-//			+ "JOIN s.category a "
-//			+ "WHERE c.curriculumId = ?1 "
-//			+ "ORDER BY a.categoryName ")
-//	public List<Visualization> visCurList(int curriculumId);
+	@Query(value = "SELECT distinct a FROM Curriculum c "
+			+ "JOIN c.skillList s "
+			+ "JOIN s.category a "
+			+ "WHERE c.curriculumId = ?1 "
+			+ "ORDER BY a.categoryName ")
+	public List<Visualization> catCurList(int curriculumId);
 
 }

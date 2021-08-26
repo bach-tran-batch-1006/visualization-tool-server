@@ -76,249 +76,249 @@ class VisualizationServiceTest {
 //	}
 	
 
-//	@Test
-//	void test_findAllVisualization_happy() {
-//		List<Visualization> expected = new ArrayList<Visualization>();
-//		expected.add(new Visualization(1, "Mock Visual", null));
-//		List<Visualization> actual = visualizationService.findAllVisualization();
-//		assertEquals(expected, actual);
-//	}
-//	
-////
-//	@Test
-//	void test_findVisualizationByID_happy() throws VisualizationNotFoundException, EmptyParameterException, BadParameterException{
-//		Visualization expected = new Visualization(2, "Java React", null);
-//		Visualization actual = visualizationService.findVisualizationByID("2");
-//		assertEquals(expected, actual);
-//	}
+	@Test
+	void test_findAllVisualization_happy() {
+		List<Visualization> expected = new ArrayList<Visualization>();
+		expected.add(new Visualization(1, "Mock Visual", null));
+		List<Visualization> actual = visualizationService.findAllVisualization();
+		assertEquals(expected, actual);
+	}
+	
 //
-//	@Test
-//	void test_findVisualizationByID_notFound() throws EmptyParameterException, BadParameterException {
-//		try {
-//			visualizationService.findVisualizationByID("20202020");
-//			fail("VisualizationNotFound Exception not thrown");
-//		} catch (VisualizationNotFoundException e) {
-//			assertEquals("Visualization not found", e.getMessage());
-//		}
-//	}
-//	
-//	@Test
-//	void test_findVisualizationByID_BadParameter() throws VisualizationNotFoundException, EmptyParameterException  {
-//		try {
-//			visualizationService.findVisualizationByID("test");
-//			fail("BadParameterException not thrown");
-//		} catch (BadParameterException e) {
-//			assertEquals("The visualization ID provided must be of type int", e.getMessage());
-//		}
-//	}
-//	
-//	@Test
-//	void test_findVisualizationByID_EmptyParameter() throws VisualizationNotFoundException, BadParameterException  {
-//		try {
-//			visualizationService.findVisualizationByID("   ");
-//			fail("EmptyParameterException not thrown");
-//		} catch (EmptyParameterException e) {
-//			assertEquals("The visualization ID was left blank", e.getMessage());
-//		}
-//	}
+	@Test
+	void test_findVisualizationByID_happy() throws VisualizationNotFoundException, EmptyParameterException, BadParameterException{
+		Visualization expected = new Visualization(2, "Java React", null);
+		Visualization actual = visualizationService.findVisualizationByID("2");
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	void test_findVisualizationByID_notFound() throws EmptyParameterException, BadParameterException {
+		try {
+			visualizationService.findVisualizationByID("20202020");
+			fail("VisualizationNotFound Exception not thrown");
+		} catch (VisualizationNotFoundException e) {
+			assertEquals("Visualization not found", e.getMessage());
+		}
+	}
+	
+	@Test
+	void test_findVisualizationByID_BadParameter() throws VisualizationNotFoundException, EmptyParameterException  {
+		try {
+			visualizationService.findVisualizationByID("test");
+			fail("BadParameterException not thrown");
+		} catch (BadParameterException e) {
+			assertEquals("The visualization ID provided must be of type int", e.getMessage());
+		}
+	}
+	
+	@Test
+	void test_findVisualizationByID_EmptyParameter() throws VisualizationNotFoundException, BadParameterException  {
+		try {
+			visualizationService.findVisualizationByID("   ");
+			fail("EmptyParameterException not thrown");
+		} catch (EmptyParameterException e) {
+			assertEquals("The visualization ID was left blank", e.getMessage());
+		}
+	}
 
 	
 //
-//	@Test
-//	void test_updateVisualizationById_happy() throws VisualizationNotFoundException, BadParameterException, EmptyParameterException {	
-//		VisualizationDTO visDto = new VisualizationDTO("currVis", null);
-//		Visualization expected = new Visualization(10, "currVisual", null); 
-//		Visualization actual = visualizationService.updateVisualizationByID("10", visDto);
-//		assertEquals(expected, actual);
-//	}
-//	
-//	@Test
-//	void test_updateVisualizationById_emptyID() throws VisualizationNotFoundException, BadParameterException {	
-//		try {
-//			VisualizationDTO visDto = new VisualizationDTO("TestVis", null);
-//			visualizationService.updateVisualizationByID("   ", visDto);
-//			fail("EmptyParameterException not thrown");
-//		} catch (EmptyParameterException e) {
-//			assertEquals("The visualization ID was left blank", e.getMessage());
-//		}
-//	}
-//	
-//	@Test
-//	void test_updateVisualizationById_emptyNewName() throws VisualizationNotFoundException, BadParameterException {	
-//		try {
-//			VisualizationDTO visDto = new VisualizationDTO("", null);
-//			visualizationService.updateVisualizationByID("1", visDto);
-//			fail("EmptyParameterException not thrown");
-//		} catch (EmptyParameterException e) {
-//			assertEquals("The visualization name was left blank", e.getMessage());
-//		}
-//	}
-//	
-//	@Test
-//	void test_updateVisualizationById_badParameter() throws VisualizationNotFoundException, EmptyParameterException {	
-//		try {
-//			VisualizationDTO visDto = new VisualizationDTO("TestVis", null);
-//			visualizationService.updateVisualizationByID("test", visDto);
-//			fail("BadParameterException not thrown");
-//		} catch (BadParameterException e) {
-//			assertEquals("The visualization ID provided must be of type int", e.getMessage());
-//		}
-//	}
+	@Test
+	void test_updateVisualizationById_happy() throws VisualizationNotFoundException, BadParameterException, EmptyParameterException {	
+		VisualizationDTO visDto = new VisualizationDTO("currVis", null);
+		Visualization expected = new Visualization(10, "currVisual", null); 
+		Visualization actual = visualizationService.updateVisualizationByID("10", visDto);
+		assertEquals(expected, actual);
+	}
 	
-//	@Test
-//	void test_updateVisualizationById_visualizationNotFound() throws BadParameterException, EmptyParameterException {	
-//		try {
-//			VisualizationDTO visDto = new VisualizationDTO("TestVis", null);
-//			visualizationService.updateVisualizationByID("20202020", visDto);
-//			fail("VisualizationNotFound Exception not thrown");
-//		} catch (VisualizationNotFoundException e) {
-//			assertEquals("Visualization not found", e.getMessage());
-//		}
-//	}
+	@Test
+	void test_updateVisualizationById_emptyID() throws VisualizationNotFoundException, BadParameterException {	
+		try {
+			VisualizationDTO visDto = new VisualizationDTO("TestVis", null);
+			visualizationService.updateVisualizationByID("   ", visDto);
+			fail("EmptyParameterException not thrown");
+		} catch (EmptyParameterException e) {
+			assertEquals("The visualization ID was left blank", e.getMessage());
+		}
+	}
+	
+	@Test
+	void test_updateVisualizationById_emptyNewName() throws VisualizationNotFoundException, BadParameterException {	
+		try {
+			VisualizationDTO visDto = new VisualizationDTO("", null);
+			visualizationService.updateVisualizationByID("1", visDto);
+			fail("EmptyParameterException not thrown");
+		} catch (EmptyParameterException e) {
+			assertEquals("The visualization name was left blank", e.getMessage());
+		}
+	}
+	
+	@Test
+	void test_updateVisualizationById_badParameter() throws VisualizationNotFoundException, EmptyParameterException {	
+		try {
+			VisualizationDTO visDto = new VisualizationDTO("TestVis", null);
+			visualizationService.updateVisualizationByID("test", visDto);
+			fail("BadParameterException not thrown");
+		} catch (BadParameterException e) {
+			assertEquals("The visualization ID provided must be of type int", e.getMessage());
+		}
+	}
+	
+	@Test
+	void test_updateVisualizationById_visualizationNotFound() throws BadParameterException, EmptyParameterException {	
+		try {
+			VisualizationDTO visDto = new VisualizationDTO("TestVis", null);
+			visualizationService.updateVisualizationByID("20202020", visDto);
+			fail("VisualizationNotFound Exception not thrown");
+		} catch (VisualizationNotFoundException e) {
+			assertEquals("Visualization not found", e.getMessage());
+		}
+	}
 	
 	 
 //
-//	@Test
-//	void test_deleteVisualizationById_happy() throws VisualizationNotFoundException, BadParameterException, EmptyParameterException {
-//		int expected = 5;
-//		int actual = visualizationService.deleteVisualizationByID("5");
-//		assertEquals(expected, actual);
-//	};
+	@Test
+	void test_deleteVisualizationById_happy() throws VisualizationNotFoundException, BadParameterException, EmptyParameterException {
+		int expected = 5;
+		int actual = visualizationService.deleteVisualizationByID("5");
+		assertEquals(expected, actual);
+	};
 	
+	@Test
+	void test_deleteVisualizationById_emptyID() throws VisualizationNotFoundException, BadParameterException {	
+		try {
+			visualizationService.deleteVisualizationByID("   ");
+			fail("EmptyParameterException not thrown");
+		} catch (EmptyParameterException e) {
+			assertEquals("The visualization ID was left blank", e.getMessage());
+		}
+	}
+	
+	@Test
+	void test_deleteVisualizationById_badParameter() throws VisualizationNotFoundException, EmptyParameterException {	
+		try {
+			visualizationService.deleteVisualizationByID("test");
+			fail("BadParameterException not thrown");
+		} catch (BadParameterException e) {
+			assertEquals("The visualization ID provided must be of type int", e.getMessage());
+		}
+	}
+	
+	@Test
+	void test_deleteVisualizationById_visualizationNotFound() throws BadParameterException, EmptyParameterException {	
+		try {
+			visualizationService.deleteVisualizationByID("20202020");
+			fail("VisualizationNotFound Exception not thrown");
+		} catch (VisualizationNotFoundException e) {
+			assertEquals("Visualization not found", e.getMessage());
+		}
+	}
+	
+
+//
+	@Test
+	void test_createVisualization_happy() throws EmptyParameterException{
+		VisualizationDTO visDto = new VisualizationDTO("currVis", null);
+		Visualization expected = new Visualization(10, "currVisual", null); 
+		Visualization actual = visualizationService.createVisualization(visDto);
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	void test_createVisualization_emptyName() {
+		try {
+			VisualizationDTO visDto = new VisualizationDTO("", null);
+			visualizationService.createVisualization(visDto);
+			fail("EmptyParameterException not thrown");
+		} catch (EmptyParameterException e) {
+			assertEquals("The visualization name was left blank", e.getMessage());
+		}
+	}
+	
+
+//
 //	@Test
-//	void test_deleteVisualizationById_emptyID() throws VisualizationNotFoundException, BadParameterException {	
+//	void test_getAllSkillsByVisualization_happy() throws EmptyParameterException, BadParameterException, VisualizationNotFoundException {
+//		Skill skill1 = new Skill(1, "", new Category(1, "", null));
+//		Skill skill2 = new Skill(2, "", new Category(1, "", null));
+//		List<Skill> expected = new ArrayList<Skill>();
+//		expected.add(skill1);
+//		expected.add(skill2);
+//		List<Skill> actual = visualizationService.getAllSkillsByVisualization("1");
+//		assertEquals(expected, actual);
+//	}
+//	
+//	@Test
+//	void test_getAllSkillsByVisualization_emptyParameter() throws BadParameterException, VisualizationNotFoundException {
 //		try {
-//			visualizationService.deleteVisualizationByID("   ");
-//			fail("EmptyParameterException not thrown");
+//			visualizationService.getAllSkillsByVisualization(" ");
+//			fail("EmptyParameterException was not thrown");
 //		} catch (EmptyParameterException e) {
 //			assertEquals("The visualization ID was left blank", e.getMessage());
 //		}
 //	}
 //	
 //	@Test
-//	void test_deleteVisualizationById_badParameter() throws VisualizationNotFoundException, EmptyParameterException {	
+//	void test_getAllSkillsByVisualization_badParameter() throws EmptyParameterException, VisualizationNotFoundException {
 //		try {
-//			visualizationService.deleteVisualizationByID("test");
-//			fail("BadParameterException not thrown");
+//			visualizationService.getAllSkillsByVisualization("test");
+//			fail("BadParameterException was not thrown");
 //		} catch (BadParameterException e) {
 //			assertEquals("The visualization ID provided must be of type int", e.getMessage());
 //		}
 //	}
 //	
 //	@Test
-//	void test_deleteVisualizationById_visualizationNotFound() throws BadParameterException, EmptyParameterException {	
+//	void test_getAllSkillsByVisualization_visualizationNotFound() throws EmptyParameterException, BadParameterException {
 //		try {
-//			visualizationService.deleteVisualizationByID("20202020");
-//			fail("VisualizationNotFound Exception not thrown");
+//			visualizationService.getAllSkillsByVisualization("20202020");
+//			fail("VisualizationNotFoundException was not thrown");
 //		} catch (VisualizationNotFoundException e) {
 //			assertEquals("Visualization not found", e.getMessage());
 //		}
 //	}
-//	
 //
 ////
 //	@Test
-//	void test_createVisualization_happy() throws EmptyParameterException{
-//		VisualizationDTO visDto = new VisualizationDTO("currVis", null);
-//		Visualization expected = new Visualization(10, "currVisual", null); 
-//		Visualization actual = visualizationService.createVisualization(visDto);
+//	void test_getAllCategoriesByVisualization_happy() throws EmptyParameterException, BadParameterException, VisualizationNotFoundException {
+//		Category cat1 = new Category(1, "TestCat1", "Description");
+//		Category cat2 = new Category(1, "TestCat2", "Description");
+//		List<Category> expected = new ArrayList<Category>();
+//		expected.add(cat1);
+//		expected.add(cat2);
+//		List<Category> actual = visualizationService.getAllCategoriesByVisualization("1");
 //		assertEquals(expected, actual);
 //	}
 //	
 //	@Test
-//	void test_createVisualization_emptyName() {
+//	void test_getAllCategoriesByVisualization_emptyParameter() throws BadParameterException, VisualizationNotFoundException {
 //		try {
-//			VisualizationDTO visDto = new VisualizationDTO("", null);
-//			visualizationService.createVisualization(visDto);
-//			fail("EmptyParameterException not thrown");
+//			visualizationService.getAllCategoriesByVisualization(" ");
+//			fail("EmptyParameterException was not thrown");
 //		} catch (EmptyParameterException e) {
-//			assertEquals("The visualization name was left blank", e.getMessage());
+//			assertEquals("The visualization ID was left blank", e.getMessage());
 //		}
 //	}
 //	
-//
-////
-////	@Test
-////	void test_getAllSkillsByVisualization_happy() throws EmptyParameterException, BadParameterException, VisualizationNotFoundException {
-////		Skill skill1 = new Skill(1, "", new Category(1, "", null));
-////		Skill skill2 = new Skill(2, "", new Category(1, "", null));
-////		List<Skill> expected = new ArrayList<Skill>();
-////		expected.add(skill1);
-////		expected.add(skill2);
-////		List<Skill> actual = visualizationService.getAllSkillsByVisualization("1");
-////		assertEquals(expected, actual);
-////	}
-////	
-////	@Test
-////	void test_getAllSkillsByVisualization_emptyParameter() throws BadParameterException, VisualizationNotFoundException {
-////		try {
-////			visualizationService.getAllSkillsByVisualization(" ");
-////			fail("EmptyParameterException was not thrown");
-////		} catch (EmptyParameterException e) {
-////			assertEquals("The visualization ID was left blank", e.getMessage());
-////		}
-////	}
-////	
-////	@Test
-////	void test_getAllSkillsByVisualization_badParameter() throws EmptyParameterException, VisualizationNotFoundException {
-////		try {
-////			visualizationService.getAllSkillsByVisualization("test");
-////			fail("BadParameterException was not thrown");
-////		} catch (BadParameterException e) {
-////			assertEquals("The visualization ID provided must be of type int", e.getMessage());
-////		}
-////	}
-////	
-////	@Test
-////	void test_getAllSkillsByVisualization_visualizationNotFound() throws EmptyParameterException, BadParameterException {
-////		try {
-////			visualizationService.getAllSkillsByVisualization("20202020");
-////			fail("VisualizationNotFoundException was not thrown");
-////		} catch (VisualizationNotFoundException e) {
-////			assertEquals("Visualization not found", e.getMessage());
-////		}
-////	}
-////
-//////
-////	@Test
-////	void test_getAllCategoriesByVisualization_happy() throws EmptyParameterException, BadParameterException, VisualizationNotFoundException {
-////		Category cat1 = new Category(1, "TestCat1", "Description");
-////		Category cat2 = new Category(1, "TestCat2", "Description");
-////		List<Category> expected = new ArrayList<Category>();
-////		expected.add(cat1);
-////		expected.add(cat2);
-////		List<Category> actual = visualizationService.getAllCategoriesByVisualization("1");
-////		assertEquals(expected, actual);
-////	}
-////	
-////	@Test
-////	void test_getAllCategoriesByVisualization_emptyParameter() throws BadParameterException, VisualizationNotFoundException {
-////		try {
-////			visualizationService.getAllCategoriesByVisualization(" ");
-////			fail("EmptyParameterException was not thrown");
-////		} catch (EmptyParameterException e) {
-////			assertEquals("The visualization ID was left blank", e.getMessage());
-////		}
-////	}
-////	
-////	@Test
-////	void test_getAllCategoriesByVisualization_badParameter() throws EmptyParameterException, VisualizationNotFoundException {
-////		try {
-////			visualizationService.getAllCategoriesByVisualization("test");
-////			fail("BadParameterException was not thrown");
-////		} catch (BadParameterException e) {
-////			assertEquals("The visualization ID provided must be of type int", e.getMessage());
-////		}
-////	}
-////	
-////	@Test
-////	void test_getAllCategoriesByVisualization_visualizationNotFound() throws EmptyParameterException, BadParameterException {
-////		try {
-////			visualizationService.getAllCategoriesByVisualization("20202020");
-////			fail("VisualizationNotFoundException was not thrown");
-////		} catch (VisualizationNotFoundException e) {
-////			assertEquals("Visualization not found", e.getMessage());
-////		}
+//	@Test
+//	void test_getAllCategoriesByVisualization_badParameter() throws EmptyParameterException, VisualizationNotFoundException {
+//		try {
+//			visualizationService.getAllCategoriesByVisualization("test");
+//			fail("BadParameterException was not thrown");
+//		} catch (BadParameterException e) {
+//			assertEquals("The visualization ID provided must be of type int", e.getMessage());
+//		}
+//	}
+//	
+//	@Test
+//	void test_getAllCategoriesByVisualization_visualizationNotFound() throws EmptyParameterException, BadParameterException {
+//		try {
+//			visualizationService.getAllCategoriesByVisualization("20202020");
+//			fail("VisualizationNotFoundException was not thrown");
+//		} catch (VisualizationNotFoundException e) {
+//			assertEquals("Visualization not found", e.getMessage());
+//		}
 //	}
 
 }

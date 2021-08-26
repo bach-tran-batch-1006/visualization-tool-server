@@ -30,9 +30,6 @@ public class Visualization {
 	@Column(name = "visualization_id")
 	private int visualizationId;
 	
-	@Column(name = "user_id")
-	private int UserId;
-	
 	@Column(name = "visualization_name")
 	private String visualizationName;
 	
