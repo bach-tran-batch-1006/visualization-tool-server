@@ -45,36 +45,36 @@ import com.revature.app.model.Curriculum;
 import com.revature.app.model.Visualization;
 import com.revature.app.service.CurriculumService;
 
-@SpringBootTest
-@ActiveProfiles("test")
-@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
-@ExtendWith(SpringExtension.class)
-@WebAppConfiguration
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class CurriculumControllerIntegrationTest {
+//@SpringBootTest
+//@ActiveProfiles("test")
+//@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
+//@ExtendWith(SpringExtension.class)
+//@WebAppConfiguration
+//@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+//class CurriculumControllerIntegrationTest {
 
-	@Autowired
-	WebApplicationContext webApplicationContext;
+//	@Autowired
+//	WebApplicationContext webApplicationContext;
+//
+//	@Autowired
+//	CurriculumService service;
+//
+//	@Autowired
+//	CurriculumDao dao;
+//
+//	private MockMvc mockMvc;
+//	private ObjectMapper om;
+//
+//	@Autowired
+//	EntityManagerFactory emf;
+//	private EntityManager em;
 
-	@Autowired
-	CurriculumService service;
-
-	@Autowired
-	CurriculumDao dao;
-
-	private MockMvc mockMvc;
-	private ObjectMapper om;
-
-	@Autowired
-	EntityManagerFactory emf;
-	private EntityManager em;
-
-	@BeforeEach
-	void setup() {
-		this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-		this.om = new ObjectMapper();
-		em = emf.createEntityManager();
-	}
+//	@BeforeEach
+//	void setup() {
+//		this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+//		this.om = new ObjectMapper();
+//		em = emf.createEntityManager();
+//	}
 
 //_________________SUPPORT_FUNCTIONS__________________//	
 //	public CurriculumDto generateTestDto() {
@@ -85,78 +85,78 @@ class CurriculumControllerIntegrationTest {
 //		CurriculumDto testDto = new CurriculumDto("TestCurriculum", skills);
 //		return testDto;
 //	}
+//
+//	public MockHttpServletRequestBuilder getHttpRequest(String path, CurriculumDto params)
+//			throws JsonProcessingException {
+//		String contentString = om.writeValueAsString(params);
+//
+//		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(path).contentType(MediaType.APPLICATION_JSON)
+//				.content(contentString);
+//
+//		return request;
+//	}
 
-	public MockHttpServletRequestBuilder getHttpRequest(String path, CurriculumDto params)
-			throws JsonProcessingException {
-		String contentString = om.writeValueAsString(params);
+//	public MockHttpServletRequestBuilder postHttpRequest(String path, CurriculumDto params)
+//			throws JsonProcessingException {
+//		String contentString = om.writeValueAsString(params);
+//
+//		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post(path)
+//				.contentType(MediaType.APPLICATION_JSON).content(contentString);
+//
+//		return request;
+//	}
 
-		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(path).contentType(MediaType.APPLICATION_JSON)
-				.content(contentString);
+//	public MockHttpServletRequestBuilder putHttpRequest(String path, CurriculumDto params)
+//			throws JsonProcessingException {
+//		String contentString = om.writeValueAsString(params);
+//
+//		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.put(path).contentType(MediaType.APPLICATION_JSON)
+//				.content(contentString);
+//
+//		return request;
+//	}
 
-		return request;
-	}
+//	public MockHttpServletRequestBuilder deleteHttpRequest(String path, Curriculum params)
+//			throws JsonProcessingException {
+//		String contentString = om.writeValueAsString(params);
+//
+//		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete(path)
+//				.contentType(MediaType.APPLICATION_JSON).content(contentString);
+//
+//		return request;
+//	}
 
-	public MockHttpServletRequestBuilder postHttpRequest(String path, CurriculumDto params)
-			throws JsonProcessingException {
-		String contentString = om.writeValueAsString(params);
+//	public void performTest(MockHttpServletRequestBuilder actual, int status, CurriculumDto expected) throws Exception {
+//		String expectedDto = om.writeValueAsString(expected);
 
-		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post(path)
-				.contentType(MediaType.APPLICATION_JSON).content(contentString);
+//		Curriculum expectedOb = new Curriculum(expected);
+//		expectedOb.setCurriculumId(1);
+//		String expectedAsJson = om.writeValueAsString(expectedOb);
 
-		return request;
-	}
+//		this.mockMvc.perform(actual.contentType(MediaType.APPLICATION_JSON).content(expectedDto))
+//				.andExpect(MockMvcResultMatchers.status().is(status))
+//				.andExpect(MockMvcResultMatchers.content().json(expectedAsJson)).andReturn();
+//	}
 
-	public MockHttpServletRequestBuilder putHttpRequest(String path, CurriculumDto params)
-			throws JsonProcessingException {
-		String contentString = om.writeValueAsString(params);
+//	public ResultActions performTest(MockHttpServletRequestBuilder actual, int status, CurriculumDto expected, int flag)
+//			throws Exception {
+//		System.out.println("expected: " + expected);
+//		Curriculum expectedOb = new Curriculum(expected);
+//		expectedOb.setCurriculumId(1);
+//		String expectedAsJson = om.writeValueAsString(expectedOb);
+//		System.out.println("expectedAsJson: " + expectedAsJson);
+//
+//		return this.mockMvc.perform(actual).andExpect(MockMvcResultMatchers.status().is(status))
+//				.andExpect(MockMvcResultMatchers.content().json(expectedAsJson));
+//	}
 
-		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.put(path).contentType(MediaType.APPLICATION_JSON)
-				.content(contentString);
-
-		return request;
-	}
-
-	public MockHttpServletRequestBuilder deleteHttpRequest(String path, Curriculum params)
-			throws JsonProcessingException {
-		String contentString = om.writeValueAsString(params);
-
-		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete(path)
-				.contentType(MediaType.APPLICATION_JSON).content(contentString);
-
-		return request;
-	}
-
-	public void performTest(MockHttpServletRequestBuilder actual, int status, CurriculumDto expected) throws Exception {
-		String expectedDto = om.writeValueAsString(expected);
-
-		Curriculum expectedOb = new Curriculum(expected);
-		expectedOb.setCurriculumId(1);
-		String expectedAsJson = om.writeValueAsString(expectedOb);
-
-		this.mockMvc.perform(actual.contentType(MediaType.APPLICATION_JSON).content(expectedDto))
-				.andExpect(MockMvcResultMatchers.status().is(status))
-				.andExpect(MockMvcResultMatchers.content().json(expectedAsJson)).andReturn();
-	}
-
-	public ResultActions performTest(MockHttpServletRequestBuilder actual, int status, CurriculumDto expected, int flag)
-			throws Exception {
-		System.out.println("expected: " + expected);
-		Curriculum expectedOb = new Curriculum(expected);
-		expectedOb.setCurriculumId(1);
-		String expectedAsJson = om.writeValueAsString(expectedOb);
-		System.out.println("expectedAsJson: " + expectedAsJson);
-
-		return this.mockMvc.perform(actual).andExpect(MockMvcResultMatchers.status().is(status))
-				.andExpect(MockMvcResultMatchers.content().json(expectedAsJson));
-	}
-
-	public MvcResult performTest(MockHttpServletRequestBuilder actual, int status, List<Curriculum> expected)
-			throws Exception {
-		String expectedAsJson = om.writeValueAsString(expected);
-
-		return this.mockMvc.perform(actual).andExpect(MockMvcResultMatchers.status().is(status))
-				.andExpect(MockMvcResultMatchers.content().json(expectedAsJson)).andReturn();
-	}
+//	public MvcResult performTest(MockHttpServletRequestBuilder actual, int status, List<Curriculum> expected)
+//			throws Exception {
+//		String expectedAsJson = om.writeValueAsString(expected);
+//
+//		return this.mockMvc.perform(actual).andExpect(MockMvcResultMatchers.status().is(status))
+//				.andExpect(MockMvcResultMatchers.content().json(expectedAsJson)).andReturn();
+//	}
 
 	// _________________END_SUPPORT_FUNCTIONS__________________//
 
@@ -280,4 +280,4 @@ class CurriculumControllerIntegrationTest {
 //	}
 	
 	
-}
+//}

@@ -16,7 +16,7 @@ public interface VisualizationDao extends JpaRepository<Visualization, Integer> 
 
 //	public List<Visualization> findAll();
 	
-//	public Visualization findById(int visualizationId);
+	public Visualization findById(int visualizationId);
 	
 //	@Query(value = "SELECT distinct s FROM Visualization v "
 //			+ "JOIN v.curriculumList c "

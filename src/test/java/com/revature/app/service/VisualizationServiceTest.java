@@ -28,37 +28,38 @@ class VisualizationServiceTest {
 
 	@Mock
 	private VisualizationDao mockVisualizationDao;
+	
 
 	@InjectMocks
 	private VisualizationService visualizationService;
 
-//	@BeforeEach
-//	void beforeTest() throws VisualizationNotFoundException {
-//		Visualization visual1 = new Visualization(1, "Mock Visual", null);
-//		Visualization visual2 = new Visualization(2, "Java React", null);
-//		
-//		Visualization preUpdate = new Visualization(0, "currVis", null);
-//		Visualization newVisual = new Visualization(10, "currVisual", null); 
-//
+	@BeforeEach
+	void beforeTest() throws VisualizationNotFoundException {
+		Visualization visual1 = new Visualization(1, 4, "Mock Visual", null);
+		Visualization visual2 = new Visualization(2, 1, "Java React", null);
+		
+		Visualization preUpdate = new Visualization(0, 1, "currVis", null);
+		Visualization newVisual = new Visualization(10, 2, "currVisual", null); 
+
 //		Skill skill1 = new Skill(1, "", new Category(1, "", null));
 //		Skill skill2 = new Skill(2, "", new Category(1, "", null));
 //		List<Skill> skillList = new ArrayList<Skill>();
 //		skillList.add(skill1);
 //		skillList.add(skill2);
-//		
+		
 //		Category cat1 = new Category(1, "TestCat1", "Description");
 //		Category cat2 = new Category(1, "TestCat2", "Description");
 //		List<Category> catList = new ArrayList<Category>();
 //		catList.add(cat1);
 //		catList.add(cat2);
-//
-//		ArrayList<Visualization> visualList = new ArrayList<Visualization>();
-//		visualList.add(visual1);
+
+		ArrayList<Visualization> visualList = new ArrayList<Visualization>();
+		visualList.add(visual1);
 		
 		//Get Methods
-//		lenient().when(mockVisualizationDao.findAll()).thenReturn(visualList);
-//		lenient().when(mockVisualizationDao.findById(2)).thenReturn(visual2);
-//		lenient().when(mockVisualizationDao.findById(20202020)).thenReturn(null);
+		lenient().when(mockVisualizationDao.findAll()).thenReturn(visualList);
+		lenient().when(mockVisualizationDao.findById(2)).thenReturn(visual2);
+		lenient().when(mockVisualizationDao.findById(20202020)).thenReturn(null);
 //		
 //		//Update and Create
 //		lenient().when(mockVisualizationDao.findById(10)).thenReturn(preUpdate);
@@ -73,7 +74,7 @@ class VisualizationServiceTest {
 //		lenient().when(mockVisualizationDao.skillVisList(1)).thenReturn(skillList);
 //		lenient().when(mockVisualizationDao.catVisList(1)).thenReturn(catList);
 	
-//	}
+	}
 	
 
 //	@Test
@@ -217,24 +218,24 @@ class VisualizationServiceTest {
 //	
 //
 ////
-//	@Test
-//	void test_createVisualization_happy() throws EmptyParameterException{
-//		VisualizationDTO visDto = new VisualizationDTO("currVis", null);
-//		Visualization expected = new Visualization(10, "currVisual", null); 
-//		Visualization actual = visualizationService.createVisualization(visDto);
-//		assertEquals(expected, actual);
-//	}
-//	
-//	@Test
-//	void test_createVisualization_emptyName() {
-//		try {
-//			VisualizationDTO visDto = new VisualizationDTO("", null);
-//			visualizationService.createVisualization(visDto);
-//			fail("EmptyParameterException not thrown");
-//		} catch (EmptyParameterException e) {
-//			assertEquals("The visualization name was left blank", e.getMessage());
-//		}
-//	}
+	@Test
+	void test_createVisualization_happy() throws EmptyParameterException{
+		VisualizationDTO visDto = new VisualizationDTO( 2,"currVisual", null);
+		Visualization expected = new Visualization(10,2,"currVisual", null); 
+		Visualization actual = visualizationService.createVisualization(visDto);
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	void test_createVisualization_emptyName() {
+		try {
+			VisualizationDTO visDto = new VisualizationDTO(2, "", null);
+			visualizationService.createVisualization(visDto);
+			fail("EmptyParameterException not thrown");
+		} catch (EmptyParameterException e) {
+			assertEquals("The visualization name was left blank", e.getMessage());
+		}
+	}
 //	
 //
 ////
@@ -319,6 +320,7 @@ class VisualizationServiceTest {
 ////		} catch (VisualizationNotFoundException e) {
 ////			assertEquals("Visualization not found", e.getMessage());
 ////		}
-//	}
+	}
 
-}
+	
+	

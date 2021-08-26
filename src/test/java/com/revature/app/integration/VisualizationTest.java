@@ -71,76 +71,76 @@ class VisualizationTest {
 	
 	
 
-//	@Test
-//	@Order(2)
-//	@Transactional
-//	@Commit
-//	void CreateEndpoint() throws Exception {
+	@Test
+	@Order(2)
+	@Transactional
+	@Commit
+	void CreateEndpoint() throws Exception {
 //		Category testcat = new Category(0, "testcat", "hopethiswork");
 //		Skill skill1 = new Skill(0, "testskill", testcat);
-//
-//		em.getTransaction().begin();
+
+		em.getTransaction().begin();
 //		em.persist(testcat);
-//		em.getTransaction().commit();
-//
-//		em.getTransaction().begin();
+		em.getTransaction().commit();
+
+		em.getTransaction().begin();
 //		em.persist(skill1);
-//		em.getTransaction().commit();
+		em.getTransaction().commit();
 //
 //		List<Skill> skillList = new ArrayList<Skill>();
 //		skillList.add(skill1);
 
 //		Curriculum curriculum = new Curriculum(0, "testname", skillList);
 
-//		em.getTransaction().begin();
+		em.getTransaction().begin();
 //		em.persist(curriculum);
-//		em.getTransaction().commit();
+		em.getTransaction().commit();
 
-//		List<Curriculum> curlist = new ArrayList<>();
+		List<Curriculum> curlist = new ArrayList<>();
 //		curlist.add(curriculum);
 
-//		VisualizationDTO vsdto = new VisualizationDTO("first", curlist);
-//		Visualization expected = new Visualization(1, "first", curlist);
+		VisualizationDTO vsdto = new VisualizationDTO(1,"first", curlist);
+		Visualization expected = new Visualization(1,2, "first", curlist);
 
-//		objectmapper = new ObjectMapper();
-//		String Jsondto = objectmapper.writeValueAsString(vsdto);
+		objectmapper = new ObjectMapper();
+		String Jsondto = objectmapper.writeValueAsString(vsdto);
 
-//		String vsExpected = this.objectmapper.writeValueAsString(expected);
+		String vsExpected = this.objectmapper.writeValueAsString(expected);
 
-//		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.post("/visualization")
-//				.contentType(MediaType.APPLICATION_JSON).content(Jsondto);
+		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.post("/visualization")
+				.contentType(MediaType.APPLICATION_JSON).content(Jsondto);
 
-//		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isCreated())
+		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isCreated());
 //				.andExpect(MockMvcResultMatchers.content().json(vsExpected));
-//
-//	}
-//
-//	@Test
-//	@Order(3)
-//	@Transactional
-//	@Commit
-//	void CreateBlank() throws Exception {
+
+	}
+
+	@Test
+	@Order(3)
+	@Transactional
+	@Commit
+	void CreateBlank() throws Exception {
 
 //		List<Skill> skillList = new ArrayList<Skill>();
 //		Curriculum curriculum = new Curriculum(0, "testname", skillList);
-//
-//		em.getTransaction().begin();
+
+		em.getTransaction().begin();
 //		em.persist(curriculum);
-//		em.getTransaction().commit();
-//
-//		List<Curriculum> list = new ArrayList<Curriculum>();
-//		// list.add(curriculum);
-//		VisualizationDTO vsdto = new VisualizationDTO("", list);
-//
-//		objectmapper = new ObjectMapper();
-//		String Jsondto = objectmapper.writeValueAsString(vsdto);
-//
-//		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.post("/visualization")
-//				.contentType(MediaType.APPLICATION_JSON).content(Jsondto);
-//
-//		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isBadRequest());
-//
-//	}
+		em.getTransaction().commit();
+
+		List<Curriculum> list = new ArrayList<Curriculum>();
+		// list.add(curriculum);
+		VisualizationDTO vsdto = new VisualizationDTO(1,"", list);
+
+		objectmapper = new ObjectMapper();
+		String Jsondto = objectmapper.writeValueAsString(vsdto);
+
+		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.post("/visualization")
+				.contentType(MediaType.APPLICATION_JSON).content(Jsondto);
+
+		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+	}
 
 //	@Test
 //	@Order(4)

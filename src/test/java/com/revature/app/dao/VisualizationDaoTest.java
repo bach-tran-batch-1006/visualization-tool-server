@@ -150,7 +150,7 @@ class VisualizationDaoTest {
 //		em.getTransaction().commit();
 //		em.getTransaction().begin();
 //		em.persist(testSkill3);
-		em.getTransaction().commit();
+//		em.getTransaction().commit();
 		
 		//Add 2 curriculums to the database where the second skill is shared
 //		ArrayList<Skill> skillList1 = new ArrayList<Skill>();
@@ -190,15 +190,15 @@ class VisualizationDaoTest {
 //		assertEquals(expected, (ArrayList<Skill>) actual);
 	}
 	
-	@Test
-	@Commit
-	@Order(51)
-	void test_catVisList() {
-		Session session = em.unwrap(Session.class);
-		
-		//Print out the sanityCheck to make sure that everything is persisted in the database
-		Visualization sanityCheck = session.get(Visualization.class, 2);
-		System.out.println(sanityCheck);
+//	@Test
+//	@Commit
+//	@Order(51)
+//	void test_catVisList() {
+//		Session session = em.unwrap(Session.class);
+//		
+//		//Print out the sanityCheck to make sure that everything is persisted in the database
+//		Visualization sanityCheck = session.get(Visualization.class, 2);
+//		System.out.println(sanityCheck);
 		
 		//Create the expected list of categories
 //		ArrayList<Category> expected = new ArrayList<Category>();
@@ -209,7 +209,7 @@ class VisualizationDaoTest {
 //		//Now actually test the method
 //		List<Category> actual = visualDao.catVisList(2);
 //		assertEquals(expected, (ArrayList<Category>) actual);
-	}
+//}
 
 	
 	

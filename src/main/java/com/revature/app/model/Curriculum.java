@@ -45,9 +45,9 @@ public class Curriculum {
 //			@JoinColumn(name = "skill_id") })
 //	private List<Skill> skillList;
 	
-	public Curriculum(CurriculumDto dto) {
-		this.curriculumName = dto.getName();
-		this.visList = dto.getVisList();
-//		this.skillList = dto.getSkillList();
-	}
+//	public Curriculum(CurriculumDto dto) {
+//		this.curriculumName = dto.getName();
+//		//this.visList = dto.getVisList();
+////		this.skillList = dto.getSkillList();
+//	}
 }

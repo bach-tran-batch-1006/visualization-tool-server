@@ -87,71 +87,71 @@ class CurriculumDaoUnitTest {
 		assertEquals(expected, actual);
 	}
 
-	@Test
-	@Transactional
-	@Commit
-	@Order(3)
-	void test_updateCurriculumByID_success() {
-		curriculumDao.findByCurriculumId(1);
-		Curriculum actual = curriculumDao.save(new Curriculum(1, "update Developer", new ArrayList<>()));
-		Curriculum expected = new Curriculum(1, "update Developer", new ArrayList<>());
-		assertEquals(expected, actual);
-	}
-
-	@Test
-	@Transactional
-	@Commit
-	@Order(4)
-	void test_deleteCurriculumByID_success() {
-		curriculumDao.deleteById(1);
-		
-		Curriculum actual = curriculumDao.findByCurriculumId(1);
-		Curriculum expected = null;
-		assertEquals(expected, actual);
-	}
+//	@Test
+//	@Transactional
+//	@Commit
+//	@Order(3)
+//	void test_updateCurriculumByID_success() {
+//		curriculumDao.findByCurriculumId(1);
+//		Curriculum actual = curriculumDao.save(new Curriculum(1, "update Developer", new ArrayList<>()));
+//		Curriculum expected = new Curriculum(1, "update Developer", new ArrayList<>());
+//		assertEquals(expected, actual);
+//	}
+//
+//	@Test
+//	@Transactional
+//	@Commit
+//	@Order(4)
+//	void test_deleteCurriculumByID_success() {
+//		curriculumDao.deleteById(1);
+//		
+//		Curriculum actual = curriculumDao.findByCurriculumId(1);
+//		Curriculum expected = null;
+//		assertEquals(expected, actual);
+//	}
 	
 	
-	@Test
-	@Commit
-	@Order(50)
-	void test_skillVisList() {
-		Session session = em.unwrap(Session.class);
-		
-		//Add a category to the database, all skills will share this
-//		Category testCat1 = new Category(0, "TestCat1", "TestDescription");
-//		Category testCat2 = new Category(0, "TestCat2", "TestDescription");
-//		Category testCat3 = new Category(0, "TestCat3", "TestDescription");
-		em.getTransaction().begin();
-//		em.persist(testCat1);
-		em.getTransaction().commit();
-		em.getTransaction().begin();
-//		em.persist(testCat2);
-		em.getTransaction().commit();
-		em.getTransaction().begin();
-//		em.persist(testCat3);
-		em.getTransaction().commit();
-		
-		//Add 3 skills to the database
-//		Skill testSkill1 = new Skill(0, "TestSkill1", session.get(Category.class, 1));
-//		Skill testSkill2 = new Skill(0, "TestSkill2", session.get(Category.class, 2));
-//		Skill testSkill3 = new Skill(0, "TestSkill3", session.get(Category.class, 1));
-//		Skill testSkill4 = new Skill(0, "TestSkill4", session.get(Category.class, 3));
-//		Skill testSkill5 = new Skill(0, "TestSkill5", session.get(Category.class, 2));
-		em.getTransaction().begin();
-//		em.persist(testSkill1);
-		em.getTransaction().commit();
-		em.getTransaction().begin();
-//		em.persist(testSkill2);
-		em.getTransaction().commit();
-		em.getTransaction().begin();
-//		em.persist(testSkill3);
-		em.getTransaction().commit();
-		em.getTransaction().begin();
-//		em.persist(testSkill4);
-		em.getTransaction().commit();
-		em.getTransaction().begin();
-//		em.persist(testSkill5);
-		em.getTransaction().commit();
+//	@Test
+//	@Commit
+//	@Order(50)
+//	void test_skillVisList() {
+//		Session session = em.unwrap(Session.class);
+//		
+//		//Add a category to the database, all skills will share this
+////		Category testCat1 = new Category(0, "TestCat1", "TestDescription");
+////		Category testCat2 = new Category(0, "TestCat2", "TestDescription");
+////		Category testCat3 = new Category(0, "TestCat3", "TestDescription");
+//		em.getTransaction().begin();
+////		em.persist(testCat1);
+//		em.getTransaction().commit();
+//		em.getTransaction().begin();
+////		em.persist(testCat2);
+//		em.getTransaction().commit();
+//		em.getTransaction().begin();
+////		em.persist(testCat3);
+//		em.getTransaction().commit();
+//		
+//		//Add 3 skills to the database
+////		Skill testSkill1 = new Skill(0, "TestSkill1", session.get(Category.class, 1));
+////		Skill testSkill2 = new Skill(0, "TestSkill2", session.get(Category.class, 2));
+////		Skill testSkill3 = new Skill(0, "TestSkill3", session.get(Category.class, 1));
+////		Skill testSkill4 = new Skill(0, "TestSkill4", session.get(Category.class, 3));
+////		Skill testSkill5 = new Skill(0, "TestSkill5", session.get(Category.class, 2));
+//		em.getTransaction().begin();
+////		em.persist(testSkill1);
+//		em.getTransaction().commit();
+//		em.getTransaction().begin();
+////		em.persist(testSkill2);
+//		em.getTransaction().commit();
+//		em.getTransaction().begin();
+////		em.persist(testSkill3);
+//		em.getTransaction().commit();
+//		em.getTransaction().begin();
+////		em.persist(testSkill4);
+//		em.getTransaction().commit();
+//		em.getTransaction().begin();
+////		em.persist(testSkill5);
+//		em.getTransaction().commit();
 		
 		//Add 2 curriculums to the database where the second skill is shared
 //		ArrayList<Skill> skillList = new ArrayList<Skill>();
@@ -161,9 +161,9 @@ class CurriculumDaoUnitTest {
 //		skillList.add(session.get(Skill.class, 4));
 //		skillList.add(session.get(Skill.class, 5));
 //		Curriculum testCurr = new Curriculum(0, "TestCurriculum1", skillList);
-		em.getTransaction().begin();
-//		em.persist(testCurr);
-		em.getTransaction().commit();
+//		em.getTransaction().begin();
+////		em.persist(testCurr);
+//		em.getTransaction().commit();
 		
 		
 		//Create the expected list of categories
@@ -173,12 +173,12 @@ class CurriculumDaoUnitTest {
 //		expected.add(session.get(Category.class, 3)); 
 		
 		//Sanity check
-		System.out.println(session.get(Curriculum.class, 3));
+//		System.out.println(session.get(Curriculum.class, 3));
 		
 		//Now actually test the method
 //		List<Category> actual = curriculumDao.catCurList(3);
 //		assertEquals(expected, (ArrayList<Category>) actual);
-	}
+//	}
 	
 	
 }

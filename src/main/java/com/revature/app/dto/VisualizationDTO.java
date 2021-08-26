@@ -15,14 +15,15 @@ import lombok.ToString;
 
 @Data @Getter @Setter @ToString @EqualsAndHashCode @AllArgsConstructor @NoArgsConstructor
 public class VisualizationDTO {
-
-	String title;
 	int UserId;
+	String title;
+	
 	List<Curriculum> curricula;
 	
-	public VisualizationDTO(String title, int UserId) {
-		this.title = title;
+	public VisualizationDTO(int UserId, String title) {
+	
 		this.UserId = UserId;
+		this.title = title;
 		this.curricula = new ArrayList<>();
 	}
 	
