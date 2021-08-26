@@ -38,15 +38,15 @@ class CurriculumControllerUnitTest {
 	@Mock
 	CurriculumService curriculumService;
 
-	@InjectMocks
-	private CurriculumController curriculumController;
+//	@InjectMocks
+//	private CurriculumController curriculumController;
 
 	private ObjectMapper om = new ObjectMapper();
 	
-	@BeforeEach
-	void setUp() {
-		this.mockMvc = MockMvcBuilders.standaloneSetup(curriculumController).build();
-	}
+//	@BeforeEach
+//	void setUp() {
+//		this.mockMvc = MockMvcBuilders.standaloneSetup(curriculumController).build();
+//	}
 	
 	@Test
 	void test_addCurriculum_negative_BlankExceptionWithStatusCode() throws Exception {
@@ -60,24 +60,24 @@ class CurriculumControllerUnitTest {
 //		.andExpect(status().isBadRequest());
 	}
 		
-	@Test
-	void test_getCurriculumByID_negative_BlankExceptionWithStatusCode() throws Exception {
-		when(curriculumService.getCurriculumByID("1000")).thenThrow(CurriculumNotFoundException.class);
-		mockMvc.perform(get("/curriculum/1000")).andExpect(MockMvcResultMatchers.status().isNotFound());
-	}
+//	@Test
+//	void test_getCurriculumByID_negative_BlankExceptionWithStatusCode() throws Exception {
+//		when(curriculumService.getCurriculumByID("1000")).thenThrow(CurriculumNotFoundException.class);
+//		mockMvc.perform(get("/curriculum/1000")).andExpect(MockMvcResultMatchers.status().isNotFound());
+//	}
 	
 	
-	@Test
-	void test_getCurriculumByID_badID() throws Exception {
-		when(curriculumService.getCurriculumByID("test")).thenThrow(BadParameterException.class);
-		mockMvc.perform(get("/curriculum/test")).andExpect(MockMvcResultMatchers.status().is(400));
-	}
+//	@Test
+//	void test_getCurriculumByID_badID() throws Exception {
+//		when(curriculumService.getCurriculumByID("test")).thenThrow(BadParameterException.class);
+//		mockMvc.perform(get("/curriculum/test")).andExpect(MockMvcResultMatchers.status().is(400));
+//	}
 	
-	@Test
-	void test_getCurriculumByID_emptyID() throws Exception {
-		when(curriculumService.getCurriculumByID(" ")).thenThrow(EmptyParameterException.class);
-		mockMvc.perform(get("/curriculum/ ")).andExpect(MockMvcResultMatchers.status().is(400));
-	}
+//	@Test
+//	void test_getCurriculumByID_emptyID() throws Exception {
+//		when(curriculumService.getCurriculumByID(" ")).thenThrow(EmptyParameterException.class);
+//		mockMvc.perform(get("/curriculum/ ")).andExpect(MockMvcResultMatchers.status().is(400));
+//	}
 
 //
 	@Test
@@ -117,53 +117,53 @@ class CurriculumControllerUnitTest {
 	}
 
 //
-	@Test
-	void test_deleteCurriculum_curriculumNotFound() throws Exception {
-		when(curriculumService.deleteCurriculumByID("2")).thenThrow(CurriculumNotFoundException.class);
-		mockMvc.perform(delete("/curriculum/2")).andExpect(MockMvcResultMatchers.status().is(404));
-	}
-	
-	@Test
-	void test_deleteCurriculum_badID() throws Exception {
-		when(curriculumService.deleteCurriculumByID("test")).thenThrow(BadParameterException.class);
-		mockMvc.perform(delete("/curriculum/test")).andExpect(MockMvcResultMatchers.status().is(400));
-	}
-	
-	@Test
-	void test_deleteCurriculum_emptyID() throws Exception {
-		when(curriculumService.deleteCurriculumByID(" ")).thenThrow(EmptyParameterException.class);
-		mockMvc.perform(delete("/curriculum/ ")).andExpect(MockMvcResultMatchers.status().is(400));
-	}
-	
-	@Test
-	void test_deleteCurriculum_foreignKey() throws Exception {
-		when(curriculumService.deleteCurriculumByID("3")).thenThrow(ForeignKeyConstraintException.class);
-		mockMvc.perform(delete("/curriculum/3")).andExpect(MockMvcResultMatchers.status().is(400));
-	}
-	
-//
-	@Test
-	void test_getAllCategoriesByID_happy() throws Exception {
-		lenient().when(curriculumService.getAllCategoriesByCurriculum("1")).thenReturn(null);
-		mockMvc.perform(get("/curriculum/1/categories")).andExpect(MockMvcResultMatchers.status().is(200));
-	}
-	
-	@Test
-	void test_getAllCategoriesByID_curriculumNotFound() throws Exception {
-		lenient().when(curriculumService.getAllCategoriesByCurriculum("2")).thenThrow(CurriculumNotFoundException.class);
-		mockMvc.perform(get("/curriculum/2/categories")).andExpect(MockMvcResultMatchers.status().is(404));
-	}
-	
-	@Test
-	void test_getAllCategoriesByID_emptyID() throws Exception {
-		lenient().when(curriculumService.getAllCategoriesByCurriculum(" ")).thenThrow(EmptyParameterException.class);
-		mockMvc.perform(get("/curriculum/ /categories")).andExpect(MockMvcResultMatchers.status().is(400));
-	}
-	
-	@Test
-	void test_getAllCategoriesByID_badID() throws Exception {
-		lenient().when(curriculumService.getAllCategoriesByCurriculum("test")).thenThrow(BadParameterException.class);
-		mockMvc.perform(get("/curriculum/test/categories")).andExpect(MockMvcResultMatchers.status().is(400));
-	}
+//	@Test
+//	void test_deleteCurriculum_curriculumNotFound() throws Exception {
+//		when(curriculumService.deleteCurriculumByID("2")).thenThrow(CurriculumNotFoundException.class);
+//		mockMvc.perform(delete("/curriculum/2")).andExpect(MockMvcResultMatchers.status().is(404));
+//	}
+//	
+//	@Test
+//	void test_deleteCurriculum_badID() throws Exception {
+//		when(curriculumService.deleteCurriculumByID("test")).thenThrow(BadParameterException.class);
+//		mockMvc.perform(delete("/curriculum/test")).andExpect(MockMvcResultMatchers.status().is(400));
+//	}
+//	
+//	@Test
+//	void test_deleteCurriculum_emptyID() throws Exception {
+//		when(curriculumService.deleteCurriculumByID(" ")).thenThrow(EmptyParameterException.class);
+//		mockMvc.perform(delete("/curriculum/ ")).andExpect(MockMvcResultMatchers.status().is(400));
+//	}
+//	
+//	@Test
+//	void test_deleteCurriculum_foreignKey() throws Exception {
+//		when(curriculumService.deleteCurriculumByID("3")).thenThrow(ForeignKeyConstraintException.class);
+//		mockMvc.perform(delete("/curriculum/3")).andExpect(MockMvcResultMatchers.status().is(400));
+//	}
+//	
+////
+//	@Test
+//	void test_getAllCategoriesByID_happy() throws Exception {
+//		lenient().when(curriculumService.getAllCategoriesByCurriculum("1")).thenReturn(null);
+//		mockMvc.perform(get("/curriculum/1/categories")).andExpect(MockMvcResultMatchers.status().is(200));
+//	}
+//	
+//	@Test
+//	void test_getAllCategoriesByID_curriculumNotFound() throws Exception {
+//		lenient().when(curriculumService.getAllCategoriesByCurriculum("2")).thenThrow(CurriculumNotFoundException.class);
+//		mockMvc.perform(get("/curriculum/2/categories")).andExpect(MockMvcResultMatchers.status().is(404));
+//	}
+//	
+//	@Test
+//	void test_getAllCategoriesByID_emptyID() throws Exception {
+//		lenient().when(curriculumService.getAllCategoriesByCurriculum(" ")).thenThrow(EmptyParameterException.class);
+//		mockMvc.perform(get("/curriculum/ /categories")).andExpect(MockMvcResultMatchers.status().is(400));
+//	}
+//	
+//	@Test
+//	void test_getAllCategoriesByID_badID() throws Exception {
+//		lenient().when(curriculumService.getAllCategoriesByCurriculum("test")).thenThrow(BadParameterException.class);
+//		mockMvc.perform(get("/curriculum/test/categories")).andExpect(MockMvcResultMatchers.status().is(400));
+//	}
 		
 }
