@@ -143,7 +143,14 @@ public class VisualizationController {
 			//loop through linked curricula, associated skills to set(doesn't keep duplicates)
 			Set<Integer> skillList = new HashSet<Integer>();
 			try {
-				for(Curriculum c : visualizationService.findVisualizationByID(id).getCurriculumList()) {
+				Visualization vis = visualizationService.findVisualizationByID(id);
+				if(vis == null) {
+					throw new VisualizationNotFoundException("404 vis not found");
+				}
+				if(vis.getCurriculumList()==null) {
+					return skillList;
+				}
+				for(Curriculum c : vis.getCurriculumList()) {
 					for(Integer i : c.getSkillList()) {
 						
 							skillList.add(i);
@@ -175,8 +182,14 @@ public class VisualizationController {
 		//}
 		Set<Integer> uniqueCats = new HashSet<Integer>();
 		try {
-			
-			for(Curriculum c : visualizationService.findVisualizationByID(id).getCurriculumList()) {
+			Visualization vis = visualizationService.findVisualizationByID(id);
+			if(vis == null) {
+				throw new VisualizationNotFoundException("404 vis not found");
+			}
+			if(vis.getCurriculumList()==null) {
+				return uniqueCats;
+			}
+			for(Curriculum c : vis.getCurriculumList()) {
 				String catId = ""+c.getCurriculumId()+"";
 				for(Integer i : cControl.getAllCategoriesById(catId)) {
 					uniqueCats.add(i);

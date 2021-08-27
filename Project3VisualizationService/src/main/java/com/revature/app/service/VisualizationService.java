@@ -38,9 +38,9 @@ public class VisualizationService {
 		if (visualizationDto.getTitle().trim().equals("")) {
 			throw new EmptyParameterException(emptyName);
 			//check if curricula is empty, if so instantiate with new empty list 
-		}else if(visualizationDto.getCurricula().isEmpty()) {
-			List<Curriculum> curricula = new ArrayList<Curriculum>();
-			Visualization visualization = visualizationDao.save(new Visualization(visualizationDto.getTitle(),curricula));
+		}else if(visualizationDto.getCurricula()==null) {
+			//List<Curriculum> curricula = new ArrayList<Curriculum>();
+			Visualization visualization = visualizationDao.save(new Visualization(visualizationDto.getTitle(),null));
 			return visualization;
 			//if both properties contain values, instantiate with said properties
 		}else {
@@ -83,19 +83,19 @@ public class VisualizationService {
 				throw new VisualizationNotFoundException(notFound);
 			}
 			//check if a new title was sent and set visualization name if so
-			if (!visualizationDto.getTitle().trim().equals("")) {
-				vis.setVisualizationName(visualizationDto.getTitle());
+			if (visualizationDto.getTitle().trim().equals("")) {
+				throw new EmptyParameterException("The visualization name was left blank");
 			}
 			ArrayList<Curriculum> persistantCurriculumList = new ArrayList<>();
 			//check if new/updated curricula were sent, set curricula list to it if so
-			if (!visualizationDto.getCurricula().isEmpty()) {
+			if (!(visualizationDto.getCurricula()==null)) {
 				for (Curriculum eachCurriculumDTO : (ArrayList<Curriculum>) visualizationDto.getCurricula()) {
 					persistantCurriculumList.add(
 							curriculumService.getCurriculumByID(String.valueOf(eachCurriculumDTO.getCurriculumId())));
 				}
 				vis.setCurriculumList(persistantCurriculumList);
 			}
-			
+			vis.setVisualizationName(visualizationDto.getTitle());
 			//update the visualization
 			vis = visualizationDao.save(vis);
 			return vis;

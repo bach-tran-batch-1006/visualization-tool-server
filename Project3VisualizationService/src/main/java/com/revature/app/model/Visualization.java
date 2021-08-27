@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -32,7 +32,10 @@ public class Visualization {
 	private String visualizationName;
 	
 	@ElementCollection
+<<<<<<< Updated upstream
 	//@Column(name = "curricula")
+=======
+>>>>>>> Stashed changes
 	private List<Curriculum> curriculumList;
 
 	public Visualization(String visualizationName, List<Curriculum> curriculumList) {

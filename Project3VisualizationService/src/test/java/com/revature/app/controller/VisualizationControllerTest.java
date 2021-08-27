@@ -78,6 +78,18 @@ class VisualizationControllerTest {
 		lenient().when(mockService.createVisualization(visualizationdtoblank)).thenThrow(new EmptyParameterException());
 		lenient().when(mockService.updateVisualizationByID("1",visualizationdtoblank)).thenThrow(new EmptyParameterException());
 		
+<<<<<<< Updated upstream
+=======
+//		lenient().when(mockService.getAllSkillsByVisualization("1")).thenReturn(null);
+//		lenient().when(mockService.getAllSkillsByVisualization("2")).thenThrow(new VisualizationNotFoundException());
+//		lenient().when(mockService.getAllSkillsByVisualization("test")).thenThrow(new BadParameterException());
+//		lenient().when(mockService.getAllSkillsByVisualization(" ")).thenThrow(new EmptyParameterException());
+//		
+//		lenient().when(mockService.getAllCategoriesByVisualization("1")).thenReturn(null);
+//		lenient().when(mockService.getAllCategoriesByVisualization("2")).thenThrow(new VisualizationNotFoundException());
+//		lenient().when(mockService.getAllCategoriesByVisualization("test")).thenThrow(new BadParameterException());
+//		lenient().when(mockService.getAllCategoriesByVisualization(" ")).thenThrow(new EmptyParameterException());
+>>>>>>> Stashed changes
 	}
 
 	@Test
