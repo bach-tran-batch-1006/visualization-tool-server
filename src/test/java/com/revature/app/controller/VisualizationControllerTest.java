@@ -24,9 +24,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.app.dto.VisualizationDTO;
-import com.revature.app.exception.BadParameterException;
+//import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.EmptyParameterException;
-import com.revature.app.exception.VisualizationNotFoundException;
+//import com.revature.app.exception.VisualizationNotFoundException;
 import com.revature.app.model.Visualization;
 import com.revature.app.service.VisualizationService;
 
@@ -44,7 +44,9 @@ class VisualizationControllerTest {
 	private VisualizationController vscontroller;
 
 	@BeforeEach
-	void setup() throws VisualizationNotFoundException, BadParameterException, EmptyParameterException {
+//	void setup() throws VisualizationNotFoundException, BadParameterException, EmptyParameterException {
+	void setup() throws EmptyParameterException {
+
 		this.mockmvc = MockMvcBuilders.standaloneSetup(vscontroller).build();
 		this.objectmapper = new ObjectMapper();
 

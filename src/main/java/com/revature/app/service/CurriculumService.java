@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 
 import com.revature.app.dao.CurriculumDao;
 import com.revature.app.dto.CurriculumDto;
-import com.revature.app.exception.BadParameterException;
-import com.revature.app.exception.CurriculumNotAddedException;
-import com.revature.app.exception.CurriculumNotFoundException;
-import com.revature.app.exception.EmptyCurriculumException;
-import com.revature.app.exception.EmptyParameterException;
-import com.revature.app.exception.ForeignKeyConstraintException;
+//import com.revature.app.exception.BadParameterException;
+//import com.revature.app.exception.CurriculumNotAddedException;
+//import com.revature.app.exception.CurriculumNotFoundException;
+//import com.revature.app.exception.EmptyCurriculumException;
+//import com.revature.app.exception.EmptyParameterException;
+//import com.revature.app.exception.ForeignKeyConstraintException;
 //import com.revature.app.model.Category;
 import com.revature.app.model.Curriculum;
 import com.revature.app.model.Visualization;

@@ -16,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.revature.app.dao.VisualizationDao;
 import com.revature.app.dto.VisualizationDTO;
-import com.revature.app.exception.BadParameterException;
+//import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.EmptyParameterException;
 import com.revature.app.exception.VisualizationNotFoundException;
 //import com.revature.app.model.Category;

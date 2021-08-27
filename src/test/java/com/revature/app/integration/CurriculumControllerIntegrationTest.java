@@ -45,36 +45,36 @@ import com.revature.app.model.Curriculum;
 import com.revature.app.model.Visualization;
 import com.revature.app.service.CurriculumService;
 
-//@SpringBootTest
-//@ActiveProfiles("test")
-//@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
-//@ExtendWith(SpringExtension.class)
-//@WebAppConfiguration
-//@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-//class CurriculumControllerIntegrationTest {
+@SpringBootTest
+@ActiveProfiles("test")
+@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
+@ExtendWith(SpringExtension.class)
+@WebAppConfiguration
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+class CurriculumControllerIntegrationTest {
 
-//	@Autowired
-//	WebApplicationContext webApplicationContext;
+	@Autowired
+	WebApplicationContext webApplicationContext;
 //
-//	@Autowired
-//	CurriculumService service;
+	@Autowired
+	CurriculumService service;
 //
-//	@Autowired
-//	CurriculumDao dao;
+	@Autowired
+	CurriculumDao dao;
 //
-//	private MockMvc mockMvc;
-//	private ObjectMapper om;
+	private MockMvc mockMvc;
+	private ObjectMapper om;
 //
-//	@Autowired
-//	EntityManagerFactory emf;
-//	private EntityManager em;
+	@Autowired
+	EntityManagerFactory emf;
+	private EntityManager em;
 
-//	@BeforeEach
-//	void setup() {
-//		this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-//		this.om = new ObjectMapper();
-//		em = emf.createEntityManager();
-//	}
+	@BeforeEach
+	void setup() {
+		this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+		this.om = new ObjectMapper();
+		em = emf.createEntityManager();
+	}
 
 //_________________SUPPORT_FUNCTIONS__________________//	
 //	public CurriculumDto generateTestDto() {
@@ -128,11 +128,11 @@ import com.revature.app.service.CurriculumService;
 
 //	public void performTest(MockHttpServletRequestBuilder actual, int status, CurriculumDto expected) throws Exception {
 //		String expectedDto = om.writeValueAsString(expected);
-
+//
 //		Curriculum expectedOb = new Curriculum(expected);
 //		expectedOb.setCurriculumId(1);
 //		String expectedAsJson = om.writeValueAsString(expectedOb);
-
+//
 //		this.mockMvc.perform(actual.contentType(MediaType.APPLICATION_JSON).content(expectedDto))
 //				.andExpect(MockMvcResultMatchers.status().is(status))
 //				.andExpect(MockMvcResultMatchers.content().json(expectedAsJson)).andReturn();
@@ -236,48 +236,48 @@ import com.revature.app.service.CurriculumService;
 //		performTest(request, 200, expected);
 //	}
 
-//	@Test
-//	@Order(4)
-//	@Commit
-//	void test_deleteCurriculumById_success() throws Exception {
-//		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
-//				.delete("/curriculum/1");
-//		
-//		this.mockMvc
-//			.perform(builder)
-//			.andExpect(MockMvcResultMatchers.status().is(200));
-//	}
+	@Test
+	@Order(4)
+	@Commit
+	void test_deleteCurriculumById_success() throws Exception {
+		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
+				.delete("/curriculum/1");
+		
+		this.mockMvc
+			.perform(builder)
+			.andExpect(MockMvcResultMatchers.status().is(200));
+	}
 	
-//	@Test
-//	@Order(50)
-//	void test_deleteSkill_foreignKeyFailure() throws Exception {
-//		Session session = em.unwrap(Session.class);
-//		
-//		//Add a new curriculum to the database directly that will fail to be deleted in the test
+	@Test
+	@Order(50)
+	void test_deleteSkill_foreignKeyFailure() throws Exception {
+		Session session = em.unwrap(Session.class);
+		
+		//Add a new curriculum to the database directly that will fail to be deleted in the test
 //		ArrayList<Skill> skillList = new ArrayList<Skill>();
 //		skillList.add(session.get(Skill.class, 1));
-//		Curriculum testCurr = new Curriculum(0, "TestCurr", skillList);
-//		em.getTransaction().begin();
-//		em.persist(testCurr);
-//		em.getTransaction().commit();
-//		
-//		//Add a Visualization the Curriculum is a part of
-//		ArrayList<Curriculum> currList = new ArrayList<Curriculum>();
-//		currList.add(session.get(Curriculum.class, 3));
-//		Visualization testVis = new Visualization(0, "TestVis", currList);
-//		em.getTransaction().begin();
-//		em.persist(testVis);
-//		em.getTransaction().commit();
-//		
-		//Print out the category and skill as a sanity check
+		Curriculum testCurr = new Curriculum(0, "TestCurr", null);
+		em.getTransaction().begin();
+		em.persist(testCurr);
+		em.getTransaction().commit();
+		
+		//Add a Visualization the Curriculum is a part of
+		ArrayList<Curriculum> currList = new ArrayList<Curriculum>();
+		currList.add(session.get(Curriculum.class, 3));
+		Visualization testVis = new Visualization(0, 1, "TestVis", currList);
+		em.getTransaction().begin();
+		em.persist(testVis);
+		em.getTransaction().commit();
+		
+//		Print out the category and skill as a sanity check
 //		System.out.println(session.get(Skill.class, 1));
-//		System.out.println(session.get(Curriculum.class, 3));
-//		System.out.println(session.get(Visualization.class, 1));
-//		
-//		//Now to test the method
-//		this.mockMvc.perform(delete("/curriculum/3")).andExpect(MockMvcResultMatchers.status().is(400));
-//
-//	}
+		System.out.println(session.get(Curriculum.class, 3));
+		System.out.println(session.get(Visualization.class, 1));
+		
+		//Now to test the method
+		this.mockMvc.perform(delete("/curriculum/3")).andExpect(MockMvcResultMatchers.status().is(400));
+
+	}
 	
 	
-//}
+}

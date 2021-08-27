@@ -24,7 +24,7 @@ import lombok.ToString;
 
 @Entity
 @Table(name = "Curricula")
-@AllArgsConstructor @EqualsAndHashCode @Getter @Setter @ToString @NoArgsConstructor
+@AllArgsConstructor @Getter @Setter @ToString @NoArgsConstructor
 public class Curriculum {
 
 	@Id

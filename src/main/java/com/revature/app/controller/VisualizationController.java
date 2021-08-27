@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.revature.app.dto.VisualizationDTO;
-import com.revature.app.exception.BadParameterException;
+//import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.EmptyParameterException;
-import com.revature.app.exception.VisualizationNotFoundException;
+//import com.revature.app.exception.VisualizationNotFoundException;
 //import com.revature.app.model.Category;
 import com.revature.app.model.Curriculum;
 //import com.revature.app.model.Skill;

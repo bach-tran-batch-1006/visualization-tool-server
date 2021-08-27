@@ -23,10 +23,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.app.dto.CurriculumDto;
-import com.revature.app.exception.BadParameterException;
-import com.revature.app.exception.CurriculumNotFoundException;
+//import com.revature.app.exception.BadParameterException;
+//import com.revature.app.exception.CurriculumNotFoundException;
 import com.revature.app.exception.EmptyParameterException;
-import com.revature.app.exception.ForeignKeyConstraintException;
+//import com.revature.app.exception.ForeignKeyConstraintException;
 //import com.revature.app.model.Skill;
 import com.revature.app.service.CurriculumService;
 

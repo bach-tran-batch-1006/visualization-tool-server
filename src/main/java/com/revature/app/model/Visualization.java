@@ -22,7 +22,7 @@ import lombok.ToString;
 
 @Entity
 @Table(name="Visualizations")
-@AllArgsConstructor @EqualsAndHashCode @Getter @Setter @ToString @NoArgsConstructor
+@AllArgsConstructor @Getter @Setter @ToString @NoArgsConstructor
 public class Visualization {
 
 	@Id
