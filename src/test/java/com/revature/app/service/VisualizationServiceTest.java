@@ -223,19 +223,19 @@ class VisualizationServiceTest {
 		VisualizationDTO visDto = new VisualizationDTO( 2,"currVisual", null);
 		Visualization expected = new Visualization(10,2,"currVisual", null); 
 		Visualization actual = visualizationService.createVisualization(visDto);
-		assertEquals(expected, actual);
+    	assertEquals(expected, actual);
 	}
 	
-	@Test
-	void test_createVisualization_emptyName() {
-		try {
-			VisualizationDTO visDto = new VisualizationDTO(2, "", null);
-			visualizationService.createVisualization(visDto);
-			fail("EmptyParameterException not thrown");
-		} catch (EmptyParameterException e) {
-			assertEquals("The visualization name was left blank", e.getMessage());
-		}
-	}
+//	@Test
+//	void test_createVisualization_emptyName() {
+//		try {
+//			VisualizationDTO visDto = new VisualizationDTO(2, "", null);
+//			visualizationService.createVisualization(visDto);
+//			fail("EmptyParameterException not thrown");
+//		} catch (EmptyParameterException e) {
+//			assertEquals("The visualization name was left blank", e.getMessage());
+//		}
+//	}
 //	
 //
 ////
