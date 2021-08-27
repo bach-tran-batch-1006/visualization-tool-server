@@ -35,9 +35,9 @@ import com.revature.app.dao.VisualizationDao;
 import com.revature.app.dto.VisualizationDTO;
 import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.VisualizationNotFoundException;
-import com.revature.app.model.Category;
+//import com.revature.app.model.Category;
 import com.revature.app.model.Curriculum;
-import com.revature.app.model.Skill;
+//import com.revature.app.model.Skill;
 import com.revature.app.model.Visualization;
 
 @WebAppConfiguration
@@ -76,21 +76,21 @@ class VisualizationTest {
 	@Transactional
 	@Commit
 	void CreateEndpoint() throws Exception {
-		Category testcat = new Category(0, "testcat", "hopethiswork");
-		Skill skill1 = new Skill(0, "testskill", testcat);
+//		Category testcat = new Category(0, "testcat", "hopethiswork");
+//		Skill skill1 = new Skill(0, "testskill", testcat);
 
-		em.getTransaction().begin();
-		em.persist(testcat);
-		em.getTransaction().commit();
+//		em.getTransaction().begin();
+//		em.persist(testcat);
+//		em.getTransaction().commit();
 
-		em.getTransaction().begin();
-		em.persist(skill1);
-		em.getTransaction().commit();
+//		em.getTransaction().begin();
+//		em.persist(skill1);
+//		em.getTransaction().commit();
+//
+//		List<Skill> skillList = new ArrayList<Skill>();
+//		skillList.add(skill1);
 
-		List<Skill> skillList = new ArrayList<Skill>();
-		skillList.add(skill1);
-
-		Curriculum curriculum = new Curriculum(0, "testname", skillList);
+		Curriculum curriculum = new Curriculum(0, "testname", null);
 
 		em.getTransaction().begin();
 		em.persist(curriculum);
@@ -99,8 +99,8 @@ class VisualizationTest {
 		List<Curriculum> curlist = new ArrayList<>();
 		curlist.add(curriculum);
 
-		VisualizationDTO vsdto = new VisualizationDTO("first", curlist);
-		Visualization expected = new Visualization(1, "first", curlist);
+		VisualizationDTO vsdto = new VisualizationDTO(2,"first", null);
+		Visualization expected = new Visualization(1, 2, "first", null);
 
 		objectmapper = new ObjectMapper();
 		String Jsondto = objectmapper.writeValueAsString(vsdto);
@@ -121,16 +121,16 @@ class VisualizationTest {
 	@Commit
 	void CreateBlank() throws Exception {
 
-		List<Skill> skillList = new ArrayList<Skill>();
-		Curriculum curriculum = new Curriculum(0, "testname", skillList);
+//		List<Skill> skillList = new ArrayList<Skill>();
+//		Curriculum curriculum = new Curriculum(0, "testname", skillList);
 
-		em.getTransaction().begin();
-		em.persist(curriculum);
-		em.getTransaction().commit();
+//		em.getTransaction().begin();
+//		em.persist(curriculum);
+//		em.getTransaction().commit();
 
-		List<Curriculum> list = new ArrayList<Curriculum>();
+//		List<Curriculum> list = new ArrayList<Curriculum>();
 		// list.add(curriculum);
-		VisualizationDTO vsdto = new VisualizationDTO("", list);
+		VisualizationDTO vsdto = new VisualizationDTO(1,"", null);
 
 		objectmapper = new ObjectMapper();
 		String Jsondto = objectmapper.writeValueAsString(vsdto);
@@ -163,8 +163,8 @@ class VisualizationTest {
 				.andExpect(MockMvcResultMatchers.content().json(vsExpected));
 
 	}
-	
-	
+//	
+//	
 	@Test
 	@Order(5)
 	@Transactional
@@ -174,7 +174,7 @@ class VisualizationTest {
 		
 		Session session = em.unwrap(Session.class);
 		Visualization expected= (session.get(Visualization.class, 1));
-		VisualizationDTO vsdto= new VisualizationDTO("newname", expected.getCurriculumList());
+		VisualizationDTO vsdto= new VisualizationDTO(1, "newname", expected.getCurriculumList());
 
 		
 	   Visualization newvs= expected;
@@ -190,7 +190,7 @@ class VisualizationTest {
 		.andExpect(MockMvcResultMatchers.content().json(vsExpected));
 		
 	}
-	
+//	
 	@Test
 	@Order(6)
 	@Transactional
@@ -198,7 +198,7 @@ class VisualizationTest {
 	void updateVisualizationDoNotExist() throws Exception {
 		Session session = em.unwrap(Session.class);
 		Visualization expected= (session.get(Visualization.class, 1));
-		VisualizationDTO vsdto= new VisualizationDTO("newname", expected.getCurriculumList());
+		VisualizationDTO vsdto= new VisualizationDTO(1, "newname", expected.getCurriculumList());
 		String Jsondto = this.objectmapper.writeValueAsString(vsdto);
 	
 
@@ -217,15 +217,15 @@ class VisualizationTest {
 	void updateVisualizationBlankName() throws Exception {
 		Session session = em.unwrap(Session.class);
 		Visualization expected= (session.get(Visualization.class, 1));
-		VisualizationDTO vsdto= new VisualizationDTO("", expected.getCurriculumList());
+		VisualizationDTO vsdto= new VisualizationDTO(0, "", expected.getCurriculumList());
         String Jsondto = this.objectmapper.writeValueAsString(vsdto);
 		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.put("/visualization/1")
 				.contentType(MediaType.APPLICATION_JSON).content(Jsondto);
 		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isBadRequest());
 	}
-
-	
-	
+//
+//	
+//	
 	@Test
 	@Order(8)
 	@Transactional
@@ -241,7 +241,7 @@ class VisualizationTest {
 			.andExpect(MockMvcResultMatchers.content().json(vsExpected));
 		
 	}
-	
+//	
 	@Test
 	@Order(9)
 	@Transactional
@@ -252,7 +252,7 @@ class VisualizationTest {
 		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isOk());
 
 	}
-
+//
 	@Test
 	@Order(10)
 	@Transactional
@@ -262,6 +262,6 @@ class VisualizationTest {
 		this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isNotFound());
 
 	}
-	
+//	
 
 }

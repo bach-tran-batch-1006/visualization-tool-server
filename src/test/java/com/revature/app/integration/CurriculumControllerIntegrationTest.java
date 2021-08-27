@@ -2,6 +2,7 @@ package com.revature.app.integration;
 
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,9 +40,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.app.dao.CurriculumDao;
 import com.revature.app.dto.CurriculumDto;
-import com.revature.app.model.Category;
+import com.revature.app.dto.VisualizationDTO;
+//import com.revature.app.model.Category;
 import com.revature.app.model.Curriculum;
-import com.revature.app.model.Skill;
+//import com.revature.app.model.Skill;
 import com.revature.app.model.Visualization;
 import com.revature.app.service.CurriculumService;
 
@@ -53,18 +55,22 @@ import com.revature.app.service.CurriculumService;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CurriculumControllerIntegrationTest {
 
+	private ObjectMapper objectmapper;
+	private MockMvc mockmvc;
+
+	
 	@Autowired
 	WebApplicationContext webApplicationContext;
-
+//
 	@Autowired
 	CurriculumService service;
-
+//
 	@Autowired
 	CurriculumDao dao;
-
+//
 	private MockMvc mockMvc;
 	private ObjectMapper om;
-
+//
 	@Autowired
 	EntityManagerFactory emf;
 	private EntityManager em;
@@ -75,14 +81,54 @@ class CurriculumControllerIntegrationTest {
 		this.om = new ObjectMapper();
 		em = emf.createEntityManager();
 	}
+	
+	@Test
+	@Order(2)
+	@Transactional
+	@Commit
+	void CreateEndpoint() throws Exception {
+	Curriculum curriculum = new Curriculum(0, "testname", null);
+
+	em.getTransaction().begin();
+	em.persist(curriculum);
+	em.getTransaction().commit();
+
+	List<Curriculum> curlist = new ArrayList<>();
+	curlist.add(curriculum);
+
+	CurriculumDto vsdto = new CurriculumDto(2,"first", null);
+	Curriculum expected = new Curriculum(2, "first", null);
+
+	objectmapper = new ObjectMapper();
+	String Jsondto = objectmapper.writeValueAsString(vsdto);
+
+	String vsExpected = this.objectmapper.writeValueAsString(expected);
+
+	MockHttpServletRequestBuilder build = MockMvcRequestBuilders.post("/curriculum")
+			.contentType(MediaType.APPLICATION_JSON).content(Jsondto);
+
+	this.mockmvc.perform(build).andExpect(MockMvcResultMatchers.status().isCreated())
+			.andExpect(MockMvcResultMatchers.content().json(vsExpected));
+
+}
+	
+	@Test 
+	void test_addCurriculum_CurriculumBlankInputException_TestEndpoint() throws Exception {
+		CurriculumDto input = new CurriculumDto(1, "", null);
+		String inputJson = om.writeValueAsString(input);
+		
+		this.mockMvc.perform(post("/category")
+			.contentType(MediaType.APPLICATION_JSON).content(inputJson))
+			.andExpect(MockMvcResultMatchers.status().isBadRequest());
+	}
 
 //_________________SUPPORT_FUNCTIONS__________________//	
 	public CurriculumDto generateTestDto() {
 		Session session = em.unwrap(Session.class);
-		Skill testSkill = session.get(Skill.class, 1);
-		ArrayList<Skill> skills = new ArrayList<Skill>();
-		skills.add(testSkill);
-		CurriculumDto testDto = new CurriculumDto("TestCurriculum", skills);
+		Curriculum testCurriculum = session.get(Curriculum.class, 1);
+		ArrayList<Curriculum> curr = new ArrayList<Curriculum>();
+		curr.add(testCurriculum);
+		CurriculumDto testDto = new CurriculumDto(1, "TestCurriculum", null);
 		return testDto;
 	}
 
@@ -138,17 +184,17 @@ class CurriculumControllerIntegrationTest {
 				.andExpect(MockMvcResultMatchers.content().json(expectedAsJson)).andReturn();
 	}
 
-	public ResultActions performTest(MockHttpServletRequestBuilder actual, int status, CurriculumDto expected, int flag)
-			throws Exception {
-		System.out.println("expected: " + expected);
-		Curriculum expectedOb = new Curriculum(expected);
-		expectedOb.setCurriculumId(1);
-		String expectedAsJson = om.writeValueAsString(expectedOb);
-		System.out.println("expectedAsJson: " + expectedAsJson);
-
-		return this.mockMvc.perform(actual).andExpect(MockMvcResultMatchers.status().is(status))
-				.andExpect(MockMvcResultMatchers.content().json(expectedAsJson));
-	}
+//	public ResultActions performTest(MockHttpServletRequestBuilder actual, int status, CurriculumDto expected, int flag)
+//			throws Exception {
+//		System.out.println("expected: " + expected);
+//		Curriculum expectedOb = new Curriculum(expected);
+//		expectedOb.setCurriculumId(1);
+//		String expectedAsJson = om.writeValueAsString(expectedOb);
+//		System.out.println("expectedAsJson: " + expectedAsJson);
+//
+//		return this.mockMvc.perform(actual).andExpect(MockMvcResultMatchers.status().is(status))
+//				.andExpect(MockMvcResultMatchers.content().json(expectedAsJson));
+//	}
 
 	public MvcResult performTest(MockHttpServletRequestBuilder actual, int status, List<Curriculum> expected)
 			throws Exception {
@@ -165,22 +211,22 @@ class CurriculumControllerIntegrationTest {
 	@Transactional
 	@Commit
 	void test_addCurriculum_success() throws Exception {
-		Category testCat = new Category(0, "TestCat", "Description");
+//		Category testCat = new Category(0, "TestCat", "Description");
+//
+//		em.getTransaction().begin();
+//		em.persist(testCat);
+//		em.getTransaction().commit();
 
-		em.getTransaction().begin();
-		em.persist(testCat);
-		em.getTransaction().commit();
-
-		Session session = em.unwrap(Session.class);
-		Skill testSkill = new Skill(0, "Test", session.get(Category.class, 1));
-
-		em.getTransaction().begin();
-		em.persist(testSkill);
-		em.getTransaction().commit();
+//		Session session = em.unwrap(Session.class);
+//		Skill testSkill = new Skill(0, "Test", session.get(Category.class, 1));
+//
+//		em.getTransaction().begin();
+//		em.persist(testSkill);
+//		em.getTransaction().commit();
 
 		CurriculumDto expected = generateTestDto();
 		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/curriculum");
-		// postHttpRequest("/curriculum", expected);
+		 postHttpRequest("/curriculum", expected);
 		performTest(request, 200, expected);
 	}
 
@@ -196,7 +242,7 @@ class CurriculumControllerIntegrationTest {
 
 		CurriculumDto expected = generateTestDto();
 		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("/curriculum/1");
-		// getHttpRequest("/curriculum/1", expected);
+		 getHttpRequest("/curriculum/1", expected);
 		performTest(request, 200, expected);
 	}
 
@@ -236,17 +282,17 @@ class CurriculumControllerIntegrationTest {
 		performTest(request, 200, expected);
 	}
 
-	@Test
-	@Order(4)
-	@Commit
-	void test_deleteCurriculumById_success() throws Exception {
-		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
-				.delete("/curriculum/1");
-		
-		this.mockMvc
-			.perform(builder)
-			.andExpect(MockMvcResultMatchers.status().is(200));
-	}
+//	@Test
+//	@Order(4)
+//	@Commit
+//	void test_deleteCurriculumById_success() throws Exception {
+//		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
+//				.delete("/curriculum/1");
+//		
+//		this.mockMvc
+//			.perform(builder)
+//			.andExpect(MockMvcResultMatchers.status().is(200));
+//	}
 	
 	@Test
 	@Order(50)
@@ -254,9 +300,9 @@ class CurriculumControllerIntegrationTest {
 		Session session = em.unwrap(Session.class);
 		
 		//Add a new curriculum to the database directly that will fail to be deleted in the test
-		ArrayList<Skill> skillList = new ArrayList<Skill>();
-		skillList.add(session.get(Skill.class, 1));
-		Curriculum testCurr = new Curriculum(0, "TestCurr", skillList);
+//		ArrayList<Skill> skillList = new ArrayList<Skill>();
+//		skillList.add(session.get(Skill.class, 1));
+		Curriculum testCurr = new Curriculum(0, "TestCurr", null);
 		em.getTransaction().begin();
 		em.persist(testCurr);
 		em.getTransaction().commit();
@@ -264,13 +310,13 @@ class CurriculumControllerIntegrationTest {
 		//Add a Visualization the Curriculum is a part of
 		ArrayList<Curriculum> currList = new ArrayList<Curriculum>();
 		currList.add(session.get(Curriculum.class, 3));
-		Visualization testVis = new Visualization(0, "TestVis", currList);
+		Visualization testVis = new Visualization(0, 1, "TestVis", currList);
 		em.getTransaction().begin();
 		em.persist(testVis);
 		em.getTransaction().commit();
 		
-		//Print out the category and skill as a sanity check
-		System.out.println(session.get(Skill.class, 1));
+//		Print out the category and skill as a sanity check
+//		System.out.println(session.get(Skill.class, 1));
 		System.out.println(session.get(Curriculum.class, 3));
 		System.out.println(session.get(Visualization.class, 1));
 		
@@ -279,5 +325,5 @@ class CurriculumControllerIntegrationTest {
 
 	}
 	
-	
+
 }

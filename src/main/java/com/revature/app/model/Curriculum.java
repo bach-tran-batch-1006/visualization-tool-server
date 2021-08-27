@@ -24,7 +24,7 @@ import lombok.ToString;
 
 @Entity
 @Table(name = "Curricula")
-@AllArgsConstructor @EqualsAndHashCode @Getter @Setter @ToString @NoArgsConstructor
+@AllArgsConstructor @Getter @Setter @ToString @NoArgsConstructor
 public class Curriculum {
 
 	@Id
@@ -34,14 +34,20 @@ public class Curriculum {
 
 	@Column(name = "curriculum_name")
 	private String curriculumName;
-
+	
 	@ManyToMany(cascade = { CascadeType.MERGE})
-	@JoinTable(name = "Curricula_Skills", joinColumns = { @JoinColumn(name = "curriculum_id") }, inverseJoinColumns = {
-			@JoinColumn(name = "skill_id") })
-	private List<Skill> skillList;
+	@JoinTable(name = "Visualization_Curricula", joinColumns = { @JoinColumn(name = "curriculum_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "visualization_id") })
+	private List<Visualization> visList;
+
+//	@ManyToMany(cascade = { CascadeType.MERGE})
+//	@JoinTable(name = "Curricula_Skills", joinColumns = { @JoinColumn(name = "curriculum_id") }, inverseJoinColumns = {
+//			@JoinColumn(name = "skill_id") })
+//	private List<Skill> skillList;
 	
 	public Curriculum(CurriculumDto dto) {
 		this.curriculumName = dto.getName();
-		this.skillList = dto.getSkillList();
+		this.visList = dto.getVisList();
+//		this.skillList = dto.getSkillList();
 	}
 }
