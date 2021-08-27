@@ -32,10 +32,6 @@ public class Visualization {
 	private String visualizationName;
 	
 	@ElementCollection
-<<<<<<< Updated upstream
-	//@Column(name = "curricula")
-=======
->>>>>>> Stashed changes
 	private List<Curriculum> curriculumList;
 
 	public Visualization(String visualizationName, List<Curriculum> curriculumList) {
