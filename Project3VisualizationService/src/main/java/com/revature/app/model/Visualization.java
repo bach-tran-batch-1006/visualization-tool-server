@@ -3,6 +3,7 @@ package com.revature.app.model;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,7 +31,8 @@ public class Visualization {
 	@Column(name = "visualization_name")
 	private String visualizationName;
 	
-	@Column(name = "curricula")
+	@ElementCollection
+	//@Column(name = "curricula")
 	private List<Curriculum> curriculumList;
 
 	public Visualization(String visualizationName, List<Curriculum> curriculumList) {

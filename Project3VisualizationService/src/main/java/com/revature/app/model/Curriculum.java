@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import com.revature.app.dto.CurriculumDto;
 
 //import com.revature.app.dto.CurriculumDto;
 
@@ -40,11 +43,16 @@ public class Curriculum {
 	@Column(name = "curriculum_name")
 	private String curriculumName;
 
-	@Column(name = "Curricula_Skills")
+	@ElementCollection
 	private List<Integer> skillList;
 	
 	public Curriculum(String curriculumName, List<Integer> skillList) {
 		this.curriculumName = curriculumName;
 		this.skillList = skillList;
+	}
+	
+	public Curriculum(CurriculumDto curDTO) {
+		this.curriculumName = curDTO.getName();
+		this.skillList = curDTO.getSkillList();
 	}
 }
