@@ -22,7 +22,8 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 public class CurriculumDto {
-
+	
+	private int UserId;
 	private String name;
 	private List<Visualization> visList;
 	
