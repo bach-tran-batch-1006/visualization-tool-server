@@ -4,14 +4,19 @@ import java.util.ArrayList;
 
 import java.util.List;
 
+import com.revature.app.model.Curriculum;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Data
-@NoArgsConstructor 
-@AllArgsConstructor
+@AllArgsConstructor 
+@NoArgsConstructor
 public class CurriculumDto {
 
 	private String name;
