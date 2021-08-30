@@ -21,7 +21,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 @RestController
-@RequestMapping(value="/user")
+
 @AllArgsConstructor(onConstructor=@__(@Autowired))
 @NoArgsConstructor
 @CrossOrigin(origins="*")
@@ -31,7 +31,7 @@ public class UserController {
 	
 	@PostMapping("/register")
 	public ResponseEntity<User> createUser(@RequestBody UserDTO userDTO){
-		
+		System.out.println("Johnaton");
 		//User u = new User(user.get("first"), user.get("last"), user.get("email"), user.get("pass"));
 		
 		User u = uServ.registerUser(userDTO);
@@ -78,6 +78,11 @@ public class UserController {
 		}
 		
 		return new ResponseEntity<User>(u, HttpStatus.OK);
+	}
+	
+	@GetMapping()
+	public String test() {
+		return "something";
 	}
 
 }
