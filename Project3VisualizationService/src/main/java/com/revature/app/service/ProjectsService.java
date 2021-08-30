@@ -97,7 +97,7 @@ public class ProjectsService {
 	}
 	//deletes the project and sets associated project in curricula to 0
 	@Transactional
-	public int deleteProjectByID(String projID) throws ProjectNotFoundException, BadParameterException, EmptyParameterException {
+	public Projects deleteProjectByID(String projID) throws ProjectNotFoundException, BadParameterException, EmptyParameterException {
 		try {
 			if(projID.trim().equals("")){
 				throw new EmptyParameterException(emptyParam);
@@ -105,7 +105,7 @@ public class ProjectsService {
 			int id = Integer.parseInt(projID);
 			Projects project = pDao.findById(id);
 			if (project == null) {
-				throw new ProjectNotFoundException("notFound");
+				throw new ProjectNotFoundException("The Project could not be deleted because it couldn't be found");
 			}else {
 				List<Curriculum> curricula = cDao.findAll();
 				for(Curriculum c : curricula) {
@@ -124,7 +124,7 @@ public class ProjectsService {
 				}
 			}
 			pDao.deleteById(id);
-			return id;
+			return project;
 		} catch (NumberFormatException e) {
 			throw new BadParameterException(badParam);
 		}
