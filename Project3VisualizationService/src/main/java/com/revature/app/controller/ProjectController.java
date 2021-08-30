@@ -38,11 +38,11 @@ import com.revature.app.service.ProjectsService;
 @CrossOrigin(origins = "*")
 @RestController
 public class ProjectController {
-	@Bean
+	//@Bean
     //@LoadBalanced
-    RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
+    //RestTemplate restTemplate() {
+    //    return new RestTemplate();
+    //}
     
    // @Autowired
     //private RestTemplate rest;

@@ -20,3 +20,7 @@ spring:
           - Path=/visualization-tool/**
           filters:
           - StripPrefix=1
+        - id: visualization
+          uri: lb://visualization
+          predicates:          - Path=/visualization/**
+          filters:          - StripPrefix=1
