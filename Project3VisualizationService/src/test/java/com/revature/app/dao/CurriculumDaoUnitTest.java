@@ -55,8 +55,9 @@ class CurriculumDaoUnitTest {
 	@Commit
 	@Order(0)
 	void test_addCurriculum_success() {
-		Curriculum actual = curriculumDao.save(new Curriculum(1, "BackEnd Developer", new ArrayList<>()));
-		Curriculum expected = new Curriculum(1, "BackEnd Developer", new ArrayList<>());
+		Curriculum actual = curriculumDao.save(new Curriculum("BackEnd Developer1", new ArrayList<>()));
+		Curriculum expected = new Curriculum("BackEnd Developer1", new ArrayList<>());
+		expected.setCurriculumId(1);
 		assertEquals(expected, actual);
 	}
 
@@ -67,7 +68,8 @@ class CurriculumDaoUnitTest {
 	void test_getCurriculumbyID_success() {
 
 		Curriculum actual = curriculumDao.getById(1);
-		Curriculum expected = new Curriculum(1, "BackEnd Developer", new ArrayList<>());
+		Curriculum expected = new Curriculum("BackEnd Developer1", new ArrayList<>());
+		expected.setCurriculumId(1);
 		assertEquals(expected, actual);
 	}
 
@@ -76,14 +78,22 @@ class CurriculumDaoUnitTest {
 	@Commit
 	@Order(2)
 	void test_getAllCurriculum_success() {
-		curriculumDao.save(new Curriculum(1, "BackEnd Developer", new ArrayList<>()));
-		curriculumDao.save(new Curriculum(2, "BackEnd Developer", new ArrayList<>()));
+		curriculumDao.save(new Curriculum("BackEnd Developer2", new ArrayList<>()));
+		curriculumDao.save(new Curriculum("BackEnd Developer3", new ArrayList<>()));
 		List<Curriculum> actual = curriculumDao.findAll();
 		System.out.println("actual " + actual);
 
 		List<Curriculum> expected = new ArrayList<>();
-		expected.add(new Curriculum(1, "BackEnd Developer", new ArrayList<>()));
-		expected.add(new Curriculum(2, "BackEnd Developer", new ArrayList<>()));
+		Curriculum expected1 = new Curriculum("BackEnd Developer1", new ArrayList<>());
+		expected1.setCurriculumId(1);
+		Curriculum expected2 = new Curriculum("BackEnd Developer2", new ArrayList<>());
+		expected2.setCurriculumId(2);
+		Curriculum expected3 = new Curriculum("BackEnd Developer3", new ArrayList<>());
+		expected3.setCurriculumId(3);
+		
+		expected.add(expected1);
+		expected.add(expected2);
+		expected.add(expected3);
 
 		assertEquals(expected, actual);
 	}
@@ -93,9 +103,10 @@ class CurriculumDaoUnitTest {
 	@Commit
 	@Order(3)
 	void test_updateCurriculumByID_success() {
-		curriculumDao.findByCurriculumId(1);
-		Curriculum actual = curriculumDao.save(new Curriculum(1, "update Developer", new ArrayList<>()));
-		Curriculum expected = new Curriculum(1, "update Developer", new ArrayList<>());
+		//curriculumDao.findByCurriculumId(1);
+		Curriculum actual = curriculumDao.save(new Curriculum("update Developer", new ArrayList<>()));
+		Curriculum expected = new Curriculum("update Developer", new ArrayList<>());
+		expected.setCurriculumId(4);
 		assertEquals(expected, actual);
 	}
 

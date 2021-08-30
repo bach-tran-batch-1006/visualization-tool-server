@@ -2,16 +2,16 @@ package com.revature.app.model;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
+//import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+//import javax.persistence.JoinColumn;
+//import javax.persistence.JoinTable;
+//import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.revature.app.dto.CurriculumDto;
@@ -42,6 +42,15 @@ public class Curriculum {
 
 	@Column(name = "curriculum_name")
 	private String curriculumName;
+	
+	@Column(name = "p1")
+	private int p1;
+	
+	@Column(name = "p2")
+	private int p2;
+	
+	@Column(name = "p3")
+	private int p3;
 
 	@ElementCollection
 	private List<Integer> skillList;

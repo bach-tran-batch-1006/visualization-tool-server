@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
 import com.revature.app.dao.CurriculumDao;
+import com.revature.app.dao.VisualizationDao;
 import com.revature.app.dto.CurriculumDto;
 import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.CurriculumNotAddedException;
@@ -33,17 +34,20 @@ class CurriculumServiceUnitTest {
 
 	@Mock
 	private CurriculumDao curriculumDao;
+	
+	@Mock
+	private VisualizationDao visualizationDao;
 
 	@InjectMocks
 	private CurriculumService curriculumService;
 
 	@Test
 	void test_addCurriculum_success() throws CurriculumNotAddedException, EmptyParameterException {
-		when(curriculumDao.save(new Curriculum(0, "BackEnd Developer", new ArrayList<>())))
-				.thenReturn(new Curriculum(1, "BackEnd Developer", new ArrayList<>()));
+		when(curriculumDao.save(new Curriculum("BackEnd Developer", new ArrayList<>())))
+				.thenReturn(new Curriculum("BackEnd Developer", new ArrayList<>()));
 
-		Curriculum actual = curriculumService.addCurriculum(new CurriculumDto("BackEnd Developer", new ArrayList<>()));
-		Curriculum expected = new Curriculum(1, "BackEnd Developer", new ArrayList<>());
+		Curriculum actual = curriculumService.addCurriculum(new CurriculumDto("BackEnd Developer", new ArrayList<>(),0,0,0));
+		Curriculum expected = new Curriculum("BackEnd Developer", new ArrayList<>());
 
 		assertEquals(expected, actual);
 	}
@@ -51,7 +55,7 @@ class CurriculumServiceUnitTest {
 	@Test
 	void test_addCurriculum_blankCurriculumName_failed() throws CurriculumNotAddedException {
 		try {
-			CurriculumDto curriculumDto = new CurriculumDto(" ", new ArrayList<Integer>());
+			CurriculumDto curriculumDto = new CurriculumDto(" ", new ArrayList<Integer>(),0,0,0);
 			curriculumService.addCurriculum(curriculumDto);
 		} catch (EmptyParameterException e) {
 			assertEquals("The curriculum name was left blank", e.getMessage());
@@ -60,16 +64,16 @@ class CurriculumServiceUnitTest {
 
 	@Test
 	void test_getCurriculumById_success() throws CurriculumNotFoundException, BadParameterException, EmptyParameterException {
-		when(curriculumDao.findByCurriculumId(1)).thenReturn(new Curriculum(1, "BackEnd Developer", new ArrayList<>()));
+		when(curriculumDao.findByCurriculumId(1)).thenReturn(new Curriculum("BackEnd Developer", new ArrayList<>()));
 		Curriculum actual = curriculumService.getCurriculumByID("1");
-		Curriculum expected = new Curriculum(1, "BackEnd Developer", new ArrayList<>());
+		Curriculum expected = new Curriculum("BackEnd Developer", new ArrayList<>());
 		assertEquals(expected, actual);
 	}
 
 	@Test
 	void test_getCurriculum_Idnotexist() throws BadParameterException, EmptyParameterException {
 		try {
-			new CurriculumDto("Language", null);
+			new CurriculumDto("Language", null,0,0,0);
 			curriculumService.getCurriculumByID("10");
 			
 		} catch (CurriculumNotFoundException e) {
@@ -101,13 +105,13 @@ class CurriculumServiceUnitTest {
 	@Test
 	void test_getAllCurriculum_success() throws EmptyCurriculumException {
 		List<Curriculum> returnCu = new ArrayList<Curriculum>();
-		returnCu.add(new Curriculum(1, "BackEnd Developer", new ArrayList<>()));
+		returnCu.add(new Curriculum("BackEnd Developer", new ArrayList<>()));
 		when(curriculumDao.findAll()).thenReturn(returnCu);
 		System.out.println("return curriculum" + returnCu);
 
 		List<Curriculum> actual = curriculumService.getAllCurriculum();
 		List<Curriculum> expected = new ArrayList<Curriculum>();
-		expected.add(new Curriculum(1, "BackEnd Developer", new ArrayList<>()));
+		expected.add(new Curriculum("BackEnd Developer", new ArrayList<>()));
 
 		assertEquals(expected, actual);
 	}
@@ -115,12 +119,12 @@ class CurriculumServiceUnitTest {
 //
 	@Test
 	void test_updatebyID_success() throws EmptyParameterException, CurriculumNotFoundException, BadParameterException {
-		when(curriculumDao.findByCurriculumId(1)).thenReturn(new Curriculum(1, "BackEnd Developer", new ArrayList<>()));
-		when(curriculumDao.save(new Curriculum(1, "Update Developer", new ArrayList<>())))
-				.thenReturn(new Curriculum(1, "Update Developer", new ArrayList<>()));
+		when(curriculumDao.findByCurriculumId(1)).thenReturn(new Curriculum("BackEnd Developer", new ArrayList<>()));
+		when(curriculumDao.save(new Curriculum("Update Developer", new ArrayList<>())))
+				.thenReturn(new Curriculum("Update Developer", new ArrayList<>()));
 
 		Curriculum actual = curriculumService.updateCurriculumByID("1", new CurriculumDto("Update Developer"));
-		Curriculum expected = new Curriculum(1, "Update Developer", new ArrayList<>());
+		Curriculum expected = new Curriculum("Update Developer", new ArrayList<>());
 
 		assertEquals(expected, actual);
 	}
@@ -129,7 +133,7 @@ class CurriculumServiceUnitTest {
 	@Test
 	void test_updateCurriculum_badID() throws EmptyParameterException, CurriculumNotFoundException {
 		try {
-			CurriculumDto upCurr = new CurriculumDto("TestCurr", null);
+			CurriculumDto upCurr = new CurriculumDto("TestCurr", null,0,0,0);
 			curriculumService.updateCurriculumByID("test", upCurr);
 			fail("BadParameterException was not thrown");
 		} catch (BadParameterException e) {
@@ -140,7 +144,7 @@ class CurriculumServiceUnitTest {
 	@Test
 	void test_updateCurriculum_emptyID() throws CurriculumNotFoundException, BadParameterException {
 		try {
-			CurriculumDto upCurr = new CurriculumDto("TestCurr", null);
+			CurriculumDto upCurr = new CurriculumDto("TestCurr", null,0,0,0);
 			curriculumService.updateCurriculumByID("   ", upCurr);
 			fail("EmptyParameterException was not thrown");
 		} catch (EmptyParameterException e) {
@@ -151,7 +155,7 @@ class CurriculumServiceUnitTest {
 	@Test
 	void test_updateCurriculum_emptyName() throws CurriculumNotFoundException, BadParameterException {
 		try {
-			CurriculumDto upCurr = new CurriculumDto("    ", null);
+			CurriculumDto upCurr = new CurriculumDto("    ", null,0,0,0);
 			curriculumService.updateCurriculumByID("1", upCurr);
 			fail("EmptyParameterException was not thrown");
 		} catch (EmptyParameterException e) {
@@ -162,7 +166,7 @@ class CurriculumServiceUnitTest {
 	@Test
 	void test_updateCurriculum_curriculumNotFound() throws EmptyParameterException, BadParameterException {
 		try {
-			CurriculumDto upCurr = new CurriculumDto("TestCurr", null);
+			CurriculumDto upCurr = new CurriculumDto("TestCurr", null,0,0,0);
 			curriculumService.updateCurriculumByID("1", upCurr);
 			fail("CurriculumNotFoundException was not thrown");
 		} catch (CurriculumNotFoundException e) {
@@ -173,9 +177,9 @@ class CurriculumServiceUnitTest {
 //
 	@Test
 	void test_delete_success() throws CurriculumNotFoundException, EmptyParameterException, BadParameterException, ForeignKeyConstraintException {
-		when(curriculumDao.findByCurriculumId(1)).thenReturn(new Curriculum(1, "Delete Developer", new ArrayList<>()));
+		when(curriculumDao.findByCurriculumId(1)).thenReturn(new Curriculum("Delete Developer", new ArrayList<>()));
 
-		Curriculum expected = new Curriculum(1, "Delete Developer", new ArrayList<>());
+		Curriculum expected = new Curriculum("Delete Developer", new ArrayList<>());
 		Curriculum actual = curriculumService.deleteCurriculumByID("1");
 		
 		assertEquals(expected, actual);

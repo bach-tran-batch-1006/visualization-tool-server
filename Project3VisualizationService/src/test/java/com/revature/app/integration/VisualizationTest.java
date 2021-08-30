@@ -88,7 +88,7 @@ class VisualizationTest {
 		List<Integer> skillList = new ArrayList<Integer>();
 		skillList.add(0);
 
-		Curriculum curriculum = new Curriculum(0, "testname", skillList);
+		Curriculum curriculum = new Curriculum("testname", skillList);
 
 		em.getTransaction().begin();
 		em.persist(curriculum);
@@ -120,7 +120,7 @@ class VisualizationTest {
 	void CreateBlank() throws Exception {
 
 		List<Integer> skillList = new ArrayList<Integer>();
-		Curriculum curriculum = new Curriculum(0, "testname", skillList);
+		Curriculum curriculum = new Curriculum("testname", skillList);
 
 		em.getTransaction().begin();
 		em.persist(curriculum);

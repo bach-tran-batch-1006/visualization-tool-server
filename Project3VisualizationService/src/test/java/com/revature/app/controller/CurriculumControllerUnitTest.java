@@ -50,7 +50,7 @@ class CurriculumControllerUnitTest {
 	@Test
 	void test_addCurriculum_negative_BlankExceptionWithStatusCode() throws Exception {
 		
-		CurriculumDto input = new CurriculumDto(" ", new ArrayList<Integer>());
+		CurriculumDto input = new CurriculumDto(" ", new ArrayList<Integer>(),0,0,0);
 		String inputJson = om.writeValueAsString(input);
 		
 		when(curriculumService.addCurriculum(input)).thenThrow(EmptyParameterException.class);
@@ -81,7 +81,7 @@ class CurriculumControllerUnitTest {
 //
 	@Test
 	void test_updateCurriculum_curriculumNotFound() throws Exception {
-		CurriculumDto input = new CurriculumDto("testCurriculum", new ArrayList<Integer>());
+		CurriculumDto input = new CurriculumDto("testCurriculum", new ArrayList<Integer>(),0,0,0);
 		String body = om.writeValueAsString(input);
 		when(curriculumService.updateCurriculumByID("2", input)).thenThrow(CurriculumNotFoundException.class);
 		mockMvc.perform(
@@ -93,7 +93,7 @@ class CurriculumControllerUnitTest {
 	
 	@Test
 	void test_updateCurriculum_badID() throws Exception {
-		CurriculumDto input = new CurriculumDto("testCurriculum", new ArrayList<Integer>());
+		CurriculumDto input = new CurriculumDto("testCurriculum", new ArrayList<Integer>(),0,0,0);
 		String body = om.writeValueAsString(input);
 		when(curriculumService.updateCurriculumByID("test", input)).thenThrow(BadParameterException.class);
 		mockMvc.perform(
@@ -105,7 +105,7 @@ class CurriculumControllerUnitTest {
 	
 	@Test
 	void test_updateCurriculum_emptyID() throws Exception {
-		CurriculumDto input = new CurriculumDto("testCurriculum", new ArrayList<Integer>());
+		CurriculumDto input = new CurriculumDto("testCurriculum", new ArrayList<Integer>(),0,0,0);
 		String body = om.writeValueAsString(input);
 		when(curriculumService.updateCurriculumByID(" ", input)).thenThrow(EmptyParameterException.class);
 		mockMvc.perform(

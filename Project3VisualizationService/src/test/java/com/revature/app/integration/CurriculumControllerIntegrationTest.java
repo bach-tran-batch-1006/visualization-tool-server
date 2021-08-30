@@ -83,7 +83,7 @@ class CurriculumControllerIntegrationTest {
 		int testSkillId = 1;
 		ArrayList<Integer> skills = new ArrayList<Integer>();
 		skills.add(testSkillId);
-		CurriculumDto testDto = new CurriculumDto("TestCurriculum", skills);
+		CurriculumDto testDto = new CurriculumDto("TestCurriculum", skills,0,0,0);
 		return testDto;
 	}
 
@@ -254,7 +254,7 @@ class CurriculumControllerIntegrationTest {
 		//Add a new curriculum to the database directly that will fail to be deleted in the test
 		ArrayList<Integer> skillList = new ArrayList<Integer>();
 		skillList.add(1);
-		Curriculum testCurr = new Curriculum(0, "TestCurr", skillList);
+		Curriculum testCurr = new Curriculum("TestCurr", skillList);
 		em.getTransaction().begin();
 		em.persist(testCurr);
 		em.getTransaction().commit();
