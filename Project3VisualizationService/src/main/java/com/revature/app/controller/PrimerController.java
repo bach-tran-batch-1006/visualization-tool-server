@@ -1,15 +1,16 @@
 package com.revature.app.controller;
 
 
+import java.util.HashSet;
 import java.util.List;
-
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
-
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -38,8 +40,8 @@ public class PrimerController {
         return new RestTemplate();
     }
     
-    //@Autowired
-    //private RestTemplate rest;
+    @Autowired
+    private RestTemplate rest;
 
 	@Autowired
 	private PrimerServices service;
@@ -133,17 +135,18 @@ public class PrimerController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		} */
 	}
-	/*
-	@GetMapping(path="curriculum/{id}/categories")
-	public Set<Integer> getAllCategoriesById(@PathVariable("id") String curriculumId) {
+	
+	@GetMapping(path="primer/{id}/categories")
+	public Set<Integer> getAllCategoriesById(@PathVariable("id") String primerId) {
 		Set<Integer> cats = new HashSet<Integer>();
 		try {
 			String url = "http://localhost:8089/skill/";
-			for (int i : service.getCurriculumByID(curriculumId).getSkillList()) {
+			for (int i : service.getPrimerByID(primerId).getSkillList()) {
 				ResponseEntity<Integer> res = this.rest.getForEntity((url + i + "/category"), Integer.class);
 				cats.add(res.getBody());
 			}
-		} catch (CurriculumNotFoundException e) {
+			return cats;
+		} catch (PrimerNotFoundException e) {
 			logger.warn("User attempted to access a curriculum in the database that did not exist while trying to return categories");
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		} catch (BadParameterException e) {
@@ -156,7 +159,6 @@ public class PrimerController {
 			logger.warn("Failed to contact request microservice");
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
-		
-	return cats;
-	} */
+	
+	}
 }

@@ -43,6 +43,9 @@ public class VisualizationController {
 	@Autowired
 	private CurriculumController cControl;
 	
+	@Autowired
+	private PrimerController pControl;
+	
 //	@Bean
 //	//@LoadBalanced
 //	RestTemplate restTemplate() {
@@ -202,12 +205,15 @@ public class VisualizationController {
 					
 				}
 			}
-//			if(vis.getPrimerList()!=null) {
-//				for(Primer p : vis.getPrimerList()) {
-//					for(Integer i : )
-//				}
-//			}
-//			
+			if(vis.getPrimerList()!=null) {
+				for(Primer p : vis.getPrimerList()) {
+					String primeId =""+p.getPrimerId()+"";
+					for(Integer i :pControl.getAllCategoriesById(primeId) ) {
+						uniqueCats.add(i);
+					}
+				}
+			}
+			
 			return uniqueCats;
 		} catch (VisualizationNotFoundException e) {
 			logger.warn("User requested information about a visualization in the database that did not exist");
@@ -219,8 +225,7 @@ public class VisualizationController {
 			logger.warn("User gave a bad parameter while trying to get information about a visualization in the database");
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
-		
-		return uniqueCats;		
+			
 	}
 
 }
