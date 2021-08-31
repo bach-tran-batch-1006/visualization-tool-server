@@ -6,11 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
+//import javax.persistence.EntityManager;
+//import javax.persistence.EntityManagerFactory;
 
-import org.hibernate.Session;
-import org.junit.jupiter.api.BeforeEach;
+//import org.hibernate.Session;
+//import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -40,15 +40,15 @@ class CurriculumDaoUnitTest {
 	@Autowired
 	private CurriculumDao curriculumDao;
 
-	@Autowired
-	EntityManagerFactory emf;
-
-	private EntityManager em;
-
-	@BeforeEach
-	public void setup() {
-		em = emf.createEntityManager();
-	}
+//	@Autowired
+//	EntityManagerFactory emf;
+//
+//	private EntityManager em;
+//
+//	@BeforeEach
+//	public void setup() {
+//		em = emf.createEntityManager();
+//	}
 
 	@Test
 	@Transactional

@@ -105,7 +105,7 @@ public class ProjectsService {
 			int id = Integer.parseInt(projID);
 			Projects project = pDao.findById(id);
 			if (project == null) {
-				throw new ProjectNotFoundException("notFound");
+				throw new ProjectNotFoundException("The Project could not be deleted because it couldn't be found");
 			}else {
 				List<Curriculum> curricula = cDao.findAll();
 				for(Curriculum c : curricula) {
