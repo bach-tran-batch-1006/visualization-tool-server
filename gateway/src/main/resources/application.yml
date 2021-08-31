@@ -6,7 +6,13 @@ spring:
     cloud:
       gateway:
         default-filters:
-        - PrefixPath=/
+          - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+        globalcors:
+          corsConfigurations:
+            '[/**]':
+              allowedOrigins: "*"
+              allowedMethods: "*"
+              allowedHeaders: "*"
         routes:
         - id: user
           uri: lb://user
