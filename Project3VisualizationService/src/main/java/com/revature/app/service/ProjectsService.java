@@ -97,7 +97,7 @@ public class ProjectsService {
 	}
 	//deletes the project and sets associated project in curricula to 0
 	@Transactional
-	public int deleteProjectByID(String projID) throws ProjectNotFoundException, BadParameterException, EmptyParameterException {
+	public Projects deleteProjectByID(String projID) throws ProjectNotFoundException, BadParameterException, EmptyParameterException {
 		try {
 			if(projID.trim().equals("")){
 				throw new EmptyParameterException(emptyParam);
@@ -124,7 +124,7 @@ public class ProjectsService {
 				}
 			}
 			pDao.deleteById(id);
-			return id;
+			return project;
 		} catch (NumberFormatException e) {
 			throw new BadParameterException(badParam);
 		}

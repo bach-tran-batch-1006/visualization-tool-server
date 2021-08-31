@@ -13,8 +13,10 @@ import com.revature.app.dto.VisualizationDTO;
 import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.CurriculumNotFoundException;
 import com.revature.app.exception.EmptyParameterException;
+import com.revature.app.exception.PrimerNotFoundException;
 import com.revature.app.exception.VisualizationNotFoundException;
 import com.revature.app.model.Curriculum;
+import com.revature.app.model.Primer;
 import com.revature.app.model.Visualization;
 
 @Service
@@ -27,6 +29,9 @@ public class VisualizationService {
 	
 	@Autowired
 	private CurriculumService curriculumService;
+	
+	@Autowired
+	private PrimerServices primerService;
 
 	@Autowired
 	private VisualizationDao visualizationDao;
@@ -37,14 +42,18 @@ public class VisualizationService {
 		//check if title is empty, if so throw exception
 		if (visualizationDto.getTitle().trim().equals("")) {
 			throw new EmptyParameterException(emptyName);
-			//check if curricula is empty, if so instantiate with new empty list 
+			//check if curricula is empty, if so instantiate with new empty list
 		}else if(visualizationDto.getCurricula()==null) {
-			//List<Curriculum> curricula = new ArrayList<Curriculum>();
-			Visualization visualization = visualizationDao.save(new Visualization(visualizationDto.getTitle(),null));
-			return visualization;
+			if(visualizationDto.getPrimers()==null) {
+				Visualization visualization = visualizationDao.save(new Visualization(visualizationDto.getTitle(),null,null));
+				return visualization;
+			}else {
+				Visualization visualization = visualizationDao.save(new Visualization(visualizationDto.getTitle(),null,visualizationDto.getPrimers()));
+				return visualization;
+			}
 			//if both properties contain values, instantiate with said properties
 		}else {
-			Visualization visualization = visualizationDao.save(new Visualization(visualizationDto.getTitle(),visualizationDto.getCurricula()));
+			Visualization visualization = visualizationDao.save(new Visualization(visualizationDto.getTitle(),visualizationDto.getCurricula(),visualizationDto.getPrimers()));
 			return visualization;
 		}
 
@@ -87,6 +96,7 @@ public class VisualizationService {
 				throw new EmptyParameterException("The visualization name was left blank");
 			}
 			ArrayList<Curriculum> persistantCurriculumList = new ArrayList<>();
+			
 			//check if new/updated curricula were sent, set curricula list to it if so
 			if (!(visualizationDto.getCurricula()==null)) {
 				for (Curriculum eachCurriculumDTO : (ArrayList<Curriculum>) visualizationDto.getCurricula()) {
@@ -95,11 +105,19 @@ public class VisualizationService {
 				}
 				vis.setCurriculumList(persistantCurriculumList);
 			}
+			ArrayList<Primer> persistantPrimerList = new ArrayList<>();
+			if (!(visualizationDto.getPrimers()==null)) {
+				for (Primer eachPrimerDTO : (ArrayList<Primer>) visualizationDto.getPrimers()) {
+					persistantPrimerList.add(
+							primerService.getPrimerByID(String.valueOf(eachPrimerDTO.getPrimerId())));
+				}
+				vis.setPrimerList(persistantPrimerList);
+			}
 			vis.setVisualizationName(visualizationDto.getTitle());
 			//update the visualization
 			vis = visualizationDao.save(vis);
 			return vis;
-		} catch (NumberFormatException | CurriculumNotFoundException e) {
+		} catch (NumberFormatException | CurriculumNotFoundException  | PrimerNotFoundException e) {
 			throw new BadParameterException(badParam);
 		}
 	}

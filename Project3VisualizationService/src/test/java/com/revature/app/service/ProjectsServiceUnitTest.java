@@ -30,7 +30,7 @@ import com.revature.app.exception.ProjectNotAddedException;
 import com.revature.app.exception.ProjectNotFoundException;
 //import com.revature.app.model.Category;
 import com.revature.app.model.Projects;
-import com.revature.app.model.Projects;
+//import com.revature.app.model.Projects;
 //import com.revature.app.model.Skill;
 
 @ExtendWith(MockitoExtension.class)
@@ -51,7 +51,7 @@ class ProjectsServiceUnitTest {
 		when(pDao.save(new Projects("BackEnd Developer", new ArrayList<>())))
 				.thenReturn(new Projects("BackEnd Developer", new ArrayList<>()));
 
-		Projects actual = pService.addProject(new ProjectDto("BackEnd Developer", new ArrayList<>());
+		Projects actual = pService.addProject(new ProjectDto("BackEnd Developer", new ArrayList<>()));
 		Projects expected = new Projects("BackEnd Developer", new ArrayList<>());
 
 		assertEquals(expected, actual);
@@ -69,7 +69,7 @@ class ProjectsServiceUnitTest {
 
 	@Test
 	void test_getProjectById_success() throws ProjectNotFoundException, BadParameterException, EmptyParameterException {
-		when(curriculumDao.findByCurriculumId(1)).thenReturn(new Projects("BackEnd Developer", new ArrayList<>()));
+		when(pDao.findById(1)).thenReturn(new Projects("BackEnd Developer", new ArrayList<>()));
 		Projects actual = pService.getProjectByID("1");
 		Projects expected = new Projects("BackEnd Developer", new ArrayList<>());
 		assertEquals(expected, actual);
@@ -87,7 +87,7 @@ class ProjectsServiceUnitTest {
 	}
 	
 	@Test
-	void test_getProject_badID() throws CurriculumNotFoundException, EmptyParameterException {
+	void test_getProject_badID() throws ProjectNotFoundException, EmptyParameterException {
 		try {
 			pService.getProjectByID("test");
 			fail("BadParameterException was not thrown");
@@ -97,7 +97,7 @@ class ProjectsServiceUnitTest {
 	}
 	
 	@Test
-	void test_getProject_emptyID() throws CurriculumNotFoundException, BadParameterException {
+	void test_getProject_emptyID() throws ProjectNotFoundException, BadParameterException {
 		try {
 			pService.getProjectByID("   ");
 			fail("EmptyParameterException was not thrown");
@@ -123,7 +123,7 @@ class ProjectsServiceUnitTest {
 
 //
 	@Test
-	void test_updatebyID_success() throws EmptyParameterException, CurriculumNotFoundException, BadParameterException {
+	void test_updatebyID_success() throws EmptyParameterException, ProjectNotFoundException, BadParameterException {
 		when(pDao.findById(1)).thenReturn(new Projects("BackEnd Developer", new ArrayList<>()));
 		when(pDao.save(new Projects("Update Developer", new ArrayList<>())))
 				.thenReturn(new Projects("Update Developer", new ArrayList<>()));
@@ -136,7 +136,7 @@ class ProjectsServiceUnitTest {
 
 	
 	@Test
-	void test_updateProject_badID() throws EmptyParameterException, CurriculumNotFoundException {
+	void test_updateProject_badID() throws EmptyParameterException, ProjectNotFoundException {
 		try {
 			ProjectDto upCurr = new ProjectDto("TestCurr", null);
 			pService.updateProjectByID("test", upCurr);
@@ -147,10 +147,10 @@ class ProjectsServiceUnitTest {
 	}
 	
 	@Test
-	void test_updateCurriculum_emptyID() throws CurriculumNotFoundException, BadParameterException {
+	void test_updateCurriculum_emptyID() throws ProjectNotFoundException, BadParameterException {
 		try {
-			CurriculumDto upCurr = new CurriculumDto("TestCurr", null,0,0,0);
-			curriculumService.updateCurriculumByID("   ", upCurr);
+			ProjectDto upCurr = new ProjectDto("TestCurr", null);
+			pService.updateProjectByID("   ", upCurr);
 			fail("EmptyParameterException was not thrown");
 		} catch (EmptyParameterException e) {
 			assertEquals("The curriculum ID was left blank", e.getMessage());
@@ -158,10 +158,10 @@ class ProjectsServiceUnitTest {
 	}
 	
 	@Test
-	void test_updateCurriculum_emptyName() throws CurriculumNotFoundException, BadParameterException {
+	void test_updateCurriculum_emptyName() throws ProjectNotFoundException, BadParameterException {
 		try {
-			CurriculumDto upCurr = new CurriculumDto("    ", null,0,0,0);
-			curriculumService.updateCurriculumByID("1", upCurr);
+			ProjectDto upCurr = new ProjectDto("    ", null);
+			pService.updateProjectByID("1", upCurr);
 			fail("EmptyParameterException was not thrown");
 		} catch (EmptyParameterException e) {
 			assertEquals("The curriculum name was left blank", e.getMessage());
@@ -171,21 +171,33 @@ class ProjectsServiceUnitTest {
 	@Test
 	void test_updateCurriculum_curriculumNotFound() throws EmptyParameterException, BadParameterException {
 		try {
-			CurriculumDto upCurr = new CurriculumDto("TestCurr", null,0,0,0);
-			curriculumService.updateCurriculumByID("1", upCurr);
+			ProjectDto upCurr = new ProjectDto("TestCurr", null);
+			pService.updateProjectByID("1", upCurr);
 			fail("CurriculumNotFoundException was not thrown");
-		} catch (CurriculumNotFoundException e) {
+		} catch (ProjectNotFoundException e) {
 			assertEquals("The category could not be updated because it couldn't be found", e.getMessage());
 		}
 	}
 	
 //
 	@Test
-	void test_delete_success() throws CurriculumNotFoundException, EmptyParameterException, BadParameterException, ForeignKeyConstraintException {
-		when(curriculumDao.findByCurriculumId(1)).thenReturn(new Projects("Delete Developer", new ArrayList<>()));
+	void test_delete_success() throws ProjectNotFoundException, EmptyParameterException, BadParameterException, ForeignKeyConstraintException {
+		when(pDao.findById(1)).thenReturn(new Projects("Delete Developer", new ArrayList<>()));
 
 		Projects expected = new Projects("Delete Developer", new ArrayList<>());
-		Projects actual = curriculumService.deleteCurriculumByID("1");
+		Projects actual = null;
+		try {
+			actual = pService.deleteProjectByID("1");
+		} catch (ProjectNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadParameterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (EmptyParameterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		assertEquals(expected, actual);
 	}
@@ -193,17 +205,17 @@ class ProjectsServiceUnitTest {
 	@Test
 	void test_delete_notFound() throws EmptyParameterException, BadParameterException, ForeignKeyConstraintException {
 		try {
-			curriculumService.deleteCurriculumByID("1");
-		} catch(CurriculumNotFoundException e) {
+			pService.deleteProjectByID("1");
+		} catch(ProjectNotFoundException e) {
 			assertEquals("The curriculum could not be deleted because it couldn't be found", e.getMessage());
 		}
 
 	}
 	
 	@Test
-	void test_delete_badID() throws CurriculumNotFoundException, EmptyParameterException, ForeignKeyConstraintException {
+	void test_delete_badID() throws ProjectNotFoundException, EmptyParameterException, ForeignKeyConstraintException {
 		try {
-			curriculumService.deleteCurriculumByID("test");
+			pService.deleteProjectByID("test");
 			fail("BadParameterException was not thrown");
 		} catch (BadParameterException e) {
 			assertEquals("The curriculum ID provided must be of type int", e.getMessage());
@@ -211,11 +223,12 @@ class ProjectsServiceUnitTest {
 	}
 	
 	@Test
-	void test_delete_emptyID() throws CurriculumNotFoundException, BadParameterException, ForeignKeyConstraintException {
+	void test_delete_emptyID() throws ProjectNotFoundException, BadParameterException, ForeignKeyConstraintException {
 		try {
-			curriculumService.deleteCurriculumByID("    ");
+			pService.deleteProjectByID("    ");
 			fail("EmptyParameterException was not thrown");
 		} catch (EmptyParameterException e) {
 			assertEquals("The curriculum ID was left blank", e.getMessage());
 		}
 	}
+}
