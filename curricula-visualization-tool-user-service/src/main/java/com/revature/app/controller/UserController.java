@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,7 +33,8 @@ public class UserController {
 	@PostMapping("/register")
 	public ResponseEntity<User> createUser(@RequestBody UserDTO userDTO){
 		//User u = new User(user.get("first"), user.get("last"), user.get("email"), user.get("pass"));
-		
+		String hasPass = BCrypt.hashpw(userDTO.getPass(), BCrypt.gensalt());
+		userDTO.setPass(hasPass);
 		User u = uServ.registerUser(userDTO);
 		
 		if(u != null) {
@@ -68,9 +70,9 @@ public class UserController {
 	}
 	
 	@PostMapping("/update")
-	public ResponseEntity<User>  updateBuyerCredentials(@RequestBody LinkedHashMap<String, String> user){
+	public ResponseEntity<User>  updateUserCredentials(@RequestBody LinkedHashMap<String, String> user){
 		
-		User u = uServ.updateBuyer(  Integer.parseInt(user.get("id")) ,  user.get("newemail"), user.get("newpass"));
+		User u = uServ.updateUser(  Integer.parseInt(user.get("id")) ,  user.get("newemail"), user.get("newpass"));
 		
 		if(u == null) {
 			return new ResponseEntity<User>(u, HttpStatus.FORBIDDEN);

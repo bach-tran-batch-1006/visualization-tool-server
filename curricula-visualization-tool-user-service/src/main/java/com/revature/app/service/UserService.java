@@ -4,6 +4,7 @@ import java.util.List;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import com.revature.app.dao.UserRepo;
@@ -40,12 +41,14 @@ public User loginUser(String email, String password) {
 		//findByUsername will return null if the user does not exist
 		User u = uDao.findByEmail(email);
 		//If username does not exist return null
+		
 		if(u == null) {
 			return null;
 		}
+		
 		else {
 			//If you user exists but password is wrong return null
-			if(!u.getPass().equals(password)) {
+			if(!checkPass(password, u.getPass())) {
 				return null;
 			}
 			//Else return the logged in user
@@ -70,7 +73,7 @@ public User displayUser(String email) {
 	}
 	
 	
-	public User updateBuyer(int buyerid, String newemail, String newpass) {
+	public User updateUser(int buyerid, String newemail, String newpass) {
 		User user = uDao.findById(buyerid);
 		    // crush the variables of the object found
 		  if (user ==null) {
@@ -83,14 +86,20 @@ public User displayUser(String email) {
 			}
 			
 			if (!newpass.equals("")) {
-				
-				user.setPass(newpass);
+				String hasPass = BCrypt.hashpw(newpass, BCrypt.gensalt());
+				user.setPass(hasPass);
 		}
 				 		   
 			  return  uDao.save(user);
 		
 		}
 		   
+		}
+	private boolean checkPass(String plainPassword, String hashedPassword) {
+		if (BCrypt.checkpw(plainPassword, hashedPassword))
+		return true;
+		else
+		return false;
 		}
 	
 }
