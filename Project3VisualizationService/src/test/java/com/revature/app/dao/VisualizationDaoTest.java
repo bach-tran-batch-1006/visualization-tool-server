@@ -90,7 +90,7 @@ class VisualizationDaoTest {
 	@Test
 	@Order(20)
 	void testGetValidVisualization() {
-		Visualization actual = visualDao.getById(1);
+		Visualization actual = visualDao.findById(1);
 
 		assertNotNull(actual);
 		assertEquals(1, actual.getVisualizationId());
@@ -104,7 +104,7 @@ class VisualizationDaoTest {
 	@Order(30)
 	void testUpdateValidVisualization() {
 		String payload = "new name";
-		Visualization actual = visualDao.getById(1);
+		Visualization actual = visualDao.findById(1);
 		actual.setVisualizationName(payload);
 		Visualization expected = visualDao.save(actual);
 

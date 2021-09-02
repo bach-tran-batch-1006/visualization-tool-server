@@ -97,8 +97,8 @@ class VisualizationTest {
 		List<Curriculum> curlist = new ArrayList<>();
 		curlist.add(curriculum);
 
-		VisualizationDTO vsdto = new VisualizationDTO("first", curlist);
-		Visualization expected = new Visualization(1, "first", curlist);
+		VisualizationDTO vsdto = new VisualizationDTO("first", curlist, null);
+		Visualization expected = new Visualization("first", curlist);
 
 		objectmapper = new ObjectMapper();
 		String Jsondto = objectmapper.writeValueAsString(vsdto);
@@ -128,7 +128,7 @@ class VisualizationTest {
 
 		List<Curriculum> list = new ArrayList<Curriculum>();
 		// list.add(curriculum);
-		VisualizationDTO vsdto = new VisualizationDTO("", list);
+		VisualizationDTO vsdto = new VisualizationDTO("", list, null);
 
 		objectmapper = new ObjectMapper();
 		String Jsondto = objectmapper.writeValueAsString(vsdto);
@@ -172,7 +172,7 @@ class VisualizationTest {
 		
 		Session session = em.unwrap(Session.class);
 		Visualization expected= (session.get(Visualization.class, 1));
-		VisualizationDTO vsdto= new VisualizationDTO("newname", expected.getCurriculumList());
+		VisualizationDTO vsdto= new VisualizationDTO("newname", expected.getCurriculumList(), null);
 
 		
 	   Visualization newvs= expected;
@@ -196,7 +196,7 @@ class VisualizationTest {
 	void updateVisualizationDoNotExist() throws Exception {
 		Session session = em.unwrap(Session.class);
 		Visualization expected= (session.get(Visualization.class, 1));
-		VisualizationDTO vsdto= new VisualizationDTO("newname", expected.getCurriculumList());
+		VisualizationDTO vsdto= new VisualizationDTO("newname", expected.getCurriculumList(), null);
 		String Jsondto = this.objectmapper.writeValueAsString(vsdto);
 	
 
@@ -215,7 +215,7 @@ class VisualizationTest {
 	void updateVisualizationBlankName() throws Exception {
 		Session session = em.unwrap(Session.class);
 		Visualization expected= (session.get(Visualization.class, 1));
-		VisualizationDTO vsdto= new VisualizationDTO("", expected.getCurriculumList());
+		VisualizationDTO vsdto= new VisualizationDTO("", expected.getCurriculumList(), null);
         String Jsondto = this.objectmapper.writeValueAsString(vsdto);
 		MockHttpServletRequestBuilder build = MockMvcRequestBuilders.put("/visualization/1")
 				.contentType(MediaType.APPLICATION_JSON).content(Jsondto);

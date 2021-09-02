@@ -67,7 +67,7 @@ class CurriculumDaoUnitTest {
 	@Order(1)
 	void test_getCurriculumbyID_success() {
 
-		Curriculum actual = curriculumDao.getById(1);
+		Curriculum actual = curriculumDao.findByCurriculumId(1);
 		Curriculum expected = new Curriculum("BackEnd Developer1", new ArrayList<>());
 		expected.setCurriculumId(1);
 		assertEquals(expected, actual);

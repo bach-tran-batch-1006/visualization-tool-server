@@ -48,11 +48,11 @@ class VisualizationControllerTest {
 		this.mockmvc = MockMvcBuilders.standaloneSetup(vscontroller).build();
 		this.objectmapper = new ObjectMapper();
 
-		VisualizationDTO visualizationdto = new VisualizationDTO("first", null);
-		VisualizationDTO visualizationdtoblank= new VisualizationDTO("", null);
-		Visualization visualization = new Visualization(1, "first", null);
-		Visualization updatevisualization = new Visualization(1, "newname", null);
-		VisualizationDTO nameupdate= new VisualizationDTO("newname", null);
+		VisualizationDTO visualizationdto = new VisualizationDTO("first", null, null);
+		VisualizationDTO visualizationdtoblank= new VisualizationDTO("", null, null);
+		Visualization visualization = new Visualization("first", null);
+		Visualization updatevisualization = new Visualization("newname", null);
+		VisualizationDTO nameupdate= new VisualizationDTO("newname", null, null);
 		List <Visualization> all = new ArrayList<>();
 		all.add(visualization);
 		lenient().when(mockService.createVisualization(visualizationdto)).thenReturn(visualization);
@@ -84,10 +84,10 @@ class VisualizationControllerTest {
 	@Test
 	void CreateEndpoint() throws Exception {
 
-		VisualizationDTO body = new VisualizationDTO("first", null);
+		VisualizationDTO body = new VisualizationDTO("first", null, null);
 		String bodystring = this.objectmapper.writeValueAsString(body);
 
-		Visualization visualization = new Visualization(1, "first", null);
+		Visualization visualization = new Visualization("first", null);
 		String expected = this.objectmapper.writeValueAsString(visualization);
 
 		this.mockmvc.perform(post("/visualization").contentType(MediaType.APPLICATION_JSON).content(bodystring))
@@ -98,7 +98,7 @@ class VisualizationControllerTest {
 	
 	@Test
 	void CreatEndpointvalidBlankVisualization() throws Exception {
-		VisualizationDTO bodyupdate = new VisualizationDTO("", null);
+		VisualizationDTO bodyupdate = new VisualizationDTO("", null, null);
 		String bodystring = this.objectmapper.writeValueAsString(bodyupdate);
 
 
@@ -110,7 +110,7 @@ class VisualizationControllerTest {
 //
 	@Test
 	void FindEndpoint() throws Exception {
-		Visualization visualization = new Visualization(1, "first", null);
+		Visualization visualization = new Visualization("first", null);
 		String expected = this.objectmapper.writeValueAsString(visualization);
 		mockmvc.perform(get("/visualization/1")).andExpect(MockMvcResultMatchers.content().json(expected)).andDo(print())
 		.andExpect(MockMvcResultMatchers.status().isOk());
@@ -136,10 +136,10 @@ class VisualizationControllerTest {
 
 	@Test
 	void UpdateEndpointvalidVisualization() throws Exception {
-		VisualizationDTO bodyupdate = new VisualizationDTO("newname", null);
+		VisualizationDTO bodyupdate = new VisualizationDTO("newname", null, null);
 		String bodystring = this.objectmapper.writeValueAsString(bodyupdate);
 
-		Visualization visualization = new Visualization(1, "newname", null);
+		Visualization visualization = new Visualization("newname", null);
 		String expected = this.objectmapper.writeValueAsString(visualization);
 
 		this.mockmvc.perform(put("/visualization/1").contentType(MediaType.APPLICATION_JSON).content(bodystring))
@@ -151,7 +151,7 @@ class VisualizationControllerTest {
 
 	@Test
 	void UpdateEndpointDoNotExistVisualization() throws Exception {
-		VisualizationDTO bodyupdate = new VisualizationDTO("newname", null);
+		VisualizationDTO bodyupdate = new VisualizationDTO("newname", null, null);
 		String bodystring = this.objectmapper.writeValueAsString(bodyupdate);
 
 		this.mockmvc.perform(put("/visualization/98").contentType(MediaType.APPLICATION_JSON).content(bodystring))
@@ -160,7 +160,7 @@ class VisualizationControllerTest {
 	
 	@Test
 	void updateEndpointinvalidBlankVisualization() throws Exception {
-		VisualizationDTO bodyupdate = new VisualizationDTO("", null);
+		VisualizationDTO bodyupdate = new VisualizationDTO("", null, null);
 		String bodystring = this.objectmapper.writeValueAsString(bodyupdate);
 
 
@@ -170,7 +170,7 @@ class VisualizationControllerTest {
 	
 	@Test
 	void test_updateVisualization_badID() throws Exception {
-		VisualizationDTO bodyupdate = new VisualizationDTO("newname", null);
+		VisualizationDTO bodyupdate = new VisualizationDTO("newname", null, null);
 		String bodystring = this.objectmapper.writeValueAsString(bodyupdate);
 		this.mockmvc.perform(put("/visualization/test").contentType(MediaType.APPLICATION_JSON).content(bodystring))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest());
@@ -203,7 +203,7 @@ class VisualizationControllerTest {
 //
 	@Test
 	void GetallEndpointvalidVisualizations() throws Exception {
-		Visualization visualization = new Visualization(1, "first", null);
+		Visualization visualization = new Visualization("first", null);
 		List <Visualization> all = new ArrayList<>();
 		all.add(visualization);
 		String allexpect= this.objectmapper.writeValueAsString(all);
