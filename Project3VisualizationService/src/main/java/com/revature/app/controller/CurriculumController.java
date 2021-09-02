@@ -26,7 +26,7 @@ import com.revature.app.dto.CurriculumDto;
 import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.CurriculumNotFoundException;
 import com.revature.app.exception.EmptyParameterException;
-import com.revature.app.exception.ForeignKeyConstraintException;
+//import com.revature.app.exception.ForeignKeyConstraintException;
 //import com.revature.app.model.Category;
 import com.revature.app.model.Curriculum;
 import com.revature.app.service.CurriculumService;
@@ -130,10 +130,11 @@ public class CurriculumController {
 		} catch (BadParameterException e) {
 			logger.warn("User gave a bad parameter while trying to delete a curriculum from the database");
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		} catch(ForeignKeyConstraintException e) {
-			logger.warn("User attempted to delete a curriculum from the database but it was blocked because of a foreign key constraint");
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
+//		} catch(ForeignKeyConstraintException e) {
+//			logger.warn("User attempted to delete a curriculum from the database but it was blocked because of a foreign key constraint");
+//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+//		}
 	}
 	
 	@GetMapping(path="curriculum/{id}/categories")

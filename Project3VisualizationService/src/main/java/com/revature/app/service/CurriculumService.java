@@ -6,7 +6,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
+//import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.revature.app.dao.CurriculumDao;
@@ -18,7 +18,7 @@ import com.revature.app.exception.CurriculumNotAddedException;
 import com.revature.app.exception.CurriculumNotFoundException;
 import com.revature.app.exception.EmptyCurriculumException;
 import com.revature.app.exception.EmptyParameterException;
-import com.revature.app.exception.ForeignKeyConstraintException;
+//import com.revature.app.exception.ForeignKeyConstraintException;
 //import com.revature.app.exception.VisualizationNotFoundException;
 import com.revature.app.model.Curriculum;
 import com.revature.app.model.Visualization;
@@ -116,8 +116,8 @@ public class CurriculumService {
 		}
 	}
 
-	@Transactional(rollbackOn = {CurriculumNotFoundException.class, ForeignKeyConstraintException.class})
-	public Curriculum deleteCurriculumByID(String curId) throws CurriculumNotFoundException, EmptyParameterException, BadParameterException, ForeignKeyConstraintException {
+	@Transactional(rollbackOn = {CurriculumNotFoundException.class})
+	public Curriculum deleteCurriculumByID(String curId) throws CurriculumNotFoundException, EmptyParameterException, BadParameterException {
 		Curriculum curriculum = null;
 		try {
 			if(curId.trim().equals("")){
@@ -143,9 +143,10 @@ public class CurriculumService {
 			return curriculum;
 		} catch (NumberFormatException e) {
 			throw new BadParameterException(badParam);
-		} catch (DataIntegrityViolationException e) {
-			throw new ForeignKeyConstraintException("Please remove this curriculum from all visualizations before attempting to delete this curriculum");
 		}
+//		} catch (DataIntegrityViolationException e) {
+//			throw new ForeignKeyConstraintException("Please remove this curriculum from all visualizations before attempting to delete this curriculum");
+//		}
 	}
 	
 	//dependency on categories 

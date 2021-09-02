@@ -9,7 +9,7 @@ import java.util.List;
 //import javax.persistence.EntityManager;
 //import javax.persistence.EntityManagerFactory;
 
-
+//import org.hibernate.Session;
 //import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -25,19 +25,20 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import com.revature.app.model.Projects;
+//import com.revature.app.model.Category;
+import com.revature.app.model.Primer;
+//import com.revature.app.model.Skill;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
-class ProjectDaoUnitTest {
+class PrimerDaoTest {
 	
 	//testing with sonarCloud
 	@Autowired
-	private ProjectDao pDao;
+	private PrimerDao pDao;
 
 //	@Autowired
 //	EntityManagerFactory emf;
@@ -53,10 +54,10 @@ class ProjectDaoUnitTest {
 	@Transactional
 	@Commit
 	@Order(0)
-	void test_addCurriculum_success() {
-		Projects actual = pDao.save(new Projects("Project 1", new ArrayList<>()));
-		Projects expected = new Projects("Project 1", new ArrayList<>());
-		expected.setProjectId(1);
+	void test_addPrimer_success() {
+		Primer actual = pDao.save(new Primer("BackEnd Developer1", new ArrayList<>()));
+		Primer expected = new Primer("BackEnd Developer1", new ArrayList<>());
+		expected.setPrimerId(1);
 		assertEquals(expected, actual);
 	}
 
@@ -64,11 +65,11 @@ class ProjectDaoUnitTest {
 	@Transactional
 	@Commit
 	@Order(1)
-	void test_getCurriculumbyID_success() {
+	void test_getPrimerbyID_success() {
 
-		Projects actual = pDao.findById(1);
-		Projects expected = new Projects("Project 1", new ArrayList<>());
-		expected.setProjectId(1);
+		Primer actual = pDao.findByPrimerId(1);
+		Primer expected = new Primer("BackEnd Developer1", new ArrayList<>());
+		expected.setPrimerId(1);
 		assertEquals(expected, actual);
 	}
 
@@ -76,19 +77,19 @@ class ProjectDaoUnitTest {
 	@Transactional
 	@Commit
 	@Order(2)
-	void test_getAllCurriculum_success() {
-		pDao.save(new Projects("Project 2", new ArrayList<>()));
-		pDao.save(new Projects("Project 3", new ArrayList<>()));
-		List<Projects> actual = pDao.findAll();
+	void test_getAllPrimer_success() {
+		pDao.save(new Primer("BackEnd Developer2", new ArrayList<>()));
+		pDao.save(new Primer("BackEnd Developer3", new ArrayList<>()));
+		List<Primer> actual = pDao.findAll();
 		System.out.println("actual " + actual);
 
-		List<Projects> expected = new ArrayList<>();
-		Projects expected1 = new Projects("Project 1", new ArrayList<>());
-		expected1.setProjectId(1);
-		Projects expected2 = new Projects("Project 2", new ArrayList<>());
-		expected2.setProjectId(2);
-		Projects expected3 = new Projects("Project 3", new ArrayList<>());
-		expected3.setProjectId(3);
+		List<Primer> expected = new ArrayList<>();
+		Primer expected1 = new Primer("BackEnd Developer1", new ArrayList<>());
+		expected1.setPrimerId(1);
+		Primer expected2 = new Primer("BackEnd Developer2", new ArrayList<>());
+		expected2.setPrimerId(2);
+		Primer expected3 = new Primer("BackEnd Developer3", new ArrayList<>());
+		expected3.setPrimerId(3);
 		
 		expected.add(expected1);
 		expected.add(expected2);
@@ -101,11 +102,11 @@ class ProjectDaoUnitTest {
 	@Transactional
 	@Commit
 	@Order(3)
-	void test_updateCurriculumByID_success() {
-		//pDao.findById(1);
-		Projects actual = pDao.save(new Projects("update Developer", new ArrayList<>()));
-		Projects expected = new Projects("update Developer", new ArrayList<>());
-		expected.setProjectId(4);
+	void test_updatePrimerByID_success() {
+		//curriculumDao.findByCurriculumId(1);
+		Primer actual = pDao.save(new Primer("update Developer", new ArrayList<>()));
+		Primer expected = new Primer("update Developer", new ArrayList<>());
+		expected.setPrimerId(4);
 		assertEquals(expected, actual);
 	}
 
@@ -113,11 +114,12 @@ class ProjectDaoUnitTest {
 	@Transactional
 	@Commit
 	@Order(4)
-	void test_deleteCurriculumByID_success() {
+	void test_deletePrimerByID_success() {
 		pDao.deleteById(1);
 		
-		Projects actual = pDao.findById(1);
-		Projects expected = null;
+		Primer actual = pDao.findByPrimerId(1);
+		Primer expected = null;
 		assertEquals(expected, actual);
 	}
 }
+	

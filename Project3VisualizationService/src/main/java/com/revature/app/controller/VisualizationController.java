@@ -29,6 +29,7 @@ import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.EmptyParameterException;
 import com.revature.app.exception.VisualizationNotFoundException;
 import com.revature.app.model.Curriculum;
+import com.revature.app.model.Primer;
 import com.revature.app.model.Visualization;
 import com.revature.app.service.VisualizationService;
 
@@ -41,6 +42,9 @@ public class VisualizationController {
 	
 	@Autowired
 	private CurriculumController cControl;
+	
+	@Autowired
+	private PrimerController pControl;
 	
 //	@Bean
 //	//@LoadBalanced
@@ -147,15 +151,23 @@ public class VisualizationController {
 				if(vis == null) {
 					throw new VisualizationNotFoundException("404 vis not found");
 				}
-				if(vis.getCurriculumList()==null) {
-					return skillList;
-				}
-				for(Curriculum c : vis.getCurriculumList()) {
-					for(Integer i : c.getSkillList()) {
-						
-							skillList.add(i);
+				if(vis.getCurriculumList()!=null) {
+					for(Curriculum c : vis.getCurriculumList()) {
+						for(Integer i : c.getSkillList()) {
+							
+								skillList.add(i);
+						}
 					}
 				}
+				if(vis.getPrimerList()!=null) {
+					for(Primer p : vis.getPrimerList()) {
+						for(Integer i : p.getSkillList()) {
+							skillList.add(i);
+						}
+					}
+				}
+				return skillList;
+				
 			} catch (VisualizationNotFoundException e) {
 				logger.warn("User requested information about a visualization in the database that did not exist");
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -167,7 +179,7 @@ public class VisualizationController {
 				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 			}
 			
-			return skillList;
+			
 	}
 	//re-wrote logic should work
 	@GetMapping("visualization/{id}/categories")
@@ -186,16 +198,24 @@ public class VisualizationController {
 			if(vis == null) {
 				throw new VisualizationNotFoundException("404 vis not found");
 			}
-			if(vis.getCurriculumList()==null) {
-				return uniqueCats;
-			}
-			for(Curriculum c : vis.getCurriculumList()) {
-				String catId = ""+c.getCurriculumId()+"";
-				for(Integer i : cControl.getAllCategoriesById(catId)) {
-					uniqueCats.add(i);
+			if(vis.getCurriculumList()!=null) {
+				for(Curriculum c : vis.getCurriculumList()) {
+					String catId = ""+c.getCurriculumId()+"";
+					for(Integer i : cControl.getAllCategoriesById(catId)) {
+						uniqueCats.add(i);
+					}
+					
 				}
-				
 			}
+			if(vis.getPrimerList()!=null) {
+				for(Primer p : vis.getPrimerList()) {
+					String primeId = ""+p.getPrimerId()+"";
+					for(Integer i : pControl.getAllCategoriesById(primeId)) {
+						uniqueCats.add(i);
+					}
+				}
+			}
+			return uniqueCats;
 			
 		} catch (VisualizationNotFoundException e) {
 			logger.warn("User requested information about a visualization in the database that did not exist");
@@ -206,9 +226,7 @@ public class VisualizationController {
 		} catch (BadParameterException e) {
 			logger.warn("User gave a bad parameter while trying to get information about a visualization in the database");
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		}
-		
-		return uniqueCats;		
+		}		
 	}
 
 }

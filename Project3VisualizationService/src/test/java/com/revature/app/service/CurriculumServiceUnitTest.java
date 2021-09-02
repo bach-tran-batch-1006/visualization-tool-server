@@ -23,7 +23,7 @@ import com.revature.app.exception.CurriculumNotAddedException;
 import com.revature.app.exception.CurriculumNotFoundException;
 import com.revature.app.exception.EmptyCurriculumException;
 import com.revature.app.exception.EmptyParameterException;
-import com.revature.app.exception.ForeignKeyConstraintException;
+//import com.revature.app.exception.ForeignKeyConstraintException;
 //import com.revature.app.model.Category;
 import com.revature.app.model.Curriculum;
 //import com.revature.app.model.Skill;
@@ -176,7 +176,7 @@ class CurriculumServiceUnitTest {
 	
 //
 	@Test
-	void test_delete_success() throws CurriculumNotFoundException, EmptyParameterException, BadParameterException, ForeignKeyConstraintException {
+	void test_delete_success() throws CurriculumNotFoundException, EmptyParameterException, BadParameterException{
 		when(curriculumDao.findByCurriculumId(1)).thenReturn(new Curriculum("Delete Developer", new ArrayList<>()));
 
 		Curriculum expected = new Curriculum("Delete Developer", new ArrayList<>());
@@ -186,7 +186,7 @@ class CurriculumServiceUnitTest {
 	}
 
 	@Test
-	void test_delete_notFound() throws EmptyParameterException, BadParameterException, ForeignKeyConstraintException {
+	void test_delete_notFound() throws EmptyParameterException, BadParameterException {
 		try {
 			curriculumService.deleteCurriculumByID("1");
 		} catch(CurriculumNotFoundException e) {
@@ -196,7 +196,7 @@ class CurriculumServiceUnitTest {
 	}
 	
 	@Test
-	void test_delete_badID() throws CurriculumNotFoundException, EmptyParameterException, ForeignKeyConstraintException {
+	void test_delete_badID() throws CurriculumNotFoundException, EmptyParameterException{
 		try {
 			curriculumService.deleteCurriculumByID("test");
 			fail("BadParameterException was not thrown");
@@ -206,7 +206,7 @@ class CurriculumServiceUnitTest {
 	}
 	
 	@Test
-	void test_delete_emptyID() throws CurriculumNotFoundException, BadParameterException, ForeignKeyConstraintException {
+	void test_delete_emptyID() throws CurriculumNotFoundException, BadParameterException{
 		try {
 			curriculumService.deleteCurriculumByID("    ");
 			fail("EmptyParameterException was not thrown");
