@@ -13,10 +13,10 @@ import com.revature.app.model.Primer;
 
 
 @Repository
-public interface PrimerDao extends JpaRepository<Primer, Integer>{    
-    
+public interface PrimerDao extends JpaRepository<Primer, Integer>{
+
 
     public Primer findByPrimerId(int primerId);
 
     public List<Primer> findAll();
-} 
+}

@@ -39,7 +39,7 @@ public class PrimerController {
 //    RestTemplate restTemplate() {
 //        return new RestTemplate();
 //    }
-    
+//    
     @Autowired
     private RestTemplate rest;
 

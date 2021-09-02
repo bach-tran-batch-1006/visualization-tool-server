@@ -1,4 +1,4 @@
- package com.revature.app.exception;
+package com.revature.app.exception;
 
 @SuppressWarnings("serial")
 public class PrimerNotAddedException extends Exception {

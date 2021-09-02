@@ -34,25 +34,25 @@ import lombok.ToString;
 @NoArgsConstructor
 public class Primer {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "primer_id")
-	private int primerId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "primer_id")
+    private int primerId;
 
-	@Column(name = "primer_name")
-	private String primerName;
-	
+    @Column(name = "primer_name")
+    private String primerName;
 
-	@ElementCollection
-	private List<Integer> skillList;
-	
-	public Primer(String primerName, List<Integer> skillList) {
-		this.primerName = primerName;
-		this.skillList = skillList;
-	}
-	
-	public Primer(PrimerDto primeDTO) {
-		this.primerName = primeDTO.getName();
-		this.skillList = primeDTO.getSkillList();
-	}
+
+    @ElementCollection
+    private List<Integer> skillList;
+
+    public Primer(String primerName, List<Integer> skillList) {
+        this.primerName = primerName;
+        this.skillList = skillList;
+    }
+
+    public Primer(PrimerDto primeDTO) {
+        this.primerName = primeDTO.getName();
+        this.skillList = primeDTO.getSkillList();
+    }
 }

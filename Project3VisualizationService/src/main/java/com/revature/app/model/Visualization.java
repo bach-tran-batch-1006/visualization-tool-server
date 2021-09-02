@@ -51,7 +51,13 @@ public class Visualization {
 		this.curriculumList = curriculumList;
 		this.primerList = primerList;
 	}
-	
+
+	public Visualization(String visualizationName, List<Curriculum> curriculumList, List<Primer> primerList) {
+		super();
+		this.visualizationName = visualizationName;
+		this.curriculumList = curriculumList;
+		this.primerList = primerList;
+	}
 	
 	
 	
