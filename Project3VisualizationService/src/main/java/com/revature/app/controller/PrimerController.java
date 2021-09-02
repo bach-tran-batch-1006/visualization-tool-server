@@ -34,11 +34,11 @@ import com.revature.app.service.PrimerServices;
 @CrossOrigin(origins = "*")
 @RestController
 public class PrimerController {
-	@Bean
-    //@LoadBalanced
-    RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
+//	@Bean
+//    //@LoadBalanced
+//    RestTemplate restTemplate() {
+//        return new RestTemplate();
+//    }
     
     @Autowired
     private RestTemplate rest;

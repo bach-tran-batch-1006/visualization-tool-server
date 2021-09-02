@@ -99,6 +99,7 @@ class VisualizationTest {
 
 		VisualizationDTO vsdto = new VisualizationDTO("first", curlist, null);
 		Visualization expected = new Visualization("first", curlist);
+		expected.setVisualizationId(1);
 
 		objectmapper = new ObjectMapper();
 		String Jsondto = objectmapper.writeValueAsString(vsdto);
