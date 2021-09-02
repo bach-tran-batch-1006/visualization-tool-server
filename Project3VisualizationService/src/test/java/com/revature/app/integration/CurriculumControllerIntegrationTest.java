@@ -262,7 +262,7 @@ class CurriculumControllerIntegrationTest {
 		//Add a Visualization the Curriculum is a part of
 		ArrayList<Curriculum> currList = new ArrayList<Curriculum>();
 		currList.add(session.get(Curriculum.class, 3));
-		Visualization testVis = new Visualization(0, "TestVis", currList);
+		Visualization testVis = new Visualization("TestVis", currList);
 		em.getTransaction().begin();
 		em.persist(testVis);
 		em.getTransaction().commit();

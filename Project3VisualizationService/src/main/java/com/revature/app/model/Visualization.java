@@ -1,5 +1,6 @@
 package com.revature.app.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -33,12 +34,26 @@ public class Visualization {
 	
 	@ElementCollection
 	private List<Curriculum> curriculumList;
+	
+	@ElementCollection
+	private List<Primer> primerList;
 
 	public Visualization(String visualizationName, List<Curriculum> curriculumList) {
 		super();
 		this.visualizationName = visualizationName;
 		this.curriculumList = curriculumList;
+		this.primerList = null;
 	}
+
+	public Visualization(String visualizationName, List<Curriculum> curriculumList, List<Primer> primerList) {
+		super();
+		this.visualizationName = visualizationName;
+		this.curriculumList = curriculumList;
+		this.primerList = primerList;
+	}
+	
+	
+	
 	
 	
 }
