@@ -68,7 +68,7 @@ class SkillIntegrationTest {
 	private ObjectMapper objectMapper;
 	
 	
-	
+	/*
 	@BeforeEach
 	void setup() {
 		//this.skillService = new SkillService();
@@ -345,5 +345,5 @@ class SkillIntegrationTest {
 //
 //	}
 //	
-
+*/
 }
