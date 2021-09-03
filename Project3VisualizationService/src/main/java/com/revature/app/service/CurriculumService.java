@@ -131,8 +131,8 @@ public class CurriculumService {
 				List<Visualization> vList = vDao.findAll();
 				for(Visualization v : vList) {
 					if(v.getCurriculumList().contains(id)) {
-						List<Curriculum> newCurric = v.getCurriculumList();
-						newCurric.remove(curriculum);
+						List<Integer> newCurric = v.getCurriculumList();
+						newCurric.remove(id);
 						v.setCurriculumList(newCurric);
 						vDao.save(v);
 					}

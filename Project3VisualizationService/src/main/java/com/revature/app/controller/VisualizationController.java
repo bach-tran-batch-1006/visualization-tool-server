@@ -152,16 +152,18 @@ public class VisualizationController {
 					throw new VisualizationNotFoundException("404 vis not found");
 				}
 				if(vis.getCurriculumList()!=null) {
-					for(Curriculum c : vis.getCurriculumList()) {
-						for(Integer i : c.getSkillList()) {
-							
+
+					for(Integer c : vis.getCurriculumList()) {
+						Curriculum current = (Curriculum) cControl.getCurriculumById(""+c+"");
+						for(Integer i : current.getSkillList()) {
 								skillList.add(i);
 						}
 					}
 				}
 				if(vis.getPrimerList()!=null) {
-					for(Primer p : vis.getPrimerList()) {
-						for(Integer i : p.getSkillList()) {
+					for(Integer p : vis.getPrimerList()) {
+						Primer current = (Primer) pControl.getPrimerById(""+p+"");
+						for(Integer i : current.getSkillList()) {
 							skillList.add(i);
 						}
 					}
@@ -199,25 +201,25 @@ public class VisualizationController {
 				throw new VisualizationNotFoundException("404 vis not found");
 			}
 			if(vis.getCurriculumList()!=null) {
-				for(Curriculum c : vis.getCurriculumList()) {
-					String catId = ""+c.getCurriculumId()+"";
-					for(Integer i : cControl.getAllCategoriesById(catId)) {
+				for(Integer c : vis.getCurriculumList()) {
+					Curriculum current = (Curriculum) cControl.getCurriculumById(""+c+"");
+					for(Integer i : current.getSkillList()) {
 						uniqueCats.add(i);
 					}
 					
 				}
 			}
 			if(vis.getPrimerList()!=null) {
-				for(Primer p : vis.getPrimerList()) {
-					String primeId = ""+p.getPrimerId()+"";
-					for(Integer i : pControl.getAllCategoriesById(primeId)) {
+				for(Integer p : vis.getPrimerList()) {
+					Primer current = (Primer) pControl.getPrimerById(""+p+"");
+					for(Integer i : current.getSkillList()) {
 						uniqueCats.add(i);
 					}
 				}
 			}
 			return uniqueCats;
-			
-			return uniqueCats;
+//			
+//			return uniqueCats;
 		} catch (VisualizationNotFoundException e) {
 			logger.warn("User requested information about a visualization in the database that did not exist");
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());

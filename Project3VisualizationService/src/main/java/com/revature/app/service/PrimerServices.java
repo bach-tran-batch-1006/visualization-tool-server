@@ -134,8 +134,8 @@ public class PrimerServices {
 				List<Visualization> vList = vDao.findAll();
 				for(Visualization v : vList) {
 					if(v.getCurriculumList().contains(id)) {
-						List<Primer> newPrimer = v.getPrimerList();
-						newPrimer.remove(primer);
+						List<Integer> newPrimer = v.getPrimerList();
+						newPrimer.remove(id);
 						v.setPrimerList(newPrimer);
 						vDao.save(v);
 					}

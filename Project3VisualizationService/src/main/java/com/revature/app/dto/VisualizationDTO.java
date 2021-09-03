@@ -22,7 +22,7 @@ public class VisualizationDTO {
 
 	String title;
 	
-	List<Curriculum> curricula;
+	List<Integer> curricula;
 	
-	List<Primer> primers;
+	List<Integer> primers;
 }
