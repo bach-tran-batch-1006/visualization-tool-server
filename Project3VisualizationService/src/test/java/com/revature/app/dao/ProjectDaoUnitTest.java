@@ -66,7 +66,7 @@ class ProjectDaoUnitTest {
 	@Order(1)
 	void test_getCurriculumbyID_success() {
 
-		Projects actual = pDao.getById(1);
+		Projects actual = pDao.findById(1);
 		Projects expected = new Projects("Project 1", new ArrayList<>());
 		expected.setProjectId(1);
 		assertEquals(expected, actual);

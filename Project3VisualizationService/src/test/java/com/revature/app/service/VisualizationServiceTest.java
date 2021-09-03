@@ -33,11 +33,11 @@ class VisualizationServiceTest {
 
 	@BeforeEach
 	void beforeTest() throws VisualizationNotFoundException {
-		Visualization visual1 = new Visualization(1, "Mock Visual", null);
-		Visualization visual2 = new Visualization(2, "Java React", null);
+		Visualization visual1 = new Visualization("Mock Visual", null);
+		Visualization visual2 = new Visualization("Java React", null);
 		
-		Visualization preUpdate = new Visualization(0, "currVis", null);
-		Visualization newVisual = new Visualization(10, "currVisual", null); 
+		Visualization preUpdate = new Visualization("currVis", null);
+		Visualization newVisual = new Visualization("currVisual", null); 
 
 //		Skill skill1 = new Skill(1, "", new Category(1, "", null));
 //		Skill skill2 = new Skill(2, "", new Category(1, "", null));
@@ -78,7 +78,7 @@ class VisualizationServiceTest {
 	@Test
 	void test_findAllVisualization_happy() {
 		List<Visualization> expected = new ArrayList<Visualization>();
-		expected.add(new Visualization(1, "Mock Visual", null));
+		expected.add(new Visualization("Mock Visual", null));
 		List<Visualization> actual = visualizationService.findAllVisualization();
 		assertEquals(expected, actual);
 	}
@@ -86,7 +86,7 @@ class VisualizationServiceTest {
 //
 	@Test
 	void test_findVisualizationByID_happy() throws VisualizationNotFoundException, EmptyParameterException, BadParameterException{
-		Visualization expected = new Visualization(2, "Java React", null);
+		Visualization expected = new Visualization("Java React", null);
 		Visualization actual = visualizationService.findVisualizationByID("2");
 		assertEquals(expected, actual);
 	}
@@ -125,8 +125,8 @@ class VisualizationServiceTest {
 //
 	@Test
 	void test_updateVisualizationById_happy() throws VisualizationNotFoundException, BadParameterException, EmptyParameterException {	
-		VisualizationDTO visDto = new VisualizationDTO("currVis", null);
-		Visualization expected = new Visualization(10, "currVisual", null); 
+		VisualizationDTO visDto = new VisualizationDTO("currVis", null, null);
+		Visualization expected = new Visualization("currVisual", null); 
 		Visualization actual = visualizationService.updateVisualizationByID("10", visDto);
 		assertEquals(expected, actual);
 	}
@@ -134,7 +134,7 @@ class VisualizationServiceTest {
 	@Test
 	void test_updateVisualizationById_emptyID() throws VisualizationNotFoundException, BadParameterException {	
 		try {
-			VisualizationDTO visDto = new VisualizationDTO("TestVis", null);
+			VisualizationDTO visDto = new VisualizationDTO("TestVis", null, null);
 			visualizationService.updateVisualizationByID("   ", visDto);
 			fail("EmptyParameterException not thrown");
 		} catch (EmptyParameterException e) {
@@ -145,7 +145,7 @@ class VisualizationServiceTest {
 	@Test
 	void test_updateVisualizationById_emptyNewName() throws VisualizationNotFoundException, BadParameterException {	
 		try {
-			VisualizationDTO visDto = new VisualizationDTO("", null);
+			VisualizationDTO visDto = new VisualizationDTO("", null, null);
 			visualizationService.updateVisualizationByID("1", visDto);
 			fail("EmptyParameterException not thrown");
 		} catch (EmptyParameterException e) {
@@ -156,7 +156,7 @@ class VisualizationServiceTest {
 	@Test
 	void test_updateVisualizationById_badParameter() throws VisualizationNotFoundException, EmptyParameterException {	
 		try {
-			VisualizationDTO visDto = new VisualizationDTO("TestVis", null);
+			VisualizationDTO visDto = new VisualizationDTO("TestVis", null, null);
 			visualizationService.updateVisualizationByID("test", visDto);
 			fail("BadParameterException not thrown");
 		} catch (BadParameterException e) {
@@ -167,7 +167,7 @@ class VisualizationServiceTest {
 	@Test
 	void test_updateVisualizationById_visualizationNotFound() throws BadParameterException, EmptyParameterException {	
 		try {
-			VisualizationDTO visDto = new VisualizationDTO("TestVis", null);
+			VisualizationDTO visDto = new VisualizationDTO("TestVis", null, null);
 			visualizationService.updateVisualizationByID("20202020", visDto);
 			fail("VisualizationNotFound Exception not thrown");
 		} catch (VisualizationNotFoundException e) {
@@ -218,8 +218,8 @@ class VisualizationServiceTest {
 //
 	@Test
 	void test_createVisualization_happy() throws EmptyParameterException{
-		VisualizationDTO visDto = new VisualizationDTO("currVis", null);
-		Visualization expected = new Visualization(10, "currVisual", null); 
+		VisualizationDTO visDto = new VisualizationDTO("currVis", null, null);
+		Visualization expected = new Visualization("currVisual", null); 
 		Visualization actual = visualizationService.createVisualization(visDto);
 		assertEquals(expected, actual);
 	}
@@ -227,7 +227,7 @@ class VisualizationServiceTest {
 	@Test
 	void test_createVisualization_emptyName() {
 		try {
-			VisualizationDTO visDto = new VisualizationDTO("", null);
+			VisualizationDTO visDto = new VisualizationDTO("", null, null);
 			visualizationService.createVisualization(visDto);
 			fail("EmptyParameterException not thrown");
 		} catch (EmptyParameterException e) {
