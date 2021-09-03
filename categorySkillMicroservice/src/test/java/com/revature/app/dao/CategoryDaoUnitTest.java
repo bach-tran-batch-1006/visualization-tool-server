@@ -37,7 +37,7 @@ class CategoryDaoUnitTest {
 	void setUp() throws Exception {
 		
 	}
-
+/*
 	@Test
 	@Order(0)
 	@Commit
@@ -102,6 +102,6 @@ class CategoryDaoUnitTest {
 			assertEquals(null, categoryDAO.findById(1));		
 	}
 	
-	
+	*/
 
 }
