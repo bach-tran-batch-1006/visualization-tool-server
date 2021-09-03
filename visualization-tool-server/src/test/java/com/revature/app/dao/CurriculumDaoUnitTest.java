@@ -60,7 +60,7 @@ class CurriculumDaoUnitTest {
 		assertEquals(expected, actual);
 	}
 
-	@Test
+	/*@Test
 	@Transactional
 	@Commit
 	@Order(1)
@@ -69,7 +69,7 @@ class CurriculumDaoUnitTest {
 		Curriculum actual = curriculumDao.getById(1);
 		Curriculum expected = new Curriculum(1, "BackEnd Developer", new ArrayList<>());
 		assertEquals(expected, actual);
-	}
+	}*/
 
 	@Test
 	@Transactional

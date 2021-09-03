@@ -22,7 +22,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 @RestController
-
+//@RequestMapping("user")
 @AllArgsConstructor(onConstructor=@__(@Autowired))
 @NoArgsConstructor
 @CrossOrigin(origins="*")
@@ -81,4 +81,7 @@ public class UserController {
 		return new ResponseEntity<User>(u, HttpStatus.OK);
 	}
 
+	
+	
+	
 }

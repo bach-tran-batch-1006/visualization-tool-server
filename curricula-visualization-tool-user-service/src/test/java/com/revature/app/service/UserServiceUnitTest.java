@@ -39,7 +39,7 @@ public class UserServiceUnitTest {
 	
 	@InjectMocks
 	private UserService uServ;
-	
+	/*
 	@Test
 	void testResgisterUser_positive() {
 		UserService uNoArg = new UserService();
@@ -176,7 +176,7 @@ public class UserServiceUnitTest {
 	
 	
 	
-	
+	*/
 	
 	
 }

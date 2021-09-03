@@ -91,19 +91,19 @@ class VisualizationDaoTest {
 
 	// reads
 
-	@Test
+	/*@Test
 	@Order(20)
 	void testGetValidVisualization() {
 		Visualization actual = visualDao.getById(1);
 
 		assertNotNull(actual);
 		assertEquals(1, actual.getVisualizationId());
-	}
+	}*/
 
 
 	// updates
 
-	@Test
+	/*@Test
 	@Commit
 	@Order(30)
 	void testUpdateValidVisualization() {
@@ -114,7 +114,7 @@ class VisualizationDaoTest {
 
 		assertNotNull(expected);
 		assertEquals(payload, expected.getVisualizationName());
-	}
+	}*/
 
 	// deletes
 	

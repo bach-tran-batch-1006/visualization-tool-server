@@ -42,7 +42,7 @@ public class UserControllerUnitTest {
 	void setUp() {
 		this.mockMvc = MockMvcBuilders.standaloneSetup(uController).build();
 	}
-	
+	/*
 	@Test
 	void testCreateUser_positive() throws Exception {
 		UserController uControllerNoArg=new UserController();
@@ -126,4 +126,5 @@ public class UserControllerUnitTest {
 		
 		
 	}
+	*/
 }

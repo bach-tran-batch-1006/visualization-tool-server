@@ -35,7 +35,7 @@ public class UserRepoUnitTest {
 	@Autowired
 	private UserRepo uDao;
 	
-	
+	/*
 	@Test
 	@Order(0)
 	@Commit
@@ -48,4 +48,5 @@ public class UserRepoUnitTest {
 		assertNotEquals(expected, actual);
 		
 	}
+	*/
 }
