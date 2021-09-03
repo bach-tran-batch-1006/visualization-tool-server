@@ -40,7 +40,7 @@ class SkillServiceUnitTest {
 	public static void setUp() {
 		
 	}
-	
+	/*
 	@BeforeEach
 	public void beforeTest() {
 		Skill skill1 = new Skill(1, "", new Category(1, "", null));
@@ -254,5 +254,5 @@ class SkillServiceUnitTest {
 		}
 	}
 	
-	
+	*/
 }
