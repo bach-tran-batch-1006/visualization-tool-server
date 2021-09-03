@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8090
 
 spring:
     application.name: gateway
@@ -28,5 +28,7 @@ spring:
           - StripPrefix=1
         - id: visualization
           uri: lb://visualization
-          predicates:          - Path=/visualization/**
-          filters:          - StripPrefix=1
+          predicates:
+          - Path=/visualization/**
+          filters:
+          - StripPrefix=1
