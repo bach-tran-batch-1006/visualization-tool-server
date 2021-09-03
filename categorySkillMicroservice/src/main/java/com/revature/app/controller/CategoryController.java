@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -24,9 +26,11 @@ import com.revature.app.exception.CategoryNotFoundException;
 import com.revature.app.exception.EmptyParameterException;
 import com.revature.app.exception.ForeignKeyConstraintException;
 import com.revature.app.model.Category;
+import com.revature.app.model.Skill;
 import com.revature.app.service.CategoryService;
 
 @CrossOrigin(origins = "*")
+@RequestMapping("category")
 @RestController
 public class CategoryController {
 
@@ -37,7 +41,8 @@ public class CategoryController {
 	
 	String goodLog = "User called the endpoint ";
 
-	@PostMapping(path = "category")
+	//@PostMapping(path = "category")
+	@PostMapping(path = "/add")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public Category addCategory(@RequestBody CategoryDTO categoryDTO) throws CategoryBlankInputException {
 		try {
@@ -51,13 +56,28 @@ public class CategoryController {
 		}
 	}
 
-	@GetMapping(path = "category")
-	public List<Category> getAllCategories() {
-		logger.info("User called the endpoint to get all categories from the database");
-		return categoryService.getAllCategories();
-	}
+	//this get all categogies for all users
+	//if use this then go to category service and the method for this not taking user id
+	//@GetMapping(path = "category")
+//	@GetMapping(path = "/user/{id}")
+//	public List<Category> getAllCategories() {
+//		logger.info("User called the endpoint to get all categories from the database");
+//		return categoryService.getAllCategories();
+//	}
+	
+	
+	
+	//this get all categories based on user id
+	
+	@GetMapping("/user/{id}")
+	public ResponseEntity<List<Category>> getUserCategories(@PathVariable("id")int id){
+		return new ResponseEntity<List<Category>>(  categoryService.getAllCategories(id), HttpStatus.OK);
+	}	
+	
+	
+	//@PutMapping(path = "category/{id}")
 
-	@PutMapping(path = "category/{id}")
+	@PutMapping(path = "/{id}")
 	public Category updateCategory(@PathVariable("id") String id, @RequestBody CategoryDTO categoryDTO) {
 		try {
 			Category category = categoryService.updateCategory(id, categoryDTO);
@@ -77,7 +97,7 @@ public class CategoryController {
 		}
 	}
 
-	@DeleteMapping(path = "category/{id}")
+	@DeleteMapping(path = "/{id}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public Object deleteCategory(@PathVariable("id") String id) {
 		try {

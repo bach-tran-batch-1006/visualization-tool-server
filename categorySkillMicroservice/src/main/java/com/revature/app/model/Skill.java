@@ -36,18 +36,20 @@ public class Skill {
 	@Column(name = "skill_name")
 	private String skillName;
 	
-	@ManyToOne
-	@JoinColumn(name = "category_id", nullable = true)
+
 	
+	@ManyToOne
+	@JoinColumn(name = "category_id", nullable = true)	
 	private Category category;
 	
-
+	@Column(name="userid")
+	private int userid =0;
 	
 	
 	
 	public Skill(SkillDTO skillDTO) {
 		this.skillName = skillDTO.getName();
-		
+		this.userid = skillDTO.getUserid();
 		
 		if(skillDTO.getCategory().getCategoryId()!= 0) {
 			this.category = skillDTO.getCategory();
@@ -55,12 +57,7 @@ public class Skill {
 				this.category = null;
 		}
 		
-//		if(skillDTO.getCurriculumListl() ==null) {
-//			this.curriculumList = null;
-//		}else {
-//			this.curriculumList = skillDTO.getCurriculumListl();			
-//		}
-//	
+
 	}
 	
 	public void updateFromDTO(SkillDTO skillDTO) {

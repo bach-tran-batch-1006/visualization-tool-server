@@ -44,14 +44,14 @@ public class CategoryService {
 		if(inputCategory.getCategoryName().trim().equals("")) {
 			throw new CategoryBlankInputException("The category name was left blank");
 		}
-		category = new Category(0, inputCategory.getCategoryName(), inputCategory.getCategoryDescription());
+		category = new Category(inputCategory.getCategoryName(), inputCategory.getCategoryDescription(),  inputCategory.getUserid());
 		category = categoryDAO.save(category);
 		return category;
 	}
 
 	@Transactional
-	public List<Category> getAllCategories() {
-		return categoryDAO.findAll();
+	public List<Category> getAllCategories(int id) {
+		return categoryDAO.findAllByuserid(id);
 
 	}
 

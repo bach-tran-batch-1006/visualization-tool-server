@@ -29,8 +29,8 @@ public class SkillService {
 	private SkillDAO skillDAO;
 
 	@Transactional
-	public List<Skill> getAllSkills(){
-		return skillDAO.findAll();
+	public List<Skill> getAllSkills(int id){
+		return skillDAO.findAllByuserid(id);
 	}
 	
 

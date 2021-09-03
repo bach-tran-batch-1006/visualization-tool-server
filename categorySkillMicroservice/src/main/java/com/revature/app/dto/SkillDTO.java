@@ -17,5 +17,6 @@ public class SkillDTO {
 
 	String name;
 	Category category;
+	int userid;
 	
 }

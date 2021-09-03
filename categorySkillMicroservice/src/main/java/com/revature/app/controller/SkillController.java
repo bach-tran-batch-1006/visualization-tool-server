@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -29,6 +30,7 @@ import com.revature.app.service.CategoryService;
 import com.revature.app.service.SkillService;
 
 @CrossOrigin(origins = "*")
+@RequestMapping("skill")
 @RestController
 public class SkillController {
 
@@ -48,33 +50,45 @@ public class SkillController {
 	
 	String goodLog = "User called the endpoint ";
 	
-	@GetMapping(path="allSkills")
-	public Object getAllSkills() {
-		List<Skill> skillList;
-		skillList = skillService.getAllSkills();
-		logger.info("User called the endpoint to get all skills from the database");
-		return skillList;
-	}
+	//this return all skills not based on user id
+//	@GetMapping(path="/allSkills")
+//	@GetMapping(path="/all")
+//	public Object getAllSkills() {
+//		List<Skill> skillList;
+//		skillList = skillService.getAllSkills();
+//		logger.info("User called the endpoint to get all skills from the database");
+//		return skillList;
+//	}
+//	
 	
-	@GetMapping(path="skill/{id}")
-	public Object getSkillByID(@PathVariable("id") String skillID) {
-		try {
-			Skill skill = skillService.getSkillByID(skillID);
-			String logString = String.format(goodLog, "to get information about a skill in the database with id %s");
-			logString = String.format(logString, skillID);
-			logger.info(logString);
-			return skill;
-		} catch (BadParameterException e) {
-			logger.warn("User gave a bad parameter while trying to get information about a skill in the database");
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		} catch (EmptyParameterException e) {
-			logger.warn("User left a parameter blank while trying to get information about a skill in the database");
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		} catch (SkillNotFoundException e) {
-			logger.warn("User requested information about a skill in the database that did not exist");
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-		}
-	}
+	//take in user id; pass in 0 or id of loggined user
+	@GetMapping("/user/{id}")
+	public ResponseEntity<List<Skill>> getUserSkills(@PathVariable("id")int id){
+		return new ResponseEntity<List<Skill>>( skillService.getAllSkills(id), HttpStatus.OK);
+	}	
+	
+	
+	//this get skill by skill id
+	//@GetMapping(path="/{id}")
+//	@GetMapping(path="/{id}")
+//	public Object getSkillByID(@PathVariable("id") String skillID) {
+//		try {
+//			Skill skill = skillService.getSkillByID(skillID);
+//			String logString = String.format(goodLog, "to get information about a skill in the database with id %s");
+//			logString = String.format(logString, skillID);
+//			logger.info(logString);
+//			return skill;
+//		} catch (BadParameterException e) {
+//			logger.warn("User gave a bad parameter while trying to get information about a skill in the database");
+//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+//		} catch (EmptyParameterException e) {
+//			logger.warn("User left a parameter blank while trying to get information about a skill in the database");
+//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+//		} catch (SkillNotFoundException e) {
+//			logger.warn("User requested information about a skill in the database that did not exist");
+//			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+//		}
+//	}
 	
 	//this will set the id foriegn key in the skill table to the primary key of categrory in the category tabloe
 	//params {String name: "angular", category:{ id: 1, categoryName: "front end",categoryDescription:"front end techs" }}
@@ -84,7 +98,7 @@ public class SkillController {
 	//String name: "angular", category:{ id: "", categoryName: "",categoryDescription:"" }
 	//then set the id foreign key of category in skill table to null
 	//can add skill now with linking to curicular or categrory
-	@PostMapping(path="skill")
+	@PostMapping(path="/add")
 	public Object addSkills(@RequestBody SkillDTO skillDTO) {
 		Skill skill = null;
 		try {
@@ -100,8 +114,8 @@ public class SkillController {
 	//must have category id in the category object in side skillDTO
 	//or there will be no link to the specific category in the category table
 	
-	
-	@PutMapping(path="skill/{id}")
+	//@PutMapping(path="skill/{id}")
+	@PutMapping(path="/{id}")
 	public Object updateSkill(@PathVariable("id") String skillID, @RequestBody SkillDTO skillDTO) {
 		Skill skill = null;
 	
@@ -116,15 +130,15 @@ public class SkillController {
 		try {
 		
 			//query for  cate Integer.parseInt(sgory in db
-			if(cateID!=0) {
-				
-				skillDTO.setCategory(catServ.findCategory(cateID) )	       ;
-			}else {
-				
-				skillDTO.setCategory(null);
-			}
-			
-		
+//			if(cateID!=0) {
+//				
+//				skillDTO.setCategory(catServ.findCategory(cateID) )	       ;
+//			}else {
+//				
+//				skillDTO.setCategory(null);
+//			}
+//			
+			skillDTO.setCategory(catServ.findCategory(cateID) )	 ;
 			skill = skillService.updateSkill(skillID, skillDTO);
 			String logString = String.format(goodLog, "to update a skill in the database with id %s");
 			logString = String.format(logString, skillID);
@@ -142,7 +156,8 @@ public class SkillController {
 		}
 	}
 	
-	@DeleteMapping(path="skill/{id}")
+	//@DeleteMapping(path="skill/{id}")
+	@DeleteMapping(path="/{id}")
 	public Object deleteSkill(@PathVariable("id") String skillID) {
 		Skill skill = null;
 		try {

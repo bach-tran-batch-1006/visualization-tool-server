@@ -40,22 +40,26 @@ public class Category {
 	@Column(name = "category_description")
 	private String categoryDescription;
 
+	@Column(name="userid")
+	private int userid = 0;
+	
 	@OneToMany(cascade = CascadeType.PERSIST, mappedBy="category") 
 	@JsonIgnore
 	private List<Skill> SkillList = new ArrayList<Skill>();
 	
-	public Category(String categoryName, String categoryDescription) {
+	public Category(String categoryName, String categoryDescription, int userid) {
 		super();
 		this.categoryName = categoryName;
 		this.categoryDescription = categoryDescription;
+		this.userid = userid;
 	}
 
-	public Category(int categoryId, String categoryName, String categoryDescription) {
-		super();
-		this.categoryId = categoryId;
-		this.categoryName = categoryName;
-		this.categoryDescription = categoryDescription;
-	}
+//	public Category(int categoryId, String categoryName, String categoryDescription) {
+//		super();
+//		this.categoryId = categoryId;
+//		this.categoryName = categoryName;
+//		this.categoryDescription = categoryDescription;
+//	}
 	
 	@PreRemove
 	private void preRemove() {
