@@ -32,3 +32,11 @@ spring:
           - Path=/visualization/**
           filters:
           - StripPrefix=1
+        - id: skillcategory
+          uri: lb://skillcategory
+          predicates:
+          - Path=/skill/**
+        - id: skillcategory
+          uri: lb://skillcategory
+          predicates:
+          - Path=/category/** 
