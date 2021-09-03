@@ -22,7 +22,6 @@ public class PrimerDto {
 
     private String name;
     private List<Integer> skillList;
-    
     public PrimerDto(String name) {
         this.name = name;
         this.skillList = new ArrayList<>();

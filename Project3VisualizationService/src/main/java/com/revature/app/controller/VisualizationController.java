@@ -154,6 +154,7 @@ public class VisualizationController {
 				if(vis.getCurriculumList()!=null) {
 					for(Curriculum c : vis.getCurriculumList()) {
 						for(Integer i : c.getSkillList()) {
+							
 								skillList.add(i);
 						}
 					}
@@ -177,6 +178,7 @@ public class VisualizationController {
 				logger.warn("User gave a bad parameter while trying to get information about a visualization in the database");
 				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 			}
+			
 			
 	}
 	//re-wrote logic should work
@@ -207,12 +209,13 @@ public class VisualizationController {
 			}
 			if(vis.getPrimerList()!=null) {
 				for(Primer p : vis.getPrimerList()) {
-					String primeId =""+p.getPrimerId()+"";
-					for(Integer i :pControl.getAllCategoriesById(primeId) ) {
+					String primeId = ""+p.getPrimerId()+"";
+					for(Integer i : pControl.getAllCategoriesById(primeId)) {
 						uniqueCats.add(i);
 					}
 				}
 			}
+			return uniqueCats;
 			
 			return uniqueCats;
 		} catch (VisualizationNotFoundException e) {
@@ -224,8 +227,7 @@ public class VisualizationController {
 		} catch (BadParameterException e) {
 			logger.warn("User gave a bad parameter while trying to get information about a visualization in the database");
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		}
-			
+		}		
 	}
 
 }

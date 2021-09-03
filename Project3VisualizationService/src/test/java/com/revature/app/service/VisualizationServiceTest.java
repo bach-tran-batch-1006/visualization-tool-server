@@ -134,7 +134,7 @@ class VisualizationServiceTest {
 	@Test
 	void test_updateVisualizationById_emptyID() throws VisualizationNotFoundException, BadParameterException {	
 		try {
-			VisualizationDTO visDto = new VisualizationDTO("TestVis", null, null);
+			VisualizationDTO visDto = new VisualizationDTO("TestVis", null,null);
 			visualizationService.updateVisualizationByID("   ", visDto);
 			fail("EmptyParameterException not thrown");
 		} catch (EmptyParameterException e) {
@@ -145,7 +145,7 @@ class VisualizationServiceTest {
 	@Test
 	void test_updateVisualizationById_emptyNewName() throws VisualizationNotFoundException, BadParameterException {	
 		try {
-			VisualizationDTO visDto = new VisualizationDTO("", null, null);
+			VisualizationDTO visDto = new VisualizationDTO("", null,null);
 			visualizationService.updateVisualizationByID("1", visDto);
 			fail("EmptyParameterException not thrown");
 		} catch (EmptyParameterException e) {
@@ -156,7 +156,7 @@ class VisualizationServiceTest {
 	@Test
 	void test_updateVisualizationById_badParameter() throws VisualizationNotFoundException, EmptyParameterException {	
 		try {
-			VisualizationDTO visDto = new VisualizationDTO("TestVis", null, null);
+			VisualizationDTO visDto = new VisualizationDTO("TestVis", null,null);
 			visualizationService.updateVisualizationByID("test", visDto);
 			fail("BadParameterException not thrown");
 		} catch (BadParameterException e) {
@@ -167,7 +167,7 @@ class VisualizationServiceTest {
 	@Test
 	void test_updateVisualizationById_visualizationNotFound() throws BadParameterException, EmptyParameterException {	
 		try {
-			VisualizationDTO visDto = new VisualizationDTO("TestVis", null, null);
+			VisualizationDTO visDto = new VisualizationDTO("TestVis", null,null);
 			visualizationService.updateVisualizationByID("20202020", visDto);
 			fail("VisualizationNotFound Exception not thrown");
 		} catch (VisualizationNotFoundException e) {
@@ -218,8 +218,8 @@ class VisualizationServiceTest {
 //
 	@Test
 	void test_createVisualization_happy() throws EmptyParameterException{
-		VisualizationDTO visDto = new VisualizationDTO("currVis", null, null);
-		Visualization expected = new Visualization("currVisual", null); 
+		VisualizationDTO visDto = new VisualizationDTO("currVis", null,null);
+		Visualization expected = new Visualization("currVisual", null,null); 
 		Visualization actual = visualizationService.createVisualization(visDto);
 		assertEquals(expected, actual);
 	}

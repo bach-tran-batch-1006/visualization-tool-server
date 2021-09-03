@@ -35,7 +35,36 @@ public class VisualizationService {
 
 	@Autowired
 	private VisualizationDao visualizationDao;
+	
+	@Autowired
+	private PrimerServices primerService;
 
+	//change logic
+	@Transactional
+	public Visualization createVisualization(VisualizationDTO visualizationDto) throws EmptyParameterException {
+		//check if title is empty, if so throw exception
+		if (visualizationDto.getTitle().trim().equals("")) {
+			throw new EmptyParameterException(emptyName);
+			//check if curricula is empty, if so instantiate with new empty list 
+		}else if(visualizationDto.getCurricula()==null) {
+			//List<Curriculum> curricula = new ArrayList<Curriculum>();
+			if(visualizationDto.getPrimers()==null) {
+				Visualization visualization = visualizationDao.save(new Visualization(visualizationDto.getTitle(),null,null));
+				return visualization;
+			}else {
+			Visualization visualization = visualizationDao.save(new Visualization(visualizationDto.getTitle(),null,visualizationDto.getPrimers()));
+			return visualization;
+			}
+		}else {
+			if(visualizationDto.getPrimers()==null) {
+				Visualization visualization = visualizationDao.save(new Visualization(visualizationDto.getTitle(),visualizationDto.getCurricula(),null));
+				return visualization;
+			}
+			Visualization visualization = visualizationDao.save(new Visualization(visualizationDto.getTitle(),visualizationDto.getCurricula(),visualizationDto.getPrimers()));
+			return visualization;
+		}
+
+	}
 	//this method is fine
 	@Transactional(rollbackOn = {VisualizationNotFoundException.class})
 	public Visualization findVisualizationByID(String visId) throws VisualizationNotFoundException, EmptyParameterException, BadParameterException {
@@ -95,7 +124,7 @@ public class VisualizationService {
 			//update the visualization
 			vis = visualizationDao.save(vis);
 			return vis;
-		} catch (NumberFormatException | CurriculumNotFoundException  | PrimerNotFoundException e) {
+		} catch (NumberFormatException | PrimerNotFoundException | CurriculumNotFoundException e) {
 			throw new BadParameterException(badParam);
 		}
 	}

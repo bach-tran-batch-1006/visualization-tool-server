@@ -2,27 +2,27 @@ package com.revature.app.service;
 
 
 import java.util.List;
-import java.util.Optional;
+//import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
+//import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import com.revature.app.dao.CurriculumDao;
+//import com.revature.app.dao.CurriculumDao;
 import com.revature.app.dao.PrimerDao;
 import com.revature.app.dao.VisualizationDao;
-import com.revature.app.dto.CurriculumDto;
+//import com.revature.app.dto.CurriculumDto;
 import com.revature.app.dto.PrimerDto;
 import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.CurriculumNotAddedException;
 import com.revature.app.exception.CurriculumNotFoundException;
 import com.revature.app.exception.EmptyCurriculumException;
 import com.revature.app.exception.EmptyParameterException;
-import com.revature.app.exception.ForeignKeyConstraintException;
+//import com.revature.app.exception.ForeignKeyConstraintException;
 import com.revature.app.exception.PrimerNotFoundException;
-import com.revature.app.model.Curriculum;
+//import com.revature.app.model.Curriculum;
 import com.revature.app.model.Primer;
 import com.revature.app.model.Visualization;
 
@@ -119,7 +119,7 @@ public class PrimerServices {
 		}
 	}
 
-	@Transactional(rollbackOn = {PrimerNotFoundException.class, ForeignKeyConstraintException.class})
+	@Transactional(rollbackOn = {PrimerNotFoundException.class})
 	public Primer deletePrimerByID(String primeId) throws PrimerNotFoundException, EmptyParameterException, BadParameterException {
 		Primer primer = null;
 		try {
