@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 import com.revature.app.dao.VisualizationDao;
 import com.revature.app.dto.VisualizationDTO;
 import com.revature.app.exception.BadParameterException;
-import com.revature.app.exception.CurriculumNotFoundException;
+//import com.revature.app.exception.CurriculumNotFoundException;
 import com.revature.app.exception.EmptyParameterException;
-import com.revature.app.exception.PrimerNotFoundException;
+//import com.revature.app.exception.PrimerNotFoundException;
 import com.revature.app.exception.VisualizationNotFoundException;
-import com.revature.app.model.Curriculum;
-import com.revature.app.model.Primer;
+//import com.revature.app.model.Curriculum;
+//import com.revature.app.model.Primer;
 import com.revature.app.model.Visualization;
 
 @Service

@@ -24,7 +24,7 @@ import com.revature.app.exception.BadParameterException;
 import com.revature.app.exception.EmptyParameterException;
 import com.revature.app.exception.ForeignKeyConstraintException;
 import com.revature.app.exception.SkillNotFoundException;
-import com.revature.app.model.Category;
+//import com.revature.app.model.Category;
 import com.revature.app.model.Skill;
 import com.revature.app.service.CategoryService;
 import com.revature.app.service.SkillService;
@@ -179,5 +179,23 @@ public class SkillController {
 			logger.warn("User attempted to delete a skill from the database but it was blocked because of a foreign key constraint");
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
+	}
+	
+	@GetMapping(path="/{id}/category")
+	public Integer getCategoryBySkillId(@PathVariable("id") String skillID) {
+		try {
+			Skill skill = skillService.getSkillByID(skillID);
+			return skill.getCategory().getCategoryId();
+		} catch (EmptyParameterException e) {
+			logger.warn("User left a parameter blank while trying to retrieve a skill from the database");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		} catch (BadParameterException e) {
+			logger.warn("User gave a bad parameter while trying to retrieve a skill from the database");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		} catch (SkillNotFoundException e) {
+			logger.warn("User attempted to retrieve a skill in the database that did not exist");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+		}
+		
 	}
 }

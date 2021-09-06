@@ -2,8 +2,8 @@ package com.revature.app.dto;
 
 import java.util.List;
 
-import com.revature.app.model.Curriculum;
-import com.revature.app.model.Primer;
+//import com.revature.app.model.Curriculum;
+//import com.revature.app.model.Primer;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

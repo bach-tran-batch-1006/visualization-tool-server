@@ -39,13 +39,13 @@ public class VisualizationController {
 
 	@Autowired
 	private VisualizationService visualizationService;
-	
+
 	@Autowired
 	private CurriculumController cControl;
-	
+
 	@Autowired
 	private PrimerController pControl;
-	
+
 //	@Bean
 //	//@LoadBalanced
 //	RestTemplate restTemplate() {
@@ -55,11 +55,12 @@ public class VisualizationController {
 //	@Autowired
 //	private RestTemplate rest;
 //	
-	
+
 	private static Logger logger = LoggerFactory.getLogger(VisualizationController.class);
-	
+
 	String goodLog = "User called the endpoint ";
-	//fine
+
+	// fine
 	@PostMapping(path = "visualization")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Object createVisualization(@RequestBody VisualizationDTO visualizationdto) {
@@ -72,12 +73,13 @@ public class VisualizationController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
-	
+
 	@GetMapping("visualization/{id}")
 	public Object findById(@PathVariable("id") String id) {
 		try {
 			Visualization vis = visualizationService.findVisualizationByID(id);
-			String logString = String.format(goodLog, "to get information about a visualization in the database with id %s");
+			String logString = String.format(goodLog,
+					"to get information about a visualization in the database with id %s");
 			logString = String.format(logString, id);
 			logger.info(logString);
 			return vis;
@@ -85,21 +87,22 @@ public class VisualizationController {
 			logger.warn("User requested information about a visualization in the database that did not exist");
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		} catch (EmptyParameterException e) {
-			logger.warn("User left a parameter blank while trying to get information about a visualization in the database");
+			logger.warn(
+					"User left a parameter blank while trying to get information about a visualization in the database");
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		} catch (BadParameterException e) {
-			logger.warn("User gave a bad parameter while trying to get information about a visualization in the database");
+			logger.warn(
+					"User gave a bad parameter while trying to get information about a visualization in the database");
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
 	@GetMapping("visualization")
-	public List<Visualization> findAll()  {
+	public List<Visualization> findAll() {
 		logger.info("User called the endpoint to get all visualizations from the database");
 		return this.visualizationService.findAllVisualization();
 	}
 
-	
 	@PutMapping("visualization/{id}")
 	public Object updateVisualization(@PathVariable("id") String id, @RequestBody VisualizationDTO visualizationdto) {
 		try {
@@ -139,97 +142,101 @@ public class VisualizationController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
-	
-	//re-wrote logic should work
-	@GetMapping("visualization/{id}/skills")
-	public Set<Integer> getAllUniqueSkillsByVisualization(@PathVariable("id") String id){
-		//try {
-			//loop through linked curricula, associated skills to set(doesn't keep duplicates)
-			Set<Integer> skillList = new HashSet<Integer>();
-			try {
-				Visualization vis = visualizationService.findVisualizationByID(id);
-				if(vis == null) {
-					throw new VisualizationNotFoundException("404 vis not found");
-				}
-				if(vis.getCurriculumList()!=null) {
 
-					for(Integer c : vis.getCurriculumList()) {
-						Curriculum current = (Curriculum) cControl.getCurriculumById(""+c+"");
-						for(Integer i : current.getSkillList()) {
-								skillList.add(i);
-						}
-					}
-				}
-				if(vis.getPrimerList()!=null) {
-					for(Integer p : vis.getPrimerList()) {
-						Primer current = (Primer) pControl.getPrimerById(""+p+"");
-						for(Integer i : current.getSkillList()) {
-							skillList.add(i);
-						}
-					}
-				}
-				return skillList;
-				
-			} catch (VisualizationNotFoundException e) {
-				logger.warn("User requested information about a visualization in the database that did not exist");
-				throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-			} catch (EmptyParameterException e) {
-				logger.warn("User left a parameter blank while trying to get information about a visualization in the database");
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-			} catch (BadParameterException e) {
-				logger.warn("User gave a bad parameter while trying to get information about a visualization in the database");
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-			}
-			
-			
-	}
-	//re-wrote logic should work
-	@GetMapping("visualization/{id}/categories")
-	public Set<Integer> getAllUniqueCategoriesByVisualization(@PathVariable("id") String id){
-		//get visualization
-		//create set for cats
-		//for(curricula in vis.getCurricula()){
-		//	set catList = call to cControl;
-		//	for(int in catList){
-		//		cats.add(int)
-		//	}
-		//}
-		Set<Integer> uniqueCats = new HashSet<Integer>();
+	// re-wrote logic should work
+	@GetMapping("visualization/{id}/skills")
+	public Set<Integer> getAllUniqueSkillsByVisualization(@PathVariable("id") String id) {
+		// try {
+		// loop through linked curricula, associated skills to set(doesn't keep
+		// duplicates)
+		Set<Integer> skillList = new HashSet<Integer>();
 		try {
 			Visualization vis = visualizationService.findVisualizationByID(id);
-			if(vis == null) {
+			if (vis == null) {
 				throw new VisualizationNotFoundException("404 vis not found");
 			}
 			if(vis.getCurriculumList()!=null) {
 				for(Integer c : vis.getCurriculumList()) {
-					Curriculum current = (Curriculum) cControl.getCurriculumById(""+c+"");
+					Curriculum current = (Curriculum) cControl.getCurriculumById(""+c);
 					for(Integer i : current.getSkillList()) {
-						uniqueCats.add(i);
+						skillList.add(i);
 					}
-					
 				}
 			}
 			if(vis.getPrimerList()!=null) {
 				for(Integer p : vis.getPrimerList()) {
-					Primer current = (Primer) pControl.getPrimerById(""+p+"");
+					Primer current = (Primer) pControl.getPrimerById(""+p);
 					for(Integer i : current.getSkillList()) {
-						uniqueCats.add(i);
+						skillList.add(i);
 					}
 				}
 			}
-			return uniqueCats;
-//			
-//			return uniqueCats;
+
+			return skillList;
+
 		} catch (VisualizationNotFoundException e) {
 			logger.warn("User requested information about a visualization in the database that did not exist");
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		} catch (EmptyParameterException e) {
-			logger.warn("User left a parameter blank while trying to get information about a visualization in the database");
+			logger.warn(
+					"User left a parameter blank while trying to get information about a visualization in the database");
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		} catch (BadParameterException e) {
-			logger.warn("User gave a bad parameter while trying to get information about a visualization in the database");
+			logger.warn(
+					"User gave a bad parameter while trying to get information about a visualization in the database");
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		}		
+		}
+
+	}
+
+	// re-wrote logic should work
+	@GetMapping("visualization/{id}/categories")
+	public Set<Integer> getAllUniqueCategoriesByVisualization(@PathVariable("id") String id) {
+		// get visualization
+		// create set for cats
+		// for(curricula in vis.getCurricula()){
+		// set catList = call to cControl;
+		// for(int in catList){
+		// cats.add(int)
+		// }
+		// }
+		Set<Integer> uniqueCats = new HashSet<Integer>();
+//		try {
+			Visualization vis;
+			try {
+				vis = visualizationService.findVisualizationByID(id);
+			
+			if (vis == null) {
+				throw new VisualizationNotFoundException("404 vis not found");
+			}
+			if (vis.getCurriculumList() != null) {
+				for (Integer i : vis.getCurriculumList()) {
+					for (Integer cat : cControl.getAllCategoriesById("" + i)) {
+						uniqueCats.add(cat);
+					}
+				}
+			}
+			if (vis.getPrimerList() != null) {
+				for (Integer i : vis.getPrimerList()) {
+					for (Integer cat : pControl.getAllCategoriesById("" + i)) {
+						uniqueCats.add(cat);
+					}
+				}
+			}
+			} catch (VisualizationNotFoundException e) {
+				logger.warn("User requested information about a visualization in the database that did not exist");
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+			} catch (EmptyParameterException e) {
+				logger.warn(
+						"User left a parameter blank while trying to get information about a visualization in the database");
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+			} catch (BadParameterException e) {
+				logger.warn(
+						"User gave a bad parameter while trying to get information about a visualization in the database");
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+			}
+
+			return uniqueCats;
 	}
 
 }
