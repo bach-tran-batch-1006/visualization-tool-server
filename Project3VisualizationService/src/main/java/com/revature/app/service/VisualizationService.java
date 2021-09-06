@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 import com.revature.app.dao.VisualizationDao;
 import com.revature.app.dto.VisualizationDTO;
 import com.revature.app.exception.BadParameterException;
-import com.revature.app.exception.CurriculumNotFoundException;
+//import com.revature.app.exception.CurriculumNotFoundException;
 import com.revature.app.exception.EmptyParameterException;
-import com.revature.app.exception.PrimerNotFoundException;
+//import com.revature.app.exception.PrimerNotFoundException;
 import com.revature.app.exception.VisualizationNotFoundException;
-import com.revature.app.model.Curriculum;
-import com.revature.app.model.Primer;
+//import com.revature.app.model.Curriculum;
+//import com.revature.app.model.Primer;
 import com.revature.app.model.Visualization;
 
 @Service
@@ -27,15 +27,44 @@ public class VisualizationService {
 	String emptyName = "The visualization name was left blank";
 	String notFound = "Visualization not found";
 	
-	@Autowired
-	private CurriculumService curriculumService;
-	
-	@Autowired
-	private PrimerServices primerService;
+//	@Autowired
+//	private CurriculumService curriculumService;
+//	
+//	@Autowired
+//	private PrimerServices primerService;
 
 	@Autowired
 	private VisualizationDao visualizationDao;
+	
+//	@Autowired
+//	private PrimerServices primerService;
 
+	//change logic
+//	@Transactional
+//	public Visualization createVisualization(VisualizationDTO visualizationDto) throws EmptyParameterException {
+//		//check if title is empty, if so throw exception
+//		if (visualizationDto.getTitle().trim().equals("")) {
+//			throw new EmptyParameterException(emptyName);
+//			//check if curricula is empty, if so instantiate with new empty list 
+//		}else if(visualizationDto.getCurricula()==null) {
+//			//List<Curriculum> curricula = new ArrayList<Curriculum>();
+//			if(visualizationDto.getPrimers()==null) {
+//				Visualization visualization = visualizationDao.save(new Visualization(visualizationDto.getTitle(),null,null));
+//				return visualization;
+//			}else {
+//			Visualization visualization = visualizationDao.save(new Visualization(visualizationDto.getTitle(),null,visualizationDto.getPrimers()));
+//			return visualization;
+//			}
+//		}else {
+//			if(visualizationDto.getPrimers()==null) {
+//				Visualization visualization = visualizationDao.save(new Visualization(visualizationDto.getTitle(),visualizationDto.getCurricula(),null));
+//				return visualization;
+//			}
+//			Visualization visualization = visualizationDao.save(new Visualization(visualizationDto.getTitle(),visualizationDto.getCurricula(),visualizationDto.getPrimers()));
+//			return visualization;
+//		}
+//
+//	}
 	//this method is fine
 	@Transactional(rollbackOn = {VisualizationNotFoundException.class})
 	public Visualization findVisualizationByID(String visId) throws VisualizationNotFoundException, EmptyParameterException, BadParameterException {
@@ -73,21 +102,19 @@ public class VisualizationService {
 			if (visualizationDto.getTitle().trim().equals("")) {
 				throw new EmptyParameterException("The visualization name was left blank");
 			}
-			ArrayList<Curriculum> persistantCurriculumList = new ArrayList<>();
+			ArrayList<Integer> persistantCurriculumList = new ArrayList<>();
 			
 			//check if new/updated curricula were sent, set curricula list to it if so
 			if (!(visualizationDto.getCurricula()==null)) {
-				for (Curriculum eachCurriculumDTO : (ArrayList<Curriculum>) visualizationDto.getCurricula()) {
-					persistantCurriculumList.add(
-							curriculumService.getCurriculumByID(String.valueOf(eachCurriculumDTO.getCurriculumId())));
+				for (Integer eachCurriculumDTO : (ArrayList<Integer>) visualizationDto.getCurricula()) {
+					persistantCurriculumList.add(eachCurriculumDTO);
 				}
 				vis.setCurriculumList(persistantCurriculumList);
 			}
-			ArrayList<Primer> persistantPrimerList = new ArrayList<>();
+			ArrayList<Integer> persistantPrimerList = new ArrayList<>();
 			if (!(visualizationDto.getPrimers()==null)) {
-				for (Primer eachPrimerDTO : (ArrayList<Primer>) visualizationDto.getPrimers()) {
-					persistantPrimerList.add(
-							primerService.getPrimerByID(String.valueOf(eachPrimerDTO.getPrimerId())));
+				for (Integer eachPrimerDTO : (ArrayList<Integer>) visualizationDto.getPrimers()) {
+					persistantPrimerList.add(eachPrimerDTO);
 				}
 				vis.setPrimerList(persistantPrimerList);
 			}
@@ -95,9 +122,12 @@ public class VisualizationService {
 			//update the visualization
 			vis = visualizationDao.save(vis);
 			return vis;
-		} catch (NumberFormatException | CurriculumNotFoundException  | PrimerNotFoundException e) {
+
+		} catch (NumberFormatException e) {
 			throw new BadParameterException(badParam);
-		}
+		}/*catch (NumberFormatException | CurriculumNotFoundException  | PrimerNotFoundException e) {
+			throw new BadParameterException(badParam);
+		}*/
 	}
 	//this method is fine//association between visualization and curricula breaks as its stored in visualization anyway
 	@Transactional
@@ -125,12 +155,12 @@ public class VisualizationService {
 	
 	public Visualization createVisualization(VisualizationDTO visualizationDto) throws EmptyParameterException {
         //check if title is empty, if so throw exception
-        if (visualizationDto.getTitle().trim().equals("")) {
+        if (visualizationDto.getTitle().trim().equals(" ")) {
             throw new EmptyParameterException(emptyName);
             //check if curricula is empty, if so instantiate with new empty list 
-        }else if(visualizationDto.getCurricula()==null) {
+        }else if(visualizationDto.getCurricula() == null) {
             //List<Curriculum> curricula = new ArrayList<Curriculum>();
-            if(visualizationDto.getPrimers()==null) {
+            if(visualizationDto.getPrimers() == null) {
                 Visualization visualization = visualizationDao.save(new Visualization(visualizationDto.getTitle(),null,null));
                 return visualization;
             }else {

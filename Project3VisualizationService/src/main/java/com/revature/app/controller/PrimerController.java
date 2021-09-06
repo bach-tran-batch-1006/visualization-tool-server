@@ -39,7 +39,7 @@ public class PrimerController {
 //    RestTemplate restTemplate() {
 //        return new RestTemplate();
 //    }
-    
+//    
     @Autowired
     private RestTemplate rest;
 
@@ -143,7 +143,9 @@ public class PrimerController {
 			String url = "http://localhost:8089/skill/";
 			for (int i : service.getPrimerByID(primerId).getSkillList()) {
 				ResponseEntity<Integer> res = this.rest.getForEntity((url + i + "/category"), Integer.class);
-				cats.add(res.getBody());
+				if(res.getBody()!=null) {
+					cats.add(res.getBody());
+				}	
 			}
 			return cats;
 		} catch (PrimerNotFoundException e) {
