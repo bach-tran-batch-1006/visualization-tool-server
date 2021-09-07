@@ -1,4 +1,4 @@
-package com.revature.app.controller;
+/*package com.revature.app.controller;
 
 import static org.mockito.Mockito.lenient;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -30,10 +30,10 @@ import com.revature.app.exception.VisualizationNotFoundException;
 import com.revature.app.model.Visualization;
 import com.revature.app.service.VisualizationService;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(MockitoExtension.class)*/
 class VisualizationControllerTest {
 
-	private MockMvc mockmvc;
+	/*private MockMvc mockmvc;
 
 	private ObjectMapper objectmapper;
 	
@@ -253,6 +253,6 @@ class VisualizationControllerTest {
 	@Test
 	void test_getAllUniqueCategoriesByVisualization_emptyID() throws Exception {
 		mockmvc.perform(get("/visualization/ /categories")).andExpect(MockMvcResultMatchers.status().is(400));
-	}
+	}*/
 
 }
