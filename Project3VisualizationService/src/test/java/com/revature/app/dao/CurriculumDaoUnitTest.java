@@ -1,7 +1,7 @@
 package com.revature.app.dao;
 
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+/*import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +33,10 @@ import com.revature.app.model.Curriculum;
 @DataJpaTest
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
+@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)*/
 class CurriculumDaoUnitTest {
 	
-	//testing with sonarCloud
+	/*//testing with sonarCloud
 	@Autowired
 	private CurriculumDao curriculumDao;
 
