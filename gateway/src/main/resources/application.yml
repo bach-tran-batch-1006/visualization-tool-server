@@ -1,0 +1,42 @@
+server:
+  port: 8090
+
+spring:
+    application.name: gateway
+    cloud:
+      gateway:
+        default-filters:
+          - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+        globalcors:
+          corsConfigurations:
+            '[/**]':
+              allowedOrigins: "*"
+              allowedMethods: "*"
+              allowedHeaders: "*"
+        routes:
+        - id: user
+          uri: lb://user
+          predicates:
+          - Path=/user/**
+          filters:
+          - StripPrefix=1
+        - id: visualization-tool
+          uri: lb://visualization-tool
+          predicates:
+          - Path=/visualization-tool/**
+          filters:
+          - StripPrefix=1
+        - id: visualization
+          uri: lb://visualization
+          predicates:
+          - Path=/visualization/**
+          filters:
+          - StripPrefix=1
+        - id: skillcategory
+          uri: lb://skillcategory
+          predicates:
+          - Path=/skill/**
+        - id: skillcategory
+          uri: lb://skillcategory
+          predicates:
+          - Path=/category/** 
