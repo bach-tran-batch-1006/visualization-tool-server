@@ -1,6 +1,6 @@
 package com.revature.app.integration;
 
-import static org.junit.jupiter.api.Assertions.fail;
+/*import static org.junit.jupiter.api.Assertions.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
 import java.util.ArrayList;
@@ -50,10 +50,10 @@ import com.revature.app.service.CurriculumService;
 @DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
 @ExtendWith(SpringExtension.class)
 @WebAppConfiguration
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)*/
 class CurriculumControllerIntegrationTest {
 
-	@Autowired
+	/*@Autowired
 	WebApplicationContext webApplicationContext;
 
 	@Autowired
@@ -275,7 +275,7 @@ class CurriculumControllerIntegrationTest {
 //		//Now to test the method
 //		this.mockMvc.perform(delete("/curriculum/3")).andExpect(MockMvcResultMatchers.status().is(400));
 //
-//	}
+//	}*/
 	
 	
 }
