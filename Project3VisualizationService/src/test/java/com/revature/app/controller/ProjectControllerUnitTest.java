@@ -1,4 +1,4 @@
-package com.revature.app.controller;
+/*package com.revature.app.controller;
 
 //import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
@@ -31,10 +31,10 @@ import com.revature.app.exception.ProjectNotFoundException;
 //import com.revature.app.service.CurriculumService;
 import com.revature.app.service.ProjectsService;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(MockitoExtension.class)*/
 class ProjectControllerUnitTest {
 
-	private MockMvc mockMvc;
+	/*private MockMvc mockMvc;
 
 	@Mock
 	ProjectsService pServ;
