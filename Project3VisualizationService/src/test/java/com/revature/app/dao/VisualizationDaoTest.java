@@ -1,6 +1,6 @@
 package com.revature.app.dao;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+/*import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -30,10 +30,10 @@ import com.revature.app.model.Visualization;
 @DataJpaTest
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
+@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)*/
 class VisualizationDaoTest {
 
-	@Autowired
+	/*@Autowired
 	private VisualizationDao visualDao;
 	
 //	@Autowired
@@ -205,7 +205,7 @@ class VisualizationDaoTest {
 //		//Now actually test the method
 //		List<Category> actual = visualDao.catVisList(2);
 //		assertEquals(expected, (ArrayList<Category>) actual);
-//	}
+//	}*/
 
 	
 	
