@@ -39,10 +39,10 @@ import com.revature.app.model.Primer;
 //import com.revature.app.model.Skill;
 
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
+@MockitoSettings(strictness = Strictness.LENIENT)*/
 class PrimerServiceUnitTest {
 
-	@Mock
+	/*@Mock
 	private VisualizationDao vDao;
 	
 	@Mock
